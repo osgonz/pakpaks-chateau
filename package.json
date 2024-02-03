@@ -1,7 +1,7 @@
 {
   "name": "pakpaks-chateau",
   "private": true,
-  "version": "4.1.0",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
