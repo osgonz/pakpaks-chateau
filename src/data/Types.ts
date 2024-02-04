@@ -4,7 +4,6 @@ export type Character = {
     campaign: number;
     lineage: string;
     classes: string;
-    level: number;
     background: string;
     faction: string;
     lifestyle: number;
