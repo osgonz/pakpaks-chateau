@@ -1,13 +1,60 @@
+export enum Campaign {
+    ForgottenRealms,
+    Eberron,
+    Ravenloft,
+    Dragonlance
+};
+
+export enum ItemType {
+    Armor,
+    Potion,
+    Ring,
+    Rod,
+    Scroll,
+    Staff,
+    Wand,
+    Weapon,
+    WondrousItem
+};
+
+export enum ItemRarity {
+    Common,
+    Uncommon,
+    Rare,
+    VeryRare,
+    Legendary,
+    Artifact,
+    Unique
+};
+
+export enum Lifestyle {
+    Wretched = 0,
+    Squalid = 1,
+    Poor = 2,
+    Modest = 10,
+    Comfortable = 20,
+    Wealthy = 40,
+    Aristocratic = 100
+};
+
+export enum PlayerLogType {
+    Adventure,
+    Merchant,
+    Trade,
+    Downtime,
+    ServiceAward
+};
+
 export type Character = {
     id: string;
     name: string;
-    campaign: number;
+    campaign: Campaign;
     lineage: string;
     classes: string;
     level: number;
     background: string;
     faction: string | null;
-    lifestyle: number;
+    lifestyle: Lifestyle;
     gold: number;
     downtime: number;
     backstory: string | null;
@@ -16,12 +63,22 @@ export type Character = {
     imageUrl: string | null;
 };
 
+export type DMLog = {
+    id: string;
+    title: string;
+    timestamp: Date;
+    location: string;
+    lengthHours: number;
+    serviceHours: number;
+    description: string | null;
+};
+
 export type MagicItem = {
     id: string;
     name: string;
     flavorName: string | null;
-    itemType: number;
-    rarity: number;
+    type: ItemType;
+    rarity: ItemRarity;
     isConsumable: boolean;
     requiresAttunement: boolean;
     description: string | null;
@@ -33,17 +90,9 @@ export type MagicItem = {
     lossLogId: string;
 };
 
-export type StoryAward = {
-    id: string;
-    name: string;
-    description: string | null;
-    isActive: boolean;
-    characterId: string;
-    originLogId: string;
-};
-
 export type PlayerLog = {
     id: string;
+    type: PlayerLogType;
     title: string;
     timestamp: Date;
     location: string;
@@ -61,12 +110,11 @@ export type PlayerLog = {
     characterId: string;
 };
 
-export type DMLog = {
+export type StoryAward = {
     id: string;
-    title: string;
-    timestamp: Date;
-    location: string;
-    lengthHours: number;
-    serviceHours: number;
+    name: string;
     description: string | null;
+    isActive: boolean;
+    characterId: string;
+    originLogId: string;
 };

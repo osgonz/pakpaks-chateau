@@ -11,7 +11,7 @@ function useCharacter(id: string) {
                 const character: Character = {
                     id: id,
                     name: "Khal Nightfist",
-                    campaign: 1,
+                    campaign: 0,
                     lineage: "Half-Orc",
                     classes: "Twilight Cleric of Selune 14 / Circle of Stars Druid 2",
                     level: calculatedValues[0],
