@@ -1,5 +1,7 @@
 import { Campaign, ItemType, ItemRarity, Lifestyle, PlayerLogType } from "./Types";
 
+// Dictionaries for enum types mapped to their string counterparts
+
 export const CampaignDictionary = new Map<Campaign, string>([
     [Campaign.ForgottenRealms, "Forgotten Realms"],
     [Campaign.Eberron, "Eberron"],

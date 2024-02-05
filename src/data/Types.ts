@@ -1,3 +1,5 @@
+// Enums
+
 export enum Campaign {
     ForgottenRealms,
     Eberron,
@@ -45,6 +47,8 @@ export enum PlayerLogType {
     ServiceAward
 };
 
+
+// Character type definition
 export type Character = {
     id: string;
     name: string;
@@ -63,6 +67,7 @@ export type Character = {
     imageUrl: string | null;
 };
 
+// DM Log type definition
 export type DMLog = {
     id: string;
     title: string;
@@ -73,6 +78,7 @@ export type DMLog = {
     description: string | null;
 };
 
+// Magic Item type definition
 export type MagicItem = {
     id: string;
     name: string;
@@ -90,6 +96,7 @@ export type MagicItem = {
     lossLogId: string;
 };
 
+// Player Log type definition
 export type PlayerLog = {
     id: string;
     type: PlayerLogType;
@@ -110,6 +117,7 @@ export type PlayerLog = {
     characterId: string;
 };
 
+// Story Award type definition
 export type StoryAward = {
     id: string;
     name: string;

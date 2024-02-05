@@ -4,6 +4,12 @@ import { Character } from "../data/Types";
 function useCharacter(id: string) {
     const [character, setCharacter]= useState<Character | undefined>();
 
+    /**
+     * Asynchronous function that pulls a character's data and injects calculated values into it
+     * @param calculatedValues - Number array containing calculated level, gold and downtime values for the character
+     * @param id - Id corresponding to the character
+     * @returns Character summary details
+     */
     const loadCharacter = async(calculatedValues: [number, number, number], id: string) => {
         return new Promise<Character>((resolve) => {
             // TODO: Call to storage to fetch character data
@@ -30,6 +36,11 @@ function useCharacter(id: string) {
         });
     };
 
+    /**
+     * Asynchronous function that calculates a character's level, gold and downtime based on their logs
+     * @param id - Id corresponding to the character
+     * @returns Number array containing calculated level, gold and downtime values
+     */
     const calculateLevelsAndCurrencyForCharacter = async(id: string) => {
         return new Promise<[number, number, number]>((resolve) => {
             // TODO: Call to storage to fetch character logs and add all levels, gold and downtime - stored proc instead maybe?
