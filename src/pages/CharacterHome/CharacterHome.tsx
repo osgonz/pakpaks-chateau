@@ -84,6 +84,7 @@ function CharacterHome() {
                     <Tabs value={tabValue} onChange={handleTabChange} centered>
                         <Tab label="Magic Items" />
                         <Tab label="Logs" />
+                        <Tab label="Story Awards" />
                         <Tab label="Other Details" />
                     </Tabs>
                     { magicItems.map((magicItem) => (
