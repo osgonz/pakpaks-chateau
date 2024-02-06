@@ -93,7 +93,7 @@ export type MagicItem = {
     isEquipped: boolean;
     characterId: string;
     originLogId: string;
-    lossLogId: string;
+    lossLogId: string | null;
 };
 
 // Player Log type definition

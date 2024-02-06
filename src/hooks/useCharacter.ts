@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
 import { Character } from "../data/Types";
 
-function useCharacter(id: string) {
+/**
+ * Custom hook that returns a specific character's summary data
+ * @param id - Id corresponding to a character
+ * @returns Character summary details
+ */
+export function useCharacter(id: string) {
     const [character, setCharacter]= useState<Character | undefined>();
 
     /**
      * Asynchronous function that pulls a character's data and injects calculated values into it
      * @param calculatedValues - Number array containing calculated level, gold and downtime values for the character
-     * @param id - Id corresponding to the character
+     * @param id - Id corresponding to a character
      * @returns Character summary details
      */
     const loadCharacter = async(calculatedValues: [number, number, number], id: string) => {
@@ -30,7 +35,7 @@ function useCharacter(id: string) {
                     notes: null,
                     characterSheetLink: "https://ddb.ac/characters/78117532/2QPdLS",
                     imageUrl: null
-                }
+                };
                 resolve(character);
             }, 1000);
         });
@@ -38,7 +43,7 @@ function useCharacter(id: string) {
 
     /**
      * Asynchronous function that calculates a character's level, gold and downtime based on their logs
-     * @param id - Id corresponding to the character
+     * @param id - Id corresponding to a character
      * @returns Number array containing calculated level, gold and downtime values
      */
     const calculateLevelsAndCurrencyForCharacter = async(id: string) => {
@@ -61,5 +66,3 @@ function useCharacter(id: string) {
 
     return character;
 }
-
-export default useCharacter;
