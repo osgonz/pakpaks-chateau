@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import { CampaignDictionary, ItemRarityDictionary, ItemTypeDictionary, LifestyleDictionary } from "../../data/Dictionaries";
 import { useCharacter } from "../../hooks/useCharacter";
 import { useMagicItemsByCharacter } from "../../hooks/useMagicItem";
+import { usePlayerLogsByCharacter } from '../../hooks/usePlayerLog';
 
 function CharacterHome() {
     // Character Id value fetched from URL params
@@ -17,12 +18,42 @@ function CharacterHome() {
     const character = useCharacter(characterId!);
     // Magic item details
     const magicItems = useMagicItemsByCharacter(characterId!);
+    // Player logs
+    const playerLogs = usePlayerLogsByCharacter(characterId!);
+    // Object containing calculated Character values
+    const [charCalcValues, setCharCalcValues] = useState({
+        downtime: 0,
+        gold: 0,
+        level: 0,
+    });
     // Value representing currently selected tab
     const [tabValue, setTabValue] = useState(0);
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue);
     };
+
+    useEffect(() => {
+        async function calculateLevelsAndCurrency() {
+            let downtime = 0;
+            let gold = 0;
+            let level = 0;
+
+            playerLogs?.forEach((log) => {
+                downtime += log.downtime;
+                gold += log.gold;
+                level += log.levels;
+            });
+
+            setCharCalcValues({
+                ...charCalcValues,
+                downtime: downtime,
+                gold: gold,
+                level: level,
+            });
+        }
+        calculateLevelsAndCurrency();
+    }, [playerLogs]);
 
     return (
         <>
@@ -38,12 +69,12 @@ function CharacterHome() {
                     <Typography gutterBottom>Campaign: {CampaignDictionary.get(character.campaign)}</Typography>
                     <Typography gutterBottom>Lineage: {character.lineage}</Typography>
                     <Typography gutterBottom>Class: {character.classes}</Typography>
-                    <Typography gutterBottom>Level: {character.level}</Typography>
+                    <Typography gutterBottom>Level: {charCalcValues.level}</Typography>
                     <Typography gutterBottom>Background: {character.background}</Typography>
                     <Typography gutterBottom>Faction: {character.faction || "Unaffiliated"}</Typography>
                     <Typography gutterBottom>Lifestyle: {LifestyleDictionary.get(character.lifestyle)}</Typography>
-                    <Typography gutterBottom>Gold: {character.gold}</Typography>
-                    <Typography gutterBottom>Downtime: {character.downtime}</Typography>
+                    <Typography gutterBottom>Gold: {charCalcValues.gold}</Typography>
+                    <Typography gutterBottom>Downtime: {charCalcValues.downtime}</Typography>
                     { character.characterSheetLink ? (
                         <Typography gutterBottom>Character Sheet: {character.characterSheetLink}</Typography>
                     ) : (

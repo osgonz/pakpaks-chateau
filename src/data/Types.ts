@@ -55,12 +55,9 @@ export type Character = {
     campaign: Campaign;
     lineage: string;
     classes: string;
-    level: number;
     background: string;
     faction: string | null;
     lifestyle: Lifestyle;
-    gold: number;
-    downtime: number;
     backstory: string | null;
     notes: string | null;
     characterSheetLink: string | null;
@@ -103,7 +100,7 @@ export type PlayerLog = {
     title: string;
     timestamp: Date;
     location: string;
-    dmName: string;
+    dmName: string | null;
     dmDci: string | null;
     lengthHours: number;
     gold: number;
