@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState, useEffect } from "react";
 import { Character } from "../data/Types";
 
@@ -15,26 +16,7 @@ export function useCharacter(id: string) {
      * @returns Character summary details
      */
     const loadCharacter = async(id: string) => {
-        return new Promise<Character>((resolve) => {
-            // TODO: Call to storage to fetch character data
-            setTimeout(() => {
-                const character: Character = {
-                    id: id,
-                    name: "Khal Nightfist",
-                    campaign: 0,
-                    lineage: "Half-Orc",
-                    classes: "Twilight Cleric of Selune 14 / Circle of Stars Druid 2",
-                    background: "Faction Agent",
-                    faction: "Harpers",
-                    lifestyle: 10,
-                    backstory: null,
-                    notes: null,
-                    characterSheetLink: "https://ddb.ac/characters/78117532/2QPdLS",
-                    imageUrl: null
-                };
-                resolve(character);
-            }, 1000);
-        });
+        return axios.get(`/api/characters/${id}`).then((res) => res.data) as Promise<Character>;
     };
 
     useEffect(() => {
