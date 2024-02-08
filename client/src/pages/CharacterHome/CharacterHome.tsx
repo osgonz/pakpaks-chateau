@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import { CampaignDictionary, ItemRarityDictionary, ItemTypeDictionary, LifestyleDictionary } from "../../data/Dictionaries";
 import { useCharacter } from "../../hooks/useCharacter";
 import { useMagicItemsByCharacter } from "../../hooks/useMagicItem";
-import { usePlayerLogsByCharacter } from '../../hooks/usePlayerLog';
+import { useCharacterLogsByCharacter } from '../../hooks/useCharacterLog';
 
 function CharacterHome() {
     // Character Id value fetched from URL params
@@ -19,7 +19,7 @@ function CharacterHome() {
     // Magic item details
     const magicItems = useMagicItemsByCharacter(characterId!);
     // Player logs
-    const playerLogs = usePlayerLogsByCharacter(characterId!);
+    const characterLogs = useCharacterLogsByCharacter(characterId!);
     // Object containing calculated Character values
     const [charCalcValues, setCharCalcValues] = useState({
         downtime: 0,
@@ -39,7 +39,7 @@ function CharacterHome() {
             let gold = 0;
             let level = 0;
 
-            playerLogs?.forEach((log) => {
+            characterLogs?.forEach((log) => {
                 downtime += log.downtime;
                 gold += log.gold;
                 level += log.levels;
@@ -53,7 +53,7 @@ function CharacterHome() {
             });
         }
         calculateLevelsAndCurrency();
-    }, [playerLogs]);
+    }, [characterLogs]);
 
     return (
         <>

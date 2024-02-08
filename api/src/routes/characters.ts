@@ -1,12 +1,20 @@
-import express, {Request, Response, NextFunction} from 'express';
-import CharacterController from '../controllers/characters';
+import express from 'express';
+import characterController from '../controllers/characters';
+import characterLogController from '../controllers/character-logs';
+import magicItemController from '../controllers/magic-items';
 
 const router = express.Router();
 
 // GET route for all characters
-router.get('/', CharacterController.getCharacters);
+router.get('/', characterController.getCharacters);
 
 // GET route for one character
-router.get('/:id', CharacterController.getCharacter);
+router.get('/:id', characterController.getCharacter);
+
+// GET route for one character's logs
+router.get('/:id/character-logs', characterLogController.getCharacterLogsByCharacter);
+
+// GET route for one character's magic items
+router.get('/:id/magic-items', magicItemController.getMagicItemsByCharacter);
 
 export default router;

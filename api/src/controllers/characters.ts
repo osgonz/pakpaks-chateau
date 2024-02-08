@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 
 class CharacterController {
     // Get all characters
-    // TODO: Call to storage to fetch character data
     getCharacters = async (req: Request, res: Response) => {
+        // TODO: Call to storage to fetch character data
         const characters = [
             {
                 id: "test",
@@ -20,15 +20,14 @@ class CharacterController {
                 imageUrl: null
             },
         ];
-
         res.status(200).send(characters);
     };
 
     // Get a character
     getCharacter = async (req: Request, res: Response) => {
         // Extract character id from parameter
-        // TODO: Call to storage to fetch character data
         const id = req.params.id;
+        // TODO: Call to storage to fetch character data
         const character = {
             id: id,
             name: "Khal Nightfist",

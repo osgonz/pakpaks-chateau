@@ -39,7 +39,7 @@ export enum Lifestyle {
     Aristocratic = 100
 };
 
-export enum PlayerLogType {
+export enum CharacterLogType {
     Adventure,
     Merchant,
     Trade,
@@ -94,9 +94,9 @@ export type MagicItem = {
 };
 
 // Player Log type definition
-export type PlayerLog = {
+export type CharacterLog = {
     id: string;
-    type: PlayerLogType;
+    type: CharacterLogType;
     title: string;
     timestamp: Date;
     location: string;
