@@ -119,7 +119,8 @@ export type StoryAward = {
     id: string;
     name: string;
     description: string | null;
-    isActive: boolean;
+    // Define enum and dictionary for this later
+    status: number;
     characterId: string;
     originLogId: string;
 };

@@ -2,6 +2,7 @@ import express from 'express';
 import characterController from '../controllers/characters';
 import characterLogController from '../controllers/character-logs';
 import magicItemController from '../controllers/magic-items';
+import storyAwardController from '../controllers/story-awards';
 
 const router = express.Router();
 
@@ -16,5 +17,8 @@ router.get('/:id/character-logs', characterLogController.getCharacterLogsByChara
 
 // GET route for one character's magic items
 router.get('/:id/magic-items', magicItemController.getMagicItemsByCharacter);
+
+// GET route for one character's story awards
+router.get('/:id/story-awards', storyAwardController.getStoryAwardsByCharacter);
 
 export default router;
