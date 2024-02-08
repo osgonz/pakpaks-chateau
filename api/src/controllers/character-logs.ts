@@ -54,7 +54,7 @@ class CharacterLogController {
         // Extract character log id from parameter
         const id = req.params.id;
         // Extract character id from parameter
-        const characterId = req.params.id;
+        const characterId = req.params.charId;
         // TODO: Call to storage to fetch character log
         const log = {
             id: id,

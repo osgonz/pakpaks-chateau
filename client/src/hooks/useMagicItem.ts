@@ -51,3 +51,30 @@ export function useMagicItemsByCharacter(characterId: string) {
 
     return magicItems;
 }
+
+/**
+ * Custom hook that returns a specific character log's magic items data
+ * @param characterId - Id corresponding to a character
+ * @param logId - Id corresponding to a character log
+ * @returns Array containing the character log's magic items
+ */
+export function useMagicItemsByCharacterLog(characterId: string, logId: string) {
+    const [magicItems, setMagicItems] = useState<MagicItem[] | undefined>();
+
+    /**
+     * Asynchronous function that pulls a character log's magic items data
+     * @param characterId - Id corresponding to a character
+     * @param logId - Id corresponding to a character log
+     * @returns Array containing the character log's magic items
+     */
+    const loadMagicItemsByCharacterLog = async(characterId: string, logId: string) => {
+        return axios.get(`/api/characters/${characterId}/character-logs/${logId}/magic-items`).then((res) => res.data) as Promise<MagicItem[]>;
+    };
+
+    useEffect(() => {
+        loadMagicItemsByCharacterLog(characterId, logId)
+            .then(setMagicItems);
+    }, []);
+
+    return magicItems;
+}

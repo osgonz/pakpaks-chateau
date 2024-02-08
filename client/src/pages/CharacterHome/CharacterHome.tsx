@@ -8,18 +8,21 @@ import { Tab, Tabs } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { CampaignDictionary, ItemRarityDictionary, ItemTypeDictionary, LifestyleDictionary } from "../../data/Dictionaries";
 import { useCharacter } from "../../hooks/useCharacter";
-import { useMagicItemsByCharacter } from "../../hooks/useMagicItem";
 import { useCharacterLogsByCharacter } from '../../hooks/useCharacterLog';
+import { useMagicItemsByCharacter } from "../../hooks/useMagicItem";
+import { useStoryAwardsByCharacter } from '../../hooks/useStoryAward';
 
 function CharacterHome() {
     // Character Id value fetched from URL params
     const { characterId } = useParams();
     // Character summary details
     const character = useCharacter(characterId!);
-    // Magic item details
-    const magicItems = useMagicItemsByCharacter(characterId!);
     // Player logs
     const characterLogs = useCharacterLogsByCharacter(characterId!);
+    // Magic item details
+    const magicItems = useMagicItemsByCharacter(characterId!);
+    // Story award details
+    const storyAwards = useStoryAwardsByCharacter(characterId!);
     // Object containing calculated Character values
     const [charCalcValues, setCharCalcValues] = useState({
         downtime: 0,
@@ -57,7 +60,7 @@ function CharacterHome() {
 
     return (
         <>
-            { character && magicItems ? (
+            { character && characterLogs && magicItems && storyAwards ? (
                 <Container maxWidth="lg">
                 <Paper 
                     elevation={1}

@@ -6,7 +6,6 @@ class StoryAwardController {
         // Extract character id from parameter
         const characterId = req.params.id;
         // TODO: Call to storage to fetch story awards
-        // TODO: Maybe replace isActive flag with status variable? Some awards have limited uses, and some awards need a Downtime Activity to activate
         const awards = [
             {
                 id: "testStoryAwardOne",
@@ -14,7 +13,7 @@ class StoryAwardController {
                 description: `Damita Uthros is alive, and you "might" be allies.`,
                 status: 1,
                 characterId: characterId,
-                originLogId: "TestLogOne",
+                originLogId: "testDDAL0706Log",
             },
             {
                 id: "testStoryAwardTwo",
@@ -28,12 +27,33 @@ class StoryAwardController {
         res.status(200).send(awards);
     };
 
+    // Get a specific character log's story awards
+    getStoryAwardsByCharacterLog = async (req: Request, res: Response) => {
+        // Extract character log id from parameter
+        const logId = req.params.id;
+        // Extract character id from parameter
+        const characterId = req.params.charId;
+        // TODO: Call to storage to fetch story awards
+        // TODO: Validate if characterId param matches characterId within story award
+        const awards = [
+            {
+                id: "testStoryAwardOne",
+                name: "Uneasy Alliance",
+                description: `Damita Uthros is alive, and you "might" be allies.`,
+                status: 1,
+                characterId: "test",
+                originLogId: logId,
+            },
+        ];
+        res.status(200).send(awards);
+    };
+
     // Get a story award
     getStoryAward = async (req: Request, res: Response) => {
         // Extract story award id from parameter
         const id = req.params.id;
         // Extract character id from parameter
-        const characterId = req.params.id;
+        const characterId = req.params.charId;
         // TODO: Call to storage to fetch story award data
         // TODO: Validate if characterId param matches characterId within story award
         const award = {
@@ -42,7 +62,7 @@ class StoryAwardController {
             description: `Damita Uthros is alive, and you "might" be allies.`,
             status: 1,
             characterId: "test",
-            originLogId: "TestLogOne",
+            originLogId: "testDDAL0706Log",
         };
         res.status(200).send(award);
     };
