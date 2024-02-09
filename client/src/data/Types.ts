@@ -47,6 +47,12 @@ export enum CharacterLogType {
     ServiceAward
 };
 
+export enum StoryAwardStatus {
+    Pending,
+    Active,
+    Consumed
+};
+
 
 // Character type definition
 export type Character = {
@@ -119,8 +125,7 @@ export type StoryAward = {
     id: string;
     name: string;
     description: string | null;
-    // Define enum and dictionary for this later
-    status: number;
+    status: StoryAwardStatus;
     characterId: string;
     originLogId: string;
 };

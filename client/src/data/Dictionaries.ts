@@ -1,4 +1,4 @@
-import { Campaign, ItemType, ItemRarity, Lifestyle, CharacterLogType } from "./Types";
+import { Campaign, ItemType, ItemRarity, Lifestyle, CharacterLogType, StoryAwardStatus } from "./Types";
 
 // Dictionaries for enum types mapped to their string counterparts
 
@@ -47,4 +47,10 @@ export const CharacterLogTypeDictionary = new Map<CharacterLogType, string>([
     [CharacterLogType.Trade, "Magic Item Trade"],
     [CharacterLogType.Downtime, "Downtime Activity"],
     [CharacterLogType.ServiceAward, "DM Service Award"]
+]);
+
+export const StoryAwardStatusDictionary = new Map<StoryAwardStatus, string>([
+    [StoryAwardStatus.Pending, "Pending Activation"],
+    [StoryAwardStatus.Active, "Active"],
+    [StoryAwardStatus.Consumed, "Consumed"]
 ]);
