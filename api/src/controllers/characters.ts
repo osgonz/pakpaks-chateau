@@ -11,13 +11,11 @@ class CharacterController {
                 campaign: 0,
                 lineage: "Half-Orc",
                 classes: "Twilight Cleric of Selune 14 / Circle of Stars Druid 2",
-                background: "Faction Agent",
-                faction: "Harpers",
-                lifestyle: 10,
+                background: "Faction Agent (Harpers)",
                 backstory: null,
                 notes: null,
                 characterSheetLink: "https://ddb.ac/characters/78117532/2QPdLS",
-                imageUrl: null
+                imageUrl: "https://s3.amazonaws.com/files.d20.io/images/294064376/qiMYHHU4j7Va-ADzPTHYHg/max.png"
             },
         ];
         res.status(200).send(characters);
@@ -34,13 +32,11 @@ class CharacterController {
             campaign: 0,
             lineage: "Half-Orc",
             classes: "Twilight Cleric of Selune 14 / Circle of Stars Druid 2",
-            background: "Faction Agent",
-            faction: "Harpers",
-            lifestyle: 10,
+            background: "Faction Agent (Harpers)",
             backstory: null,
             notes: null,
             characterSheetLink: "https://ddb.ac/characters/78117532/2QPdLS",
-            imageUrl: null
+            imageUrl: "https://s3.amazonaws.com/files.d20.io/images/294064376/qiMYHHU4j7Va-ADzPTHYHg/max.png"
         };
         res.status(200).send(character);
     };

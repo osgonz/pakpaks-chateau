@@ -2,13 +2,11 @@ import { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
-import { Tab, Tabs } from "@mui/material";
-import Typography from "@mui/material/Typography";
-import { ItemRarityDictionary, ItemTypeDictionary } from "../data/Dictionaries";
 import CharacterSummary from '../components/CharacterSummary';
+import CharacterDetailTabs from '../components/CharacterDetailTabs';
+import { MagicItem } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
 import { useCharacterLogsByCharacter } from '../hooks/useCharacterLog';
 import { useMagicItemsByCharacter } from "../hooks/useMagicItem";
@@ -31,12 +29,9 @@ const CharacterHome = () => {
         gold: 0,
         level: 0,
     });
-    // Value representing currently selected tab
-    const [tabValue, setTabValue] = useState(0);
-
-    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-        setTabValue(newValue);
-    };
+    // Objects containing split permanent and consumable magic item lists
+    const [consumableMagicItems, setConsumableMagicItems] = useState([] as MagicItem[]);
+    const [permanentMagicItems, setPermanentMagicItems] = useState([] as MagicItem[]);
 
     useEffect(() => {
         async function calculateLevelsAndCurrency() {
@@ -60,6 +55,21 @@ const CharacterHome = () => {
         calculateLevelsAndCurrency();
     }, [characterLogs]);
 
+    useEffect(() => {
+        async function splitPermanentAndConsumableMagicItems() {
+            let result = magicItems?.reduce((r, o) => {
+                r[o.isConsumable ? 'consumableItems' : 'permanentItems'].push(o);
+                return r;
+            }, { permanentItems: [] as MagicItem[], consumableItems: [] as MagicItem[] });
+
+            if (result?.consumableItems)
+                setConsumableMagicItems(result?.consumableItems);
+            if (result?.permanentItems)
+                setPermanentMagicItems(result?.permanentItems);
+        }
+        splitPermanentAndConsumableMagicItems();
+    }, [magicItems]);
+
     return (
         <>
             { character && characterLogs && magicItems && storyAwards ? (
@@ -75,75 +85,16 @@ const CharacterHome = () => {
                             level={charCalcValues.level}
                             gold={charCalcValues.gold}
                             downtime={charCalcValues.downtime}
+                            consumableMagicItems={consumableMagicItems}
+                            permanentMagicItems={permanentMagicItems}
                         />
                         <Divider variant="middle"/>
-                        <Grid 
-                            container 
-                            direction="row" 
-                            justifyContent="center" 
-                            spacing={2}
-                            sx={{
-                                pb: 2,
-                                pr: 2,
-                                ml: "auto",
-                                mr: "auto",
-
-                            }}
-                        >
-                            <Grid item xs={12}>
-                                <Tabs 
-                                    value={tabValue} 
-                                    onChange={handleTabChange} 
-                                    centered
-                                >
-                                    <Tab label="Magic Items" />
-                                    <Tab label="Logs" />
-                                    <Tab label="Story Awards" />
-                                    <Tab label="Other Details" />
-                                </Tabs>
-                            </Grid>
-                        </Grid>
-                        {
-                            /*
-                            TODO: Log Table
-                            Timestamp
-                            Title
-                            Type
-                            Levels
-                            Gold
-                            Downtime
-                            Magic Items*
-                            Actions (View, Edit, Delete)
-
-                            id: string;
-                            type: CharacterLogType;
-                            title: string;
-                            timestamp: Date;
-                            location: string;
-                            dmName: string | null;
-                            dmDci: string | null;
-                            lengthHours: number;
-                            gold: number;
-                            downtime: number;
-                            levels: number;
-                            serviceHours: number;
-                            traderCharacterId: string | null;
-                            traderCharacterName: string | null;
-                            traderOtherPlayer: string | null;
-                            description: string | null;
-                            characterId: string;
-                            */
-                        }
-                        { magicItems.map((magicItem) => (
-                            <>
-                                <Typography variant="h5" component="h2" gutterBottom>
-                                    {magicItem.flavorName ? `${magicItem.flavorName} (${magicItem.name})` : magicItem.name}
-                                </Typography>
-                                <Typography gutterBottom>
-                                    {ItemTypeDictionary.get(magicItem.type)}, {ItemRarityDictionary.get(magicItem.rarity)}{magicItem.requiresAttunement ? ' (requires attunement)' : ''}
-                                </Typography>
-                            </>
-                        ))}
+                        <CharacterDetailTabs 
+                            characterLogs={characterLogs}
+                            consumableMagicItems={consumableMagicItems}
+                            permanentMagicItems={permanentMagicItems}
+                            storyAwards={storyAwards}
+                        />
                     </Paper>
                 </Container>
             ) : (

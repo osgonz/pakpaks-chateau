@@ -29,16 +29,6 @@ export enum ItemRarity {
     Unique
 };
 
-export enum Lifestyle {
-    Wretched = 0,
-    Squalid = 1,
-    Poor = 2,
-    Modest = 10,
-    Comfortable = 20,
-    Wealthy = 40,
-    Aristocratic = 100
-};
-
 export enum CharacterLogType {
     Adventure,
     Merchant,
@@ -62,8 +52,6 @@ export type Character = {
     lineage: string;
     classes: string;
     background: string;
-    faction: string | null;
-    lifestyle: Lifestyle;
     backstory: string | null;
     notes: string | null;
     characterSheetLink: string | null;
