@@ -9,7 +9,7 @@ class CharacterLogController {
         const logs = [
             {
                 id: "testInitialEquipmentLog",
-                type: 1,
+                type: 2,
                 title: "Initial Equipment",
                 timestamp: new Date("2022-07-10T22:11:00.000-08:00"),
                 location: "Some Poor Fella's Shop (tm)",

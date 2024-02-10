@@ -5,7 +5,7 @@ import { useTheme } from "@mui/material/styles";
 import { CampaignDictionary } from "../data/Dictionaries";
 import { Character, MagicItem } from "../data/Types";
 
-export interface SummaryProps {
+interface SummaryProps {
     character: Character,
     level: number,
     gold: number,
@@ -102,7 +102,9 @@ const CharacterSummary = (props: SummaryProps) => {
                 </Grid>
                 <Grid item xs={8}>
                     { props.permanentMagicItems.filter((item) => item.isEquipped).map((item) =>(
-                        <Typography gutterBottom>{item.flavorName ? `${item.flavorName} (${item.name})` : item.name}{item.requiresAttunement ? ' [A]' : ''}</Typography>
+                        <Typography key={item.id} gutterBottom>
+                            {item.flavorName ? `${item.flavorName} (${item.name})` : item.name}{item.requiresAttunement ? ' [A]' : ''}
+                        </Typography>
                     ))}
                 </Grid>
                 <Grid item xs={4}>
@@ -110,7 +112,9 @@ const CharacterSummary = (props: SummaryProps) => {
                 </Grid>
                 <Grid item xs={8}>
                     { props.consumableMagicItems.filter((item) => item.isEquipped).map((item) =>(
-                        <Typography gutterBottom>{item.flavorName ? `${item.flavorName} (${item.name})` : item.name}{item.requiresAttunement ? ' [A]' : ''}</Typography>
+                        <Typography key={item.id} gutterBottom>
+                            {item.flavorName ? `${item.flavorName} (${item.name})` : item.name}{item.requiresAttunement ? ' [A]' : ''}
+                        </Typography>
                     ))}
                 </Grid>
             </Grid>

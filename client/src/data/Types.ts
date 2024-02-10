@@ -31,10 +31,10 @@ export enum ItemRarity {
 
 export enum CharacterLogType {
     Adventure,
-    Merchant,
-    Trade,
     Downtime,
-    ServiceAward
+    Merchant,
+    ServiceAward,
+    Trade
 };
 
 export enum StoryAwardStatus {
@@ -117,3 +117,14 @@ export type StoryAward = {
     characterId: string;
     originLogId: string;
 };
+
+// Metadata interface for head cells used in a sortable table
+export interface SortableTableHeadCell {
+    id: keyof any;
+    label: string;
+    alignment: "right" | "left" | "center";
+    isSortable: boolean;
+}
+
+// Order type for table sorting
+export type Order = 'asc' | 'desc';

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { useParams } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
@@ -23,51 +23,29 @@ const CharacterHome = () => {
     const magicItems = useMagicItemsByCharacter(characterId!);
     // Story award details
     const storyAwards = useStoryAwardsByCharacter(characterId!);
-    // Object containing calculated Character values
-    const [charCalcValues, setCharCalcValues] = useState({
-        downtime: 0,
-        gold: 0,
-        level: 0,
-    });
-    // Objects containing split permanent and consumable magic item lists
-    const [consumableMagicItems, setConsumableMagicItems] = useState([] as MagicItem[]);
-    const [permanentMagicItems, setPermanentMagicItems] = useState([] as MagicItem[]);
 
-    useEffect(() => {
-        async function calculateLevelsAndCurrency() {
-            let downtime = 0;
-            let gold = 0;
-            let level = 0;
+    // Object containing calculated Character values (cached)
+    const [level, gold, downtime] = useMemo(() => {
+        let downtime = 0;
+        let gold = 0;
+        let level = 0;
 
-            characterLogs?.forEach((log) => {
-                downtime += log.downtime;
-                gold += log.gold;
-                level += log.levels;
-            });
+        characterLogs?.forEach((log) => {
+            downtime += log.downtime;
+            gold += log.gold;
+            level += log.levels;
+        });
 
-            setCharCalcValues({
-                ...charCalcValues,
-                downtime: downtime,
-                gold: gold,
-                level: level,
-            });
-        }
-        calculateLevelsAndCurrency();
+        return [level, gold, downtime]
     }, [characterLogs]);
-
-    useEffect(() => {
-        async function splitPermanentAndConsumableMagicItems() {
-            let result = magicItems?.reduce((r, o) => {
-                r[o.isConsumable ? 'consumableItems' : 'permanentItems'].push(o);
-                return r;
-            }, { permanentItems: [] as MagicItem[], consumableItems: [] as MagicItem[] });
-
-            if (result?.consumableItems)
-                setConsumableMagicItems(result?.consumableItems);
-            if (result?.permanentItems)
-                setPermanentMagicItems(result?.permanentItems);
-        }
-        splitPermanentAndConsumableMagicItems();
+    // Objects containing split permanent and consumable magic item lists (cached)
+    const [consumableMagicItems, permanentMagicItems] = useMemo(() => {
+        let result = magicItems?.reduce((r, o) => {
+            r[o.isConsumable ? 'consumableItems' : 'permanentItems'].push(o);
+            return r;
+        }, { permanentItems: [] as MagicItem[], consumableItems: [] as MagicItem[] });
+        
+        return [result?.consumableItems, result?.permanentItems]
     }, [magicItems]);
 
     return (
@@ -82,17 +60,17 @@ const CharacterHome = () => {
                     >
                         <CharacterSummary 
                             character={character}
-                            level={charCalcValues.level}
-                            gold={charCalcValues.gold}
-                            downtime={charCalcValues.downtime}
-                            consumableMagicItems={consumableMagicItems}
-                            permanentMagicItems={permanentMagicItems}
+                            level={level}
+                            gold={gold}
+                            downtime={downtime}
+                            consumableMagicItems={consumableMagicItems!}
+                            permanentMagicItems={permanentMagicItems!}
                         />
                         <Divider variant="middle"/>
                         <CharacterDetailTabs 
                             characterLogs={characterLogs}
-                            consumableMagicItems={consumableMagicItems}
-                            permanentMagicItems={permanentMagicItems}
+                            consumableMagicItems={consumableMagicItems!}
+                            permanentMagicItems={permanentMagicItems!}
                             storyAwards={storyAwards}
                         />
                     </Paper>
