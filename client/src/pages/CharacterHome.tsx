@@ -69,8 +69,7 @@ const CharacterHome = () => {
                         <Divider variant="middle"/>
                         <CharacterDetailTabs 
                             characterLogs={characterLogs}
-                            consumableMagicItems={consumableMagicItems!}
-                            permanentMagicItems={permanentMagicItems!}
+                            magicItems={magicItems}
                             storyAwards={storyAwards}
                         />
                     </Paper>

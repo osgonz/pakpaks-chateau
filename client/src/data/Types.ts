@@ -38,9 +38,9 @@ export enum CharacterLogType {
 };
 
 export enum StoryAwardStatus {
-    Pending,
     Active,
-    Consumed
+    Consumed,
+    Pending
 };
 
 

@@ -6,6 +6,8 @@ import { useTheme } from "@mui/material/styles";
 import { CharacterLog, MagicItem, StoryAward } from '../data/Types';
 import CharacterDetailTabPanel from './CharacterDetailTabPanel';
 import CharacterLogTable from './CharacterLogTable';
+import StoryAwardTable from './StoryAwardTable';
+import MagicItemTable from './MagicItemTable';
 
 function getA11yPropsForTabs(tabName: string) {
     return {
@@ -16,8 +18,7 @@ function getA11yPropsForTabs(tabName: string) {
 
 interface CharacterDetailsProps {
     characterLogs: CharacterLog[],
-    consumableMagicItems: MagicItem[],
-    permanentMagicItems: MagicItem[],
+    magicItems: MagicItem[],
     storyAwards: StoryAward[],
 };
 
@@ -71,8 +72,32 @@ const CharacterDetailTabs = (props: CharacterDetailsProps) => {
                     tabName="player-logs"
                 >
                     <CharacterLogTable 
-                            characterLogs={props.characterLogs}
+                        characterLogs={props.characterLogs}
                     />
+                </CharacterDetailTabPanel>
+                <CharacterDetailTabPanel 
+                    value={tabValue}
+                    index={1}
+                    tabName="magic-items"
+                >
+                    <MagicItemTable
+                        magicItems={props.magicItems}
+                    />
+                </CharacterDetailTabPanel>
+                <CharacterDetailTabPanel 
+                    value={tabValue}
+                    index={2}
+                    tabName="story-awards"
+                >
+                    <StoryAwardTable
+                        storyAwards={props.storyAwards}
+                    />
+                </CharacterDetailTabPanel>
+                <CharacterDetailTabPanel 
+                    value={tabValue}
+                    index={3}
+                    tabName="other-details"
+                >
                 </CharacterDetailTabPanel>
             </Grid>
             { /*props.permanentMagicItems.map((magicItem) => (
