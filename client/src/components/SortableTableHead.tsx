@@ -59,7 +59,7 @@ interface SortableTableHeadProps {
     rowCount: number;
 };
 
-function SortableTableHead(props: SortableTableHeadProps) {
+const SortableTableHead = (props: SortableTableHeadProps) => {
     // Variables containing head cell metadata, sorting direction, attribute used for sorting,
     // and reference to helper sorting function
     const { headCells, order, orderBy, onRequestSort } = props;

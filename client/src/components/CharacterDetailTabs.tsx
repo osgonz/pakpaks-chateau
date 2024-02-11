@@ -4,7 +4,15 @@ import { Tab, Tabs } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { CharacterLog, MagicItem, StoryAward } from '../data/Types';
+import CharacterDetailTabPanel from './CharacterDetailTabPanel';
 import CharacterLogTable from './CharacterLogTable';
+
+function getA11yPropsForTabs(tabName: string) {
+    return {
+        id: `${tabName}-tab`,
+        'aria-controls': `${tabName}-tabpanel`
+    };
+};
 
 interface CharacterDetailsProps {
     characterLogs: CharacterLog[],
@@ -49,18 +57,23 @@ const CharacterDetailTabs = (props: CharacterDetailsProps) => {
                         centered={isScreenMdOrLarger}
                         variant={isScreenMdOrLarger ? "standard" : "scrollable"}
                         scrollButtons={!isScreenMdOrLarger}
+                        aria-label="Character details tabs"
                     >
-                        <Tab label="Player Logs" />
-                        <Tab label="Magic Items" />
-                        <Tab label="Story Awards" />
-                        <Tab label="Other Details" />
+                        <Tab label="Player Logs" {...getA11yPropsForTabs("player-logs")} />
+                        <Tab label="Magic Items" {...getA11yPropsForTabs("magic-items")} />
+                        <Tab label="Story Awards" {...getA11yPropsForTabs("story-awards")} />
+                        <Tab label="Other Details" {...getA11yPropsForTabs("other-details")} />
                     </Tabs>
                 </Grid>
-                <Grid item xs={12}>
+                <CharacterDetailTabPanel 
+                    value={tabValue}
+                    index={0}
+                    tabName="player-logs"
+                >
                     <CharacterLogTable 
                             characterLogs={props.characterLogs}
                     />
-                </Grid>
+                </CharacterDetailTabPanel>
             </Grid>
             { /*props.permanentMagicItems.map((magicItem) => (
                 <>
