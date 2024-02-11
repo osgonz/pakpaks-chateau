@@ -115,7 +115,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
 
     return (
         <TableContainer component={Paper} elevation={3}>
-            <Table sx={{ minWidth: 650 }} size="small" aria-label="custom pagination table">
+            <Table sx={{ minWidth: 650 }} size="small" aria-label="Character Logs table">
                 <SortableTableHead 
                     headCells={headCells}
                     order={order}

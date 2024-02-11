@@ -52,55 +52,55 @@ const CharacterSummary = (props: SummaryProps) => {
                     width={isScreenLgOrLarger? 200: 150} 
                 />
             </Grid>
-            <Grid container item xs={12} md={4.5}>
+            <Grid alignItems="center" container item xs={12} md={4.5}>
                 <Grid item xs={4}>
                     <Typography gutterBottom>Campaign:</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{CampaignDictionary.get(props.character.campaign)}</Typography>
                 </Grid>
                 <Grid item xs={4}>
                     <Typography gutterBottom>Lineage:</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{props.character.lineage}</Typography>
                 </Grid>
                 <Grid item xs={4}>
                     <Typography gutterBottom>Class:</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{props.character.classes}</Typography>
                 </Grid>
                 <Grid item xs={4}>
                     <Typography gutterBottom>Level:</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{props.level}</Typography>
                 </Grid>
                 <Grid item xs={4}>
                     <Typography gutterBottom>Background:</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{props.character.background}</Typography>
                 </Grid>
                 <Grid item xs={4}>
                     <Typography gutterBottom>Gold:</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{props.gold}</Typography>
                 </Grid>
                 <Grid item xs={4}>
                     <Typography gutterBottom>Downtime:</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{props.downtime}</Typography>
                 </Grid>
             </Grid>
-            <Grid container item xs={12} md={4.5}>
+            <Grid alignItems="center" container item xs={12} md={4.5}>
                 <Grid item xs={4}>
                     <Typography gutterBottom>Carried Magic Items:</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={8} sx={{ pl: 1 }}>
                     { props.permanentMagicItems.filter((item) => item.isEquipped).map((item) =>(
                         <Typography key={item.id} gutterBottom>
                             {item.flavorName ? `${item.flavorName} (${item.name})` : item.name}{item.requiresAttunement ? ' [A]' : ''}
@@ -110,7 +110,7 @@ const CharacterSummary = (props: SummaryProps) => {
                 <Grid item xs={4}>
                     <Typography gutterBottom>Carried Consumables:</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={8} sx={{ pl: 1 }}>
                     { props.consumableMagicItems.filter((item) => item.isEquipped).map((item) =>(
                         <Typography key={item.id} gutterBottom>
                             {item.flavorName ? `${item.flavorName} (${item.name})` : item.name}{item.requiresAttunement ? ' [A]' : ''}
