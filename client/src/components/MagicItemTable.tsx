@@ -12,7 +12,54 @@ import TableRow from '@mui/material/TableRow';
 import { ItemRarityDictionary } from '../data/Dictionaries';
 import { MagicItem, Order, SortableTableHeadCell } from '../data/Types';
 import EnhancedTablePaginationActions from './EnhancedTablePaginationActions';
-import SortableTableHead, { getSortComparator } from './SortableTableHead';
+import SortableTableHead, { getDescendingComparator } from './SortableTableHead';
+
+/**
+ * Descending comparator function for Magic Item name edge case
+ * @param a First element to be compared
+ * @param b Second element to be compared
+ * @param orderBy Key for attribute elements will be compared on
+ * @returns Comparison result (-1, 0 or 1)
+ */
+function getDescendingMagicItemNameComparator(a: MagicItem, b: MagicItem) {
+    const nameA = a["flavorName"] ?? a["name"];
+    const nameB = b["flavorName"] ?? b["name"];
+
+    if (nameB == null) {
+        if (nameA == null) {
+            return 0;
+        }
+        return -1;
+    }
+    if (nameA == null) {
+        return 1;
+    }
+    if (nameB < nameA) {
+        return -1;
+    }
+    if (nameB > nameA) {
+        return 1;
+    }
+    return 0;
+}
+
+/**
+ * 
+ * @param order Sort direction to be applied
+ * @param orderBy Key for attribute elements will be compared on
+ * @returns Result of comparator function
+ */
+function getMagicItemSortComparator<Key extends keyof MagicItem>(
+    order: Order,
+    orderBy: Key,
+) : (
+    a: MagicItem,
+    b: MagicItem,
+) => number {
+    return order === 'desc'
+        ? (a, b) => orderBy === "name" ? getDescendingMagicItemNameComparator(a, b) : getDescendingComparator(a, b, orderBy)
+        : (a, b) => orderBy === "name" ? -getDescendingMagicItemNameComparator(a, b) : -getDescendingComparator(a, b, orderBy);
+};
 
 interface MagicItemTableProps {
     magicItems: MagicItem[],
@@ -22,7 +69,7 @@ const MagicItemTable = (props: MagicItemTableProps) => {
     // Table's current sort direction
     const [order, setOrder] = useState<Order>('asc');
     // Attribute name used to sort the table
-    const [orderBy, setOrderBy] = useState<keyof any>('name');
+    const [orderBy, setOrderBy] = useState<keyof MagicItem>('name');
     // Current page number
     const [page, setPage] = useState(0);
     // Number of records showed per page
@@ -33,7 +80,7 @@ const MagicItemTable = (props: MagicItemTableProps) => {
 
     // Object containing subset of records being shown in table
     const visibleRows = useMemo(
-        () => magicItems.slice().sort(getSortComparator(order, orderBy)).slice(
+        () => magicItems.slice().sort(getMagicItemSortComparator(order, orderBy)).slice(
             page * rowsPerPage,
             page * rowsPerPage + rowsPerPage,
         ),
@@ -87,7 +134,7 @@ const MagicItemTable = (props: MagicItemTableProps) => {
     const handleRequestSort = (_: React.MouseEvent<unknown>, property: keyof any) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
+        setOrderBy(property as keyof MagicItem);
     };
 
     // Helper function triggered when table page is changed
