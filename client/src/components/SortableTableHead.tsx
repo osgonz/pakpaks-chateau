@@ -14,7 +14,7 @@ import { Order, SortableTableHeadCell } from '../data/Types';
  * @param orderBy Key for attribute elements will be compared on
  * @returns Comparison result (-1, 0 or 1)
  */
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
+export function getDescendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] == null) {
         if (a[orderBy] == null) {
             return 0;
@@ -47,8 +47,8 @@ export function getSortComparator<Key extends keyof any>(
     b: { [key in Key]: boolean | number | string | Date | null },
 ) => number {
     return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
+        ? (a, b) => getDescendingComparator(a, b, orderBy)
+        : (a, b) => -getDescendingComparator(a, b, orderBy);
 };
 
 interface SortableTableHeadProps {
