@@ -103,7 +103,7 @@ const MagicItemTable = (props: MagicItemTableProps) => {
 
     return (
         <TableContainer component={Paper} elevation={3}>
-            <Table sx={{ minWidth: 650 }} size="medium" aria-label="Story Awards table">
+            <Table sx={{ minWidth: 650 }} size="medium" aria-label="Magic Items table">
                 <SortableTableHead 
                     headCells={headCells}
                     order={order}
