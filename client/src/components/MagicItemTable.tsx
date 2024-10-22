@@ -167,7 +167,7 @@ const MagicItemTable = (props: MagicItemTableProps) => {
                         <TableCell>{ItemRarityDictionary.get(item.rarity)}</TableCell>
                         <TableCell>{item.isConsumable ? 'Consumable' : 'Permanent'}</TableCell>
                         <TableCell>{item.requiresAttunement ? 'Yes' : 'No'}</TableCell>
-                        <TableCell>{item.originLogId}</TableCell>
+                        <TableCell>{item.originLogId /* WE NEED TO SHOW LOG TITLE HERE INSTEAD */}</TableCell>
                         <TableCell align="center">
                             <IconButton color="primary"><Icon>visibility</Icon></IconButton>
                             <IconButton color="primary"><Icon>edit</Icon></IconButton>

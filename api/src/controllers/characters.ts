@@ -6,7 +6,7 @@ class CharacterController {
     // Get all characters
     getCharacters = async (req: Request, res: Response) => {
         let conn: PoolConnection | undefined;
-        // TODO: Call to storage to fetch character data
+        // TODO: Replace call below with stored procedure
         try {
             conn = await db.getConnection();
             const characters = await conn.query("SELECT * FROM `character`");
@@ -23,7 +23,7 @@ class CharacterController {
         // Extract character id from parameter
         const id = req.params.id;
         let conn: PoolConnection | undefined;
-        // TODO: Call to storage to fetch character data
+        // TODO: Replace call below with stored procedure
         try {
             conn = await db.getConnection();
             const character = await conn.query("SELECT * FROM `character` WHERE id = (?) LIMIT 1", [id]);

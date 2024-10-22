@@ -107,16 +107,6 @@ const CharacterSummary = (props: SummaryProps) => {
                         </Typography>
                     ))}
                 </Grid>
-                <Grid item xs={4}>
-                    <Typography gutterBottom>Carried Consumables:</Typography>
-                </Grid>
-                <Grid item xs={8} sx={{ pl: 1 }}>
-                    { props.consumableMagicItems.filter((item) => item.isEquipped).map((item) =>(
-                        <Typography key={item.id} gutterBottom>
-                            {item.flavorName ? `${item.flavorName} (${item.name})` : item.name}{item.requiresAttunement ? ' [A]' : ''}
-                        </Typography>
-                    ))}
-                </Grid>
             </Grid>
         </Grid>
     );
