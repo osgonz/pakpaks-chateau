@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { format } from 'date-fns';
 import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
@@ -126,7 +127,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                 <TableBody>
                 { visibleRows.map((log) => (
                     <TableRow key={log.id}>
-                        <TableCell>{log.timestamp.toString()}</TableCell>
+                        <TableCell>{format(log.timestamp, "yyyy-MM-dd HH:mm")}</TableCell>
                         <TableCell component="th" scope="row">
                             {log.title}
                         </TableCell>
