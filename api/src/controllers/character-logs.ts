@@ -8,7 +8,6 @@ class CharacterLogController {
         // Extract character id from parameter
         const characterId = req.params.id;
         let conn: PoolConnection | undefined;
-        // TODO: Replace call below with stored procedure
         try {
             conn = await db.getConnection();
             const [logs] = await conn.query("call get_character_log_list(?)", [characterId]);
@@ -27,7 +26,6 @@ class CharacterLogController {
         // Extract character id from parameter
         const characterId = req.params.charId;
         let conn: PoolConnection | undefined;
-        // TODO: Replace call below with stored procedure
         // TODO: Rethink if characterId validation should happen during or after query
         try {
             conn = await db.getConnection();
