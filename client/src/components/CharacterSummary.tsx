@@ -87,7 +87,7 @@ const CharacterSummary = (props: SummaryProps) => {
                     <Typography gutterBottom>Gold:</Typography>
                 </Grid>
                 <Grid item xs={8} sx={{ pl: 1 }}>
-                    <Typography gutterBottom>{props.gold}</Typography>
+                    <Typography gutterBottom>{parseFloat(props.gold.toFixed(2))}</Typography>
                 </Grid>
                 <Grid item xs={4}>
                     <Typography gutterBottom>Downtime:</Typography>
