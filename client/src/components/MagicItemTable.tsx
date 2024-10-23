@@ -10,7 +10,7 @@ import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { ItemRarityDictionary } from '../data/Dictionaries';
-import { MagicItem, Order, SortableTableHeadCell } from '../data/Types';
+import { MagicItem, MagicItemRow, Order, SortableTableHeadCell } from '../data/Types';
 import EnhancedTablePaginationActions from './EnhancedTablePaginationActions';
 import SortableTableHead, { getDescendingComparator } from './SortableTableHead';
 
@@ -62,7 +62,7 @@ function getMagicItemSortComparator<Key extends keyof MagicItem>(
 };
 
 interface MagicItemTableProps {
-    magicItems: MagicItem[],
+    magicItems: MagicItemRow[],
 };
 
 const MagicItemTable = (props: MagicItemTableProps) => {
@@ -114,7 +114,7 @@ const MagicItemTable = (props: MagicItemTableProps) => {
             isSortable: true,
         },
         {
-            id: 'originLogId',
+            id: 'originLogTitle',
             label: 'Origin Log',
             alignment: 'left',
             isSortable: false,
@@ -167,7 +167,7 @@ const MagicItemTable = (props: MagicItemTableProps) => {
                         <TableCell>{ItemRarityDictionary.get(item.rarity)}</TableCell>
                         <TableCell>{item.isConsumable ? 'Consumable' : 'Permanent'}</TableCell>
                         <TableCell>{item.requiresAttunement ? 'Yes' : 'No'}</TableCell>
-                        <TableCell>{item.originLogId /* WE NEED TO SHOW LOG TITLE HERE INSTEAD */}</TableCell>
+                        <TableCell>{item.originLogTitle}</TableCell>
                         <TableCell align="center">
                             <IconButton color="primary"><Icon>visibility</Icon></IconButton>
                             <IconButton color="primary"><Icon>edit</Icon></IconButton>

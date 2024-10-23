@@ -87,6 +87,10 @@ export type MagicItem = {
     lossLogId: string | null;
 };
 
+export interface MagicItemRow extends MagicItem {
+    originLogTitle: string;
+};
+
 // Player Log type definition
 export type CharacterLog = {
     id: string;

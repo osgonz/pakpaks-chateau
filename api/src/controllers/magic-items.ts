@@ -8,11 +8,10 @@ class MagicItemController {
         // Extract character id from parameter
         const characterId = req.params.id;
         let conn: PoolConnection | undefined;
-        // TODO: Replace call below with stored procedure
         // TODO: Should front end take care of filtering out items with a lossLogId?
         try {
             conn = await db.getConnection();
-            const items = await conn.query("SELECT * FROM magicItem WHERE characterId = (?) AND lossLogId IS NULL", [characterId]);
+            const [items] = await conn.query("call get_character_magic_item_list(?)", [characterId]);
             res.status(200).send(items);
         } finally {
             if (conn) {
@@ -28,11 +27,10 @@ class MagicItemController {
         // Extract character id from parameter
         const characterId = req.params.charId;
         let conn: PoolConnection | undefined;
-        // TODO: Replace call below with stored procedure
         // TODO: Rethink if characterId validation should happen during or after query
         try {
             conn = await db.getConnection();
-            const items = await conn.query("SELECT * FROM magicItem WHERE originLogId = (?) AND characterId = (?)", [logId, characterId]);
+            const [items] = await conn.query("call get_character_log_magic_item_list(?,?)", [logId, characterId]);
             res.status(200).send(items);
         } finally {
             if (conn) {
@@ -48,11 +46,10 @@ class MagicItemController {
         // Extract character id from parameter
         const characterId = req.params.charId;
         let conn: PoolConnection | undefined;
-        // TODO: Replace call below with stored procedure
         // TODO: Rethink if characterId validation should happen during or after query
         try {
             conn = await db.getConnection();
-            const magicItem = await conn.query("SELECT * FROM magicItem WHERE id = (?) AND characterId = (?)", [id, characterId]);
+            const [magicItem] = await conn.query("call get_magic_item(?,?)", [id, characterId]);
             res.status(200).send(magicItem[0]);
         } finally {
             if (conn) {
