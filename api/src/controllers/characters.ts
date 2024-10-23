@@ -9,7 +9,7 @@ class CharacterController {
         // TODO: Replace call below with stored procedure
         try {
             conn = await db.getConnection();
-            const characters = await conn.query("SELECT * FROM `character`");
+            const [characters] = await conn.execute("call get_character_list()");
             res.status(200).send(characters);
         } finally {
             if (conn) {
@@ -26,7 +26,7 @@ class CharacterController {
         // TODO: Replace call below with stored procedure
         try {
             conn = await db.getConnection();
-            const character = await conn.query("SELECT * FROM `character` WHERE id = (?) LIMIT 1", [id]);
+            const [character] = await conn.execute("call get_character(?)", [id]);
             res.status(200).send(character[0]);
         } finally {
             if (conn) {
