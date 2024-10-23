@@ -11,7 +11,7 @@ class CharacterLogController {
         // TODO: Replace call below with stored procedure
         try {
             conn = await db.getConnection();
-            const logs = await conn.query("SELECT * FROM characterLog WHERE characterId = (?)", [characterId]);
+            const [logs] = await conn.query("call get_character_log_list(?)", [characterId]);
             res.status(200).send(logs);
         } finally {
             if (conn) {
@@ -31,7 +31,7 @@ class CharacterLogController {
         // TODO: Rethink if characterId validation should happen during or after query
         try {
             conn = await db.getConnection();
-            const log = await conn.query("SELECT * FROM characterLog WHERE id = (?) AND characterId = (?)", [id, characterId]);
+            const [log] = await conn.query("call get_character_log(?,?)", [id, characterId]);
             res.status(200).send(log[0]);
         } finally {
             if (conn) {
