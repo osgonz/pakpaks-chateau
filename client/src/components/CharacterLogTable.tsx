@@ -11,19 +11,19 @@ import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { CharacterLogTypeDictionary } from '../data/Dictionaries';
-import { CharacterLog, Order, SortableTableHeadCell } from '../data/Types';
+import { CharacterLog, CharacterLogRow, Order, SortableTableHeadCell } from '../data/Types';
 import EnhancedTablePaginationActions from './EnhancedTablePaginationActions';
 import SortableTableHead, { getSortComparator } from './SortableTableHead';
 
 interface CharacterLogTableProps {
-    characterLogs: CharacterLog[],
+    characterLogs: CharacterLogRow[],
 };
 
 const CharacterLogTable = (props: CharacterLogTableProps) => {
     // Table's current sort direction
     const [order, setOrder] = useState<Order>('desc');
     // Attribute name used to sort the table
-    const [orderBy, setOrderBy] = useState<keyof any>('timestamp');
+    const [orderBy, setOrderBy] = useState<keyof CharacterLog>('timestamp');
     // Current page number
     const [page, setPage] = useState(0);
     // Number of records showed per page
@@ -80,7 +80,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
             isSortable: true,
         },
         {
-            id: 'magicItems',
+            id: 'magicItemNames',
             label: 'Magic Items',
             alignment: 'left',
             isSortable: false,
@@ -100,7 +100,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
     const handleRequestSort = (_: React.MouseEvent<unknown>, property: keyof any) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
+        setOrderBy(property as keyof CharacterLog);
     };
 
     // Helper function triggered when table page is changed
@@ -135,7 +135,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                         <TableCell align="right">{log.levels}</TableCell>
                         <TableCell align="right">{log.gold}</TableCell>
                         <TableCell align="right">{log.downtime}</TableCell>
-                        <TableCell>Something Really Cool!</TableCell>
+                        <TableCell>{log.magicItemNames || ''}</TableCell>
                         <TableCell align="center">
                             <IconButton color="primary"><Icon>visibility</Icon></IconButton>
                             <IconButton color="primary"><Icon>edit</Icon></IconButton>

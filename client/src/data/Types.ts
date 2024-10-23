@@ -112,6 +112,10 @@ export type CharacterLog = {
     characterId: string;
 };
 
+export interface CharacterLogRow extends CharacterLog {
+    magicItemNames: string | null;
+};
+
 // Story Award type definition
 export type StoryAward = {
     id: string;

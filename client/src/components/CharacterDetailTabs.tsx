@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import { Tab, Tabs } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { CharacterLog, MagicItem, StoryAward } from '../data/Types';
+import { CharacterLogRow, MagicItemRow, StoryAward } from '../data/Types';
 import CharacterDetailTabPanel from './CharacterDetailTabPanel';
 import CharacterLogTable from './CharacterLogTable';
 import StoryAwardTable from './StoryAwardTable';
@@ -17,8 +17,8 @@ function getA11yPropsForTabs(tabName: string) {
 };
 
 interface CharacterDetailsProps {
-    characterLogs: CharacterLog[],
-    magicItems: MagicItem[],
+    characterLogs: CharacterLogRow[],
+    magicItems: MagicItemRow[],
     storyAwards: StoryAward[],
 };
 
