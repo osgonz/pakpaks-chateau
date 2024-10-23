@@ -126,6 +126,10 @@ export type StoryAward = {
     originLogId: string;
 };
 
+export interface StoryAwardRow extends StoryAward {
+    originLogTitle: string;
+};
+
 // Metadata interface for head cells used in a sortable table
 export interface SortableTableHeadCell {
     id: keyof any;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from "react";
-import { StoryAward } from "../data/Types";
+import { StoryAward, StoryAwardRow } from "../data/Types";
 
 /**
  * Custom hook that returns a specific story award's data
@@ -33,7 +33,7 @@ export function useStoryAward(characterId: string, awardId: string) {
  * @returns Array containing the character's story awards
  */
 export function useStoryAwardsByCharacter(characterId: string) {
-    const [storyAwards, setStoryAwards] = useState<StoryAward[] | undefined>();
+    const [storyAwards, setStoryAwards] = useState<StoryAwardRow[] | undefined>();
 
     /**
      * Asynchronous function that pulls a character's story awards
@@ -41,7 +41,7 @@ export function useStoryAwardsByCharacter(characterId: string) {
      * @returns Array containing the character's story awards
      */
     const loadStoryAwardsByCharacter = async(characterId: string) => {
-        return axios.get(`/api/characters/${characterId}/story-awards`).then((res) => res.data) as Promise<StoryAward[]>;
+        return axios.get(`/api/characters/${characterId}/story-awards`).then((res) => res.data) as Promise<StoryAwardRow[]>;
     };
 
     useEffect(() => {

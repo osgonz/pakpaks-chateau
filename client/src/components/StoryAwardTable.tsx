@@ -10,19 +10,19 @@ import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { StoryAwardStatusDictionary } from '../data/Dictionaries';
-import { Order, SortableTableHeadCell, StoryAward } from '../data/Types';
+import { Order, SortableTableHeadCell, StoryAward, StoryAwardRow } from '../data/Types';
 import EnhancedTablePaginationActions from './EnhancedTablePaginationActions';
 import SortableTableHead, { getSortComparator } from './SortableTableHead';
 
 interface StoryAwardTableProps {
-    storyAwards: StoryAward[],
+    storyAwards: StoryAwardRow[],
 };
 
 const StoryAwardTable = (props: StoryAwardTableProps) => {
     // Table's current sort direction
     const [order, setOrder] = useState<Order>('asc');
     // Attribute name used to sort the table
-    const [orderBy, setOrderBy] = useState<keyof any>('name');
+    const [orderBy, setOrderBy] = useState<keyof StoryAward>('name');
     // Current page number
     const [page, setPage] = useState(0);
     // Number of records showed per page
@@ -75,7 +75,7 @@ const StoryAwardTable = (props: StoryAwardTableProps) => {
     const handleRequestSort = (_: React.MouseEvent<unknown>, property: keyof any) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
+        setOrderBy(property as keyof StoryAward);
     };
 
     // Helper function triggered when table page is changed
@@ -106,7 +106,7 @@ const StoryAwardTable = (props: StoryAwardTableProps) => {
                             {award.name}
                         </TableCell>
                         <TableCell>{StoryAwardStatusDictionary.get(award.status)}</TableCell>
-                        <TableCell>{award.originLogId}</TableCell>
+                        <TableCell>{award.originLogTitle}</TableCell>
                         <TableCell align="center">
                             <IconButton color="primary"><Icon>visibility</Icon></IconButton>
                             <IconButton color="primary"><Icon>edit</Icon></IconButton>

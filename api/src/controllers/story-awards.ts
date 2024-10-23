@@ -1,3 +1,5 @@
+import { PoolConnection } from 'mariadb';
+import db from '../connection';
 import { Request, Response } from 'express';
 
 class StoryAwardController {
@@ -5,26 +7,16 @@ class StoryAwardController {
     getStoryAwardsByCharacter = async (req: Request, res: Response) => {
         // Extract character id from parameter
         const characterId = req.params.id;
-        // TODO: Call to storage to fetch story awards
-        const awards = [
-            {
-                id: "testStoryAwardOne",
-                name: "Uneasy Alliance",
-                description: `Damita Uthros is alive, and you "might" be allies.`,
-                status: 0,
-                characterId: characterId,
-                originLogId: "testDDAL0706Log",
-            },
-            {
-                id: "testStoryAwardTwo",
-                name: "A Giant Challenge",
-                description: `You have earned the respect of Prince Thornacious. He challenges you to befriend a giant, as he has done with you, (Huge sized humanoid), without using charm effects. If you do, (DMs judgement), you may spend five downtime days to return to Thornacious, who uses Heart Sight to tell if you are true of heart. He bestows upon you the title: Adoness (Peacekeeper). This title grants you advantage on Charisma ability checks with good aligned fey.`,
-                status: 2,
-                characterId: characterId,
-                originLogId: "TestLogTwo",
-            },
-        ];
-        res.status(200).send(awards);
+        let conn: PoolConnection | undefined;
+        try {
+            conn = await db.getConnection();
+            const [awards] = await conn.query("call get_character_story_award_list(?)", [characterId]);
+            res.status(200).send(awards);
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
     };
 
     // Get a specific character log's story awards
@@ -33,19 +25,17 @@ class StoryAwardController {
         const logId = req.params.id;
         // Extract character id from parameter
         const characterId = req.params.charId;
-        // TODO: Call to storage to fetch story awards
-        // TODO: Validate if characterId param matches characterId within story award
-        const awards = [
-            {
-                id: "testStoryAwardOne",
-                name: "Uneasy Alliance",
-                description: `Damita Uthros is alive, and you "might" be allies.`,
-                status: 1,
-                characterId: "test",
-                originLogId: logId,
-            },
-        ];
-        res.status(200).send(awards);
+        let conn: PoolConnection | undefined;
+        // TODO: Rethink if characterId validation should happen during or after query
+        try {
+            conn = await db.getConnection();
+            const [awards] = await conn.query("call get_character_log_story_award_list(?,?)", [logId, characterId]);
+            res.status(200).send(awards);
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
     };
 
     // Get a story award
@@ -54,17 +44,17 @@ class StoryAwardController {
         const id = req.params.id;
         // Extract character id from parameter
         const characterId = req.params.charId;
-        // TODO: Call to storage to fetch story award data
-        // TODO: Validate if characterId param matches characterId within story award
-        const award = {
-            id: id,
-            name: "Uneasy Alliance",
-            description: `Damita Uthros is alive, and you "might" be allies.`,
-            status: 1,
-            characterId: "test",
-            originLogId: "testDDAL0706Log",
-        };
-        res.status(200).send(award);
+        let conn: PoolConnection | undefined;
+        // TODO: Rethink if characterId validation should happen during or after query
+        try {
+            conn = await db.getConnection();
+            const [award] = await conn.query("call get_story_award(?,?)", [id, characterId]);
+            res.status(200).send(award[0]);
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
     };
 };
 
