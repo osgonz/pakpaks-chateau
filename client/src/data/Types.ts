@@ -114,6 +114,7 @@ export type CharacterLog = {
 
 export interface CharacterLogRow extends CharacterLog {
     magicItemNames: string | null;
+    lostMagicItemNames: string | null;
 };
 
 // Story Award type definition

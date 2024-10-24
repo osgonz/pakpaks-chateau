@@ -2,6 +2,8 @@ import { useState, useMemo } from 'react';
 import { format } from 'date-fns';
 import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -135,7 +137,16 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                         <TableCell align="right">{log.levels}</TableCell>
                         <TableCell align="right">{log.gold}</TableCell>
                         <TableCell align="right">{log.downtime}</TableCell>
-                        <TableCell>{log.magicItemNames || ''}</TableCell>
+                        <TableCell>
+                            <List>
+                                { log.magicItemNames &&
+                                    <ListItem key={log.id+'-items'}>+ {log.magicItemNames}</ListItem>
+                                }
+                                { log.lostMagicItemNames &&
+                                    <ListItem key={log.id+'-lostItems'}>- {log.lostMagicItemNames}</ListItem>
+                                }
+                            </List>
+                        </TableCell>
                         <TableCell align="center">
                             <IconButton color="primary"><Icon>visibility</Icon></IconButton>
                             <IconButton color="primary"><Icon>edit</Icon></IconButton>
