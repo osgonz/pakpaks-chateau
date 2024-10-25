@@ -10,6 +10,9 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { useTheme } from "@mui/material/styles";
 import { CharacterLogTypeDictionary } from '../data/Dictionaries';
 import AdventureLogFields from './AdventureLogFields';
+import MerchantLogFields from './MerchantLogFields';
+import ServiceAwardLogFields from './ServiceAwardLogFields';
+import TradeLogFields from './TradeLogFields';
 
 interface CharacterLogDialogProps {
     characterId: string | undefined,
@@ -20,20 +23,20 @@ interface CharacterLogDialogProps {
 const CharacterLogDialog = (props: CharacterLogDialogProps) => {
     // State object containing user-provided log info
     const [log, setLog] = useState({
-        type: null as string | null,
-        title: '' as string | null,
+        type: '' as string,
+        title: '' as string,
         timestamp: new Date() as Date | null,
-        location: '' as string | null,
-        dmName: '' as string | null,
-        dmDci: '' as string | null,
-        lengthHours: 0 as number | null,
-        gold: 0 as number | null,
-        downtime: 0 as number | null,
-        levels: 0 as number | null,
-        serviceHours: 0 as number | null,
-        traderCharacterName: '' as string | null,
-        traderOtherPlayer: '' as string | null,
-        description: '' as string | null,
+        location: '' as string,
+        dmName: '' as string,
+        dmDci: '' as string,
+        lengthHours: 0 as number,
+        gold: 0 as number,
+        downtime: 0 as number,
+        levels: 0 as number,
+        serviceHours: 0 as number,
+        traderCharacterName: '' as string,
+        traderOtherPlayer: '' as string,
+        description: '' as string,
     });
 
     const theme = useTheme();
@@ -43,20 +46,20 @@ const CharacterLogDialog = (props: CharacterLogDialogProps) => {
     const handleLogDialogClose = () => {
         props.setOpen(false);
         setLog({
-            type: null as string | null,
-            title: '' as string | null,
+            type: '' as string,
+            title: '' as string,
             timestamp: new Date() as Date | null,
-            location: '' as string | null,
-            dmName: '' as string | null,
-            dmDci: '' as string | null,
-            lengthHours: null as number | null,
-            gold: null as number | null,
-            downtime: null as number | null,
-            levels: null as number | null,
-            serviceHours: null as number | null,
-            traderCharacterName: '' as string | null,
-            traderOtherPlayer: '' as string | null,
-            description: '' as string | null,
+            location: '' as string,
+            dmName: '' as string,
+            dmDci: '' as string,
+            lengthHours: 0 as number,
+            gold: 0 as number,
+            downtime: 0 as number,
+            levels: 0 as number,
+            serviceHours: 0 as number,
+            traderCharacterName: '' as string,
+            traderOtherPlayer: '' as string,
+            description: '' as string,
         });
     };
     // Helper function triggered when updating an Autocomplete field
@@ -134,6 +137,24 @@ const CharacterLogDialog = (props: CharacterLogDialogProps) => {
                     </Grid>
                     { log.type == "Adventure" &&
                         <AdventureLogFields
+                            log={log}
+                            handleLogTextChange={handleLogTextChange}
+                        />
+                    }
+                    { (log.type == "Merchant" || log.type == "Downtime Activity") &&
+                        <MerchantLogFields
+                            log={log}
+                            handleLogTextChange={handleLogTextChange}
+                        />
+                    }
+                    { log.type == "Magic Item Trade" &&
+                        <TradeLogFields
+                            log={log}
+                            handleLogTextChange={handleLogTextChange}
+                        />
+                    }
+                    { log.type == "DM Service Award" &&
+                        <ServiceAwardLogFields
                             log={log}
                             handleLogTextChange={handleLogTextChange}
                         />
