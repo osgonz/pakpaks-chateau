@@ -16,8 +16,10 @@ import { CharacterLogTypeDictionary } from '../data/Dictionaries';
 import { CharacterLog, CharacterLogRow, Order, SortableTableHeadCell } from '../data/Types';
 import EnhancedTablePaginationActions from './EnhancedTablePaginationActions';
 import SortableTableHead, { getSortComparator } from './SortableTableHead';
+import CharacterLogDialog from './CharacterLogDialog';
 
 interface CharacterLogTableProps {
+    characterId: string | undefined,
     characterLogs: CharacterLogRow[],
 };
 
@@ -30,6 +32,9 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
     const [page, setPage] = useState(0);
     // Number of records showed per page
     const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    // Flag used to hide/show the Character Log Dialog
+    const [logOpen, setLogOpen] = useState(false);
 
     // Character logs
     const { characterLogs } = props;
@@ -116,65 +121,77 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
         setPage(0);
     };
 
+    // Helper function triggered when showing Character Log Dialog
+    const handleLogDialogOpen = () => {
+        setLogOpen(true);
+    };
+
     return (
-        <TableContainer component={Paper} elevation={3}>
-            <Table sx={{ minWidth: 650 }} size="medium" aria-label="Character Logs table">
-                <SortableTableHead 
-                    headCells={headCells}
-                    order={order}
-                    orderBy={orderBy as string}
-                    onRequestSort={handleRequestSort}
-                    rowCount={characterLogs.length}
-                />
-                <TableBody>
-                { visibleRows.map((log) => (
-                    <TableRow key={log.id}>
-                        <TableCell>{format(log.timestamp, "yyyy-MM-dd HH:mm")}</TableCell>
-                        <TableCell component="th" scope="row">
-                            {log.title}
-                        </TableCell>
-                        <TableCell>{CharacterLogTypeDictionary.get(log.type)}</TableCell>
-                        <TableCell align="right">{log.levels}</TableCell>
-                        <TableCell align="right">{log.gold}</TableCell>
-                        <TableCell align="right">{log.downtime}</TableCell>
-                        <TableCell>
-                            <List>
-                                { log.magicItemNames &&
-                                    <ListItem key={log.id+'-items'}>+ {log.magicItemNames}</ListItem>
-                                }
-                                { log.lostMagicItemNames &&
-                                    <ListItem key={log.id+'-lostItems'}>- {log.lostMagicItemNames}</ListItem>
-                                }
-                            </List>
-                        </TableCell>
-                        <TableCell align="center">
-                            <IconButton color="primary"><Icon>visibility</Icon></IconButton>
-                            <IconButton color="primary"><Icon>edit</Icon></IconButton>
-                            <IconButton color="error"><Icon>delete</Icon></IconButton>
-                        </TableCell>
-                    </TableRow>
-                ))}
-                {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                        <TableCell colSpan={6} />
-                    </TableRow>
-                )}
-                </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
-                            count={characterLogs.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={EnhancedTablePaginationActions}
-                        />
-                    </TableRow>
-                </TableFooter>
-            </Table>
-        </TableContainer>
+        <>
+            <TableContainer component={Paper} elevation={3}>
+                <Table sx={{ minWidth: 650 }} size="medium" aria-label="Character Logs table">
+                    <SortableTableHead 
+                        headCells={headCells}
+                        order={order}
+                        orderBy={orderBy as string}
+                        onRequestSort={handleRequestSort}
+                        rowCount={characterLogs.length}
+                    />
+                    <TableBody>
+                    { visibleRows.map((log) => (
+                        <TableRow key={log.id}>
+                            <TableCell>{format(log.timestamp, "yyyy-MM-dd HH:mm")}</TableCell>
+                            <TableCell component="th" scope="row">
+                                {log.title}
+                            </TableCell>
+                            <TableCell>{CharacterLogTypeDictionary.get(log.type)}</TableCell>
+                            <TableCell align="right">{log.levels}</TableCell>
+                            <TableCell align="right">{log.gold}</TableCell>
+                            <TableCell align="right">{log.downtime}</TableCell>
+                            <TableCell>
+                                <List>
+                                    { log.magicItemNames &&
+                                        <ListItem key={log.id+'-items'}>+ {log.magicItemNames}</ListItem>
+                                    }
+                                    { log.lostMagicItemNames &&
+                                        <ListItem key={log.id+'-lostItems'}>- {log.lostMagicItemNames}</ListItem>
+                                    }
+                                </List>
+                            </TableCell>
+                            <TableCell align="center">
+                                <IconButton color="primary" onClick={handleLogDialogOpen}><Icon>visibility</Icon></IconButton>
+                                <IconButton color="primary"><Icon>edit</Icon></IconButton>
+                                <IconButton color="error"><Icon>delete</Icon></IconButton>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                    {emptyRows > 0 && (
+                        <TableRow style={{ height: 53 * emptyRows }}>
+                            <TableCell colSpan={6} />
+                        </TableRow>
+                    )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25]}
+                                count={characterLogs.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={EnhancedTablePaginationActions}
+                            />
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </TableContainer>
+            <CharacterLogDialog
+                characterId={props.characterId}
+                open={logOpen}
+                setOpen={setLogOpen}
+            />
+        </>
     );
 };
 

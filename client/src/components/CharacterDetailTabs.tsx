@@ -17,6 +17,7 @@ function getA11yPropsForTabs(tabName: string) {
 };
 
 interface CharacterDetailsProps {
+    characterId: string | undefined,
     characterLogs: CharacterLogRow[],
     magicItems: MagicItemRow[],
     storyAwards: StoryAwardRow[],
@@ -72,6 +73,7 @@ const CharacterDetailTabs = (props: CharacterDetailsProps) => {
                     tabName="player-logs"
                 >
                     <CharacterLogTable 
+                        characterId={props.characterId}
                         characterLogs={props.characterLogs}
                     />
                 </CharacterDetailTabPanel>
@@ -100,16 +102,6 @@ const CharacterDetailTabs = (props: CharacterDetailsProps) => {
                 >
                 </CharacterDetailTabPanel>
             </Grid>
-            { /*props.permanentMagicItems.map((magicItem) => (
-                <>
-                    <Typography variant="h5" component="h2" gutterBottom>
-                        {magicItem.flavorName ? `${magicItem.flavorName} (${magicItem.name})` : magicItem.name}
-                    </Typography>
-                    <Typography gutterBottom>
-                        {ItemTypeDictionary.get(magicItem.type)}, {ItemRarityDictionary.get(magicItem.rarity)}{magicItem.requiresAttunement ? ' (requires attunement)' : ''}
-                    </Typography>
-                </>
-            ))*/}
         </>
     );
 };
