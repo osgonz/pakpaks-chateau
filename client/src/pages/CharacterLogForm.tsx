@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useParams } from "react-router-dom";
 import Autocomplete from "@mui/material/Autocomplete";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -55,7 +56,7 @@ const CharacterLogForm = () => {
     return (
         <>
             { character ? (
-                <Container maxWidth="lg">
+                <Container maxWidth="md">
                     <BreadcrumbsMenu 
                         characterId={characterId}
                         characterName={character.name}
@@ -113,7 +114,7 @@ const CharacterLogForm = () => {
                                     value={log.type}
                                     fullWidth
                                     renderInput={(params) => (
-                                        <TextField {...params} label="Type" />
+                                        <TextField {...params} required label="Type" />
                                     )}
                                 />
                             </Grid>
@@ -140,6 +141,23 @@ const CharacterLogForm = () => {
                                     log={log}
                                     handleLogTextChange={handleLogTextChange}
                                 />
+                            }
+                            { log.type != null && log.type != CharacterLogType.Trade &&
+                                <Grid item xs={12}>
+                                    <Typography>Magic Items and Story Awards... coming soon...</Typography>
+                                </Grid>
+                            }
+                            { log.type != null &&
+                                <Grid justifyContent="flex-end" container item xs={12}>
+                                    <Grid item md={1} xs={2}>
+                                        <Button 
+                                            variant="contained"
+                                            fullWidth
+                                        >
+                                            Save
+                                        </Button>
+                                    </Grid>
+                                </Grid>
                             }
                         </Grid>
                     </Paper>

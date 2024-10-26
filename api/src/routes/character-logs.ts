@@ -14,4 +14,7 @@ router.get('/:id/magic-items', magicItemController.getMagicItemsByCharacterLog);
 // GET route for a character log's story awards
 router.get('/:id/story-awards', storyAwardController.getStoryAwardsByCharacterLog);
 
+// POST route to create a character log
+router.get('/create', characterLogController.createCharacterLog);
+
 export default router;

@@ -37,6 +37,39 @@ class CharacterLogController {
             }
         }
     };
+
+    // Create a character log
+    createCharacterLog = async (req: Request, res: Response) => {
+        // Extract character id from parameter
+        const characterId = req.params.charId;
+        const logContent = req.body;
+        let conn: PoolConnection | undefined;
+        try {
+            conn = await db.getConnection();
+            const res = await conn.query("call create_character_log(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
+                logContent.type,
+                logContent.title,
+                logContent.timestamp,
+                logContent.location,
+                logContent.dmName,
+                logContent.dmDci,
+                logContent.lengthHours,
+                logContent.gold,
+                logContent.downtime,
+                logContent.levels,
+                logContent.serviceHours,
+                logContent.traderCharacterName,
+                logContent.traderOtherPlayer,
+                logContent.description,
+                characterId
+            ]);
+            res.status(200).send(res.insertId);
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
+    };
 };
 
 export default new CharacterLogController();
