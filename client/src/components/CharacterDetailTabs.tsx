@@ -17,7 +17,6 @@ function getA11yPropsForTabs(tabName: string) {
 };
 
 interface CharacterDetailsProps {
-    characterId: string | undefined,
     characterLogs: CharacterLogRow[],
     magicItems: MagicItemRow[],
     storyAwards: StoryAwardRow[],
@@ -73,7 +72,6 @@ const CharacterDetailTabs = (props: CharacterDetailsProps) => {
                     tabName="player-logs"
                 >
                     <CharacterLogTable 
-                        characterId={props.characterId}
                         characterLogs={props.characterLogs}
                     />
                 </CharacterDetailTabPanel>

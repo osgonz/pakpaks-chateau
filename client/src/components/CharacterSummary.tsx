@@ -1,7 +1,9 @@
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import { Link } from "react-router-dom";
 import { CampaignDictionary } from "../data/Dictionaries";
 import { Character, MagicItem } from "../data/Types";
 
@@ -107,6 +109,28 @@ const CharacterSummary = (props: SummaryProps) => {
                         </Typography>
                     ))}
                 </Grid>
+                <Grid item xs={6}>
+                    <Button 
+                        component={Link}
+                        to={`/characters/${props.character.id}/logs/new`}
+                        variant="contained"
+                        fullWidth
+                    >
+                        Add Character Log
+                    </Button>
+                </Grid>
+                { props.character.characterSheetLink &&
+                    <Grid item xs={6} sx={{ pl: 1 }}>
+                        <Button 
+                            href={props.character.characterSheetLink}
+                            target="_blank"
+                            variant="contained"
+                            fullWidth
+                        >
+                            Character Sheet
+                        </Button>
+                    </Grid>
+                }
             </Grid>
         </Grid>
     );

@@ -16,10 +16,8 @@ import { CharacterLogTypeDictionary } from '../data/Dictionaries';
 import { CharacterLog, CharacterLogRow, Order, SortableTableHeadCell } from '../data/Types';
 import EnhancedTablePaginationActions from './EnhancedTablePaginationActions';
 import SortableTableHead, { getSortComparator } from './SortableTableHead';
-import CharacterLogDialog from './CharacterLogDialog';
 
 interface CharacterLogTableProps {
-    characterId: string | undefined,
     characterLogs: CharacterLogRow[],
 };
 
@@ -32,9 +30,6 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
     const [page, setPage] = useState(0);
     // Number of records showed per page
     const [rowsPerPage, setRowsPerPage] = useState(5);
-
-    // Flag used to hide/show the Character Log Dialog
-    const [logOpen, setLogOpen] = useState(false);
 
     // Character logs
     const { characterLogs } = props;
@@ -121,11 +116,6 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
         setPage(0);
     };
 
-    // Helper function triggered when showing Character Log Dialog
-    const handleLogDialogOpen = () => {
-        setLogOpen(true);
-    };
-
     return (
         <>
             <TableContainer component={Paper} elevation={3}>
@@ -159,7 +149,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                                 </List>
                             </TableCell>
                             <TableCell align="center">
-                                <IconButton color="primary" onClick={handleLogDialogOpen}><Icon>visibility</Icon></IconButton>
+                                <IconButton color="primary"><Icon>visibility</Icon></IconButton>
                                 <IconButton color="primary"><Icon>edit</Icon></IconButton>
                                 <IconButton color="error"><Icon>delete</Icon></IconButton>
                             </TableCell>
@@ -186,11 +176,6 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                     </TableFooter>
                 </Table>
             </TableContainer>
-            <CharacterLogDialog
-                characterId={props.characterId}
-                open={logOpen}
-                setOpen={setLogOpen}
-            />
         </>
     );
 };
