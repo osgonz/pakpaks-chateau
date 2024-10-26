@@ -17,18 +17,20 @@ import MerchantLogFields from '../components/MerchantLogFields';
 import ServiceAwardLogFields from '../components/ServiceAwardLogFields';
 import TradeLogFields from '../components/TradeLogFields';
 import { CharacterLogTypeDictionary } from '../data/Dictionaries';
+import { CharacterLogType } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
-import { useThemeProps } from '@mui/material';
 
 const CharacterLogForm = () => {
     // Character Id value fetched from URL params
     const { characterId } = useParams();
     // Character summary details
     const character = useCharacter(characterId!);
+    // Array containing Character Log Type ids for Autocomplete field
+    const characterLogTypeArray = Array.from(CharacterLogTypeDictionary.keys());
 
     // State object containing user-provided log info
     const [log, setLog] = useState({
-        type: '' as string,
+        type: null as CharacterLogType | null,
         title: '' as string,
         timestamp: new Date() as Date | null,
         location: '' as string,
@@ -45,7 +47,7 @@ const CharacterLogForm = () => {
     });
 
     // Helper function triggered when updating an Autocomplete field
-    const handleLogAutocompleteChange = (_: React.BaseSyntheticEvent, value: string | null, fieldName: string) => {
+    const handleLogAutocompleteChange = (_: React.BaseSyntheticEvent, value: string | CharacterLogType | null, fieldName: string) => {
         setLog({ ...log, [fieldName]: value });
     };
     // Helper function triggered when updating a text field
@@ -134,7 +136,8 @@ const CharacterLogForm = () => {
                             <Grid item xs={12}>
                                 <Autocomplete 
                                     id="log-type"
-                                    options={Array.from(CharacterLogTypeDictionary.values())}
+                                    options={characterLogTypeArray}
+                                    getOptionLabel={(o) => CharacterLogTypeDictionary.get(o) || ''}
                                     onChange={(e, v) => handleLogAutocompleteChange(e, v, "type")}
                                     value={log.type}
                                     fullWidth
@@ -143,25 +146,25 @@ const CharacterLogForm = () => {
                                     )}
                                 />
                             </Grid>
-                            { log.type == "Adventure" &&
+                            { log.type == CharacterLogType.Adventure &&
                                 <AdventureLogFields
                                     log={log}
                                     handleLogTextChange={handleLogTextChange}
                                 />
                             }
-                            { (log.type == "Merchant" || log.type == "Downtime Activity") &&
+                            { (log.type == CharacterLogType.Merchant || log.type == CharacterLogType.Downtime) &&
                                 <MerchantLogFields
                                     log={log}
                                     handleLogTextChange={handleLogTextChange}
                                 />
                             }
-                            { log.type == "Magic Item Trade" &&
+                            { log.type == CharacterLogType.Trade &&
                                 <TradeLogFields
                                     log={log}
                                     handleLogTextChange={handleLogTextChange}
                                 />
                             }
-                            { log.type == "DM Service Award" &&
+                            { log.type == CharacterLogType.ServiceAward &&
                                 <ServiceAwardLogFields
                                     log={log}
                                     handleLogTextChange={handleLogTextChange}
