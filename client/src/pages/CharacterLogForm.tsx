@@ -25,6 +25,8 @@ const CharacterLogForm = () => {
     const character = useCharacter(characterId!);
     // Array containing Character Log Type ids for Autocomplete field
     const characterLogTypeArray = Array.from(CharacterLogTypeDictionary.keys());
+    // Default error message for required fields
+    const requiredFieldErrorMessage = "This field is required.";
 
     // State object containing user-provided log info
     const [log, setLog] = useState({
@@ -44,14 +46,87 @@ const CharacterLogForm = () => {
         description: '' as string,
     });
 
+    // State object containing error flags for fields requiring validation
+    const [logError, setLogError] = useState({
+        type: false,
+        title: false,
+        timestamp: false,
+        location: false,
+        dmName: false,
+        traderCharacterName: false,
+        traderOtherPlayer: false,
+    })
+
     // Helper function triggered when updating an Autocomplete field
-    const handleLogAutocompleteChange = (_: React.BaseSyntheticEvent, value: string | CharacterLogType | null, fieldName: string) => {
-        setLog({ ...log, [fieldName]: value });
+    const handleLogTypeChange = (_: React.BaseSyntheticEvent, value: CharacterLogType | null) => {
+        setLog({ 
+            ...log, 
+            type: value,
+            location: '' as string,
+            dmName: '' as string,
+            dmDci: '' as string,
+            lengthHours: 0 as number,
+            gold: 0 as number,
+            downtime: 0 as number,
+            levels: 0 as number,
+            serviceHours: 0 as number,
+            traderCharacterName: '' as string,
+            traderOtherPlayer: '' as string,
+            description: '' as string,
+        });
+        setLogError({
+            ...logError,
+            location: false,
+            dmName: false,
+            traderCharacterName: false,
+            traderOtherPlayer: false,
+        });
     };
     // Helper function triggered when updating a text field
     const handleLogTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldName: string) => {
         setLog({ ...log, [fieldName]: event.target.value });
     };
+    // Helper function triggered when validating a required field
+    const handleRequiredFieldValidation = (fieldName: string) => {
+        let dynamicKey = fieldName as keyof (typeof log);
+        setLogError({ ...logError, [fieldName]: (log[dynamicKey] === null || log[dynamicKey] === "") });
+    };
+
+    // Function that validates form before submitting
+    const validateForm = () => {
+        let errorsFound: any = {};
+
+        if (log.title === null || log.title === "")
+            errorsFound['title'] = true;
+        if (log.timestamp === null)
+            errorsFound['timestamp'] = true;
+        if (log.type === null) {
+            errorsFound['type'] = true;
+        } else {
+            if (log.location === null || log.location === "")
+                errorsFound['location'] = true;
+            switch (log.type) {
+                case CharacterLogType.Adventure:
+                    if (log.dmName === null || log.dmName === "")
+                        errorsFound['dmName'] = true;
+                    break;
+                case CharacterLogType.Trade:
+                    if (log.traderCharacterName === null || log.traderCharacterName === "")
+                        errorsFound['traderCharacterName'] = true;
+                    if (log.traderOtherPlayer === null || log.traderOtherPlayer === "")
+                        errorsFound['traderOtherPlayer'] = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (Object.keys(errorsFound).length === 0) {
+            
+        } else {
+            setLogError({...logError, ...errorsFound});
+        }
+    }
 
     return (
         <>
@@ -87,10 +162,13 @@ const CharacterLogForm = () => {
                             </Grid>
                             <Grid item md={8} xs={12}>
                                 <TextField 
+                                    error={logError.title}
                                     required
                                     id="log-title"
                                     label="Title"
+                                    helperText={logError.title ? requiredFieldErrorMessage : ''}
                                     onChange={e => handleLogTextChange(e, "title")}
+                                    onBlur={_ => handleRequiredFieldValidation("title")}
                                     value={log.title}
                                     fullWidth
                                 />
@@ -101,8 +179,15 @@ const CharacterLogForm = () => {
                                     label="Date"
                                     format="yyyy-MM-dd HH:mm"
                                     onChange={(newDate => setLog({...log, timestamp: newDate}))}
+                                    onClose={() => handleRequiredFieldValidation("timestamp")}
                                     value={log.timestamp}
-                                    slotProps={{ textField: { required: true, fullWidth: true } }}
+                                    slotProps={{ textField: { 
+                                        error: logError.timestamp,
+                                        required: true, 
+                                        helperText: logError.timestamp ? requiredFieldErrorMessage : '',
+                                        fullWidth: true,
+                                        onBlur: (_) => handleRequiredFieldValidation("timestamp"),
+                                    } }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -110,36 +195,55 @@ const CharacterLogForm = () => {
                                     id="log-type"
                                     options={characterLogTypeArray}
                                     getOptionLabel={(o) => CharacterLogTypeDictionary.get(o) || ''}
-                                    onChange={(e, v) => handleLogAutocompleteChange(e, v, "type")}
+                                    onChange={(e, v) => handleLogTypeChange(e, v)}
+                                    onBlur={_ => handleRequiredFieldValidation("type")}
                                     value={log.type}
                                     fullWidth
                                     renderInput={(params) => (
-                                        <TextField {...params} required label="Type" />
+                                        <TextField 
+                                            {...params} 
+                                            error={logError.type} 
+                                            required 
+                                            label="Type" 
+                                            helperText={logError.type ? requiredFieldErrorMessage : ''}
+                                        />
                                     )}
                                 />
                             </Grid>
                             { log.type == CharacterLogType.Adventure &&
                                 <AdventureLogFields
                                     log={log}
+                                    logError={logError}
+                                    requiredFieldErrorMessage={requiredFieldErrorMessage}
                                     handleLogTextChange={handleLogTextChange}
+                                    handleRequiredFieldValidation={handleRequiredFieldValidation}
                                 />
                             }
                             { (log.type == CharacterLogType.Merchant || log.type == CharacterLogType.Downtime) &&
                                 <MerchantLogFields
                                     log={log}
+                                    logError={logError}
+                                    requiredFieldErrorMessage={requiredFieldErrorMessage}
                                     handleLogTextChange={handleLogTextChange}
+                                    handleRequiredFieldValidation={handleRequiredFieldValidation}
                                 />
                             }
                             { log.type == CharacterLogType.Trade &&
                                 <TradeLogFields
                                     log={log}
+                                    logError={logError}
+                                    requiredFieldErrorMessage={requiredFieldErrorMessage}
                                     handleLogTextChange={handleLogTextChange}
+                                    handleRequiredFieldValidation={handleRequiredFieldValidation}
                                 />
                             }
                             { log.type == CharacterLogType.ServiceAward &&
                                 <ServiceAwardLogFields
                                     log={log}
+                                    logError={logError}
+                                    requiredFieldErrorMessage={requiredFieldErrorMessage}
                                     handleLogTextChange={handleLogTextChange}
+                                    handleRequiredFieldValidation={handleRequiredFieldValidation}
                                 />
                             }
                             { log.type != null && log.type != CharacterLogType.Trade &&
@@ -152,6 +256,7 @@ const CharacterLogForm = () => {
                                     <Grid item md={1} xs={2}>
                                         <Button 
                                             variant="contained"
+                                            onClick={_ => validateForm()}
                                             fullWidth
                                         >
                                             Save

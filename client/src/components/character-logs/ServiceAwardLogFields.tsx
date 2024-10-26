@@ -3,7 +3,10 @@ import TextField from "@mui/material/TextField";
 
 interface ServiceAwardLogFieldsProps {
     log: any,
+    logError: any,
+    requiredFieldErrorMessage: string,
     handleLogTextChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldName: string) => void,
+    handleRequiredFieldValidation: (fieldName: string) => void,
 };
 
 const ServiceAwardLogFields = (props: ServiceAwardLogFieldsProps) => {
@@ -11,10 +14,13 @@ const ServiceAwardLogFields = (props: ServiceAwardLogFieldsProps) => {
         <>
             <Grid item xs={12}>
                 <TextField 
+                    error={props.logError.location}
                     required
                     id="log-location"
                     label="Location"
+                    helperText={props.logError.location ? props.requiredFieldErrorMessage : ''}
                     onChange={e => props.handleLogTextChange(e, "location")}
+                    onBlur={_ => props.handleRequiredFieldValidation("location")}
                     value={props.log.location}
                     fullWidth
                 />
@@ -66,7 +72,7 @@ const ServiceAwardLogFields = (props: ServiceAwardLogFieldsProps) => {
                     onChange={e => props.handleLogTextChange(e, "description")}
                     value={props.log.description}
                     multiline
-                    rows={6}
+                    rows={8}
                     fullWidth
                 />
             </Grid>

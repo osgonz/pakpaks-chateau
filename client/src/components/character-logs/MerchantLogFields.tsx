@@ -3,7 +3,10 @@ import TextField from "@mui/material/TextField";
 
 interface MerchantLogFieldsProps {
     log: any,
+    logError: any,
+    requiredFieldErrorMessage: string,
     handleLogTextChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldName: string) => void,
+    handleRequiredFieldValidation: (fieldName: string) => void,
 };
 
 const MerchantLogFields = (props: MerchantLogFieldsProps) => {
@@ -11,10 +14,13 @@ const MerchantLogFields = (props: MerchantLogFieldsProps) => {
         <>
             <Grid item md={6} xs={12}>
                 <TextField 
+                    error={props.logError.location}
                     required
                     id="log-location"
                     label="Location"
+                    helperText={props.logError.location ? props.requiredFieldErrorMessage : ''}
                     onChange={e => props.handleLogTextChange(e, "location")}
+                    onBlur={_ => props.handleRequiredFieldValidation("location")}
                     value={props.log.location}
                     fullWidth
                 />
@@ -46,7 +52,7 @@ const MerchantLogFields = (props: MerchantLogFieldsProps) => {
                     onChange={e => props.handleLogTextChange(e, "description")}
                     value={props.log.description}
                     multiline
-                    rows={6}
+                    rows={8}
                     fullWidth
                 />
             </Grid>

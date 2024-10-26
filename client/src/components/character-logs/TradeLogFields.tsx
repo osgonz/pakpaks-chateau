@@ -3,7 +3,10 @@ import TextField from "@mui/material/TextField";
 
 interface TradeLogFieldsProps {
     log: any,
+    logError: any,
+    requiredFieldErrorMessage: string,
     handleLogTextChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldName: string) => void,
+    handleRequiredFieldValidation: (fieldName: string) => void,
 };
 
 const TradeLogFields = (props: TradeLogFieldsProps) => {
@@ -11,10 +14,13 @@ const TradeLogFields = (props: TradeLogFieldsProps) => {
         <>
             <Grid item md={6} xs={12}>
                 <TextField 
+                    error={props.logError.location}
                     required
                     id="log-location"
                     label="Location"
+                    helperText={props.logError.location ? props.requiredFieldErrorMessage : ''}
                     onChange={e => props.handleLogTextChange(e, "location")}
+                    onBlur={_ => props.handleRequiredFieldValidation("location")}
                     value={props.log.location}
                     fullWidth
                 />
@@ -41,20 +47,26 @@ const TradeLogFields = (props: TradeLogFieldsProps) => {
             </Grid>
             <Grid item md={6} xs={12}>
                 <TextField 
+                    error={props.logError.traderCharacterName}
                     required
                     id="log-trader-character-name"
                     label="Trader Character"
+                    helperText={props.logError.traderCharacterName ? props.requiredFieldErrorMessage : ''}
                     onChange={e => props.handleLogTextChange(e, "traderCharacterName")}
+                    onBlur={_ => props.handleRequiredFieldValidation("traderCharacterName")}
                     value={props.log.traderCharacterName}
                     fullWidth
                 />
             </Grid>
             <Grid item md={6} xs={12}>
                 <TextField 
+                    error={props.logError.traderOtherPlayer}
                     required
                     id="log-trader-other-player"
                     label="Trader Player"
+                    helperText={props.logError.traderOtherPlayer ? props.requiredFieldErrorMessage : ''}
                     onChange={e => props.handleLogTextChange(e, "traderOtherPlayer")}
+                    onBlur={_ => props.handleRequiredFieldValidation("traderOtherPlayer")}
                     value={props.log.traderOtherPlayer}
                     fullWidth
                 />
@@ -66,7 +78,7 @@ const TradeLogFields = (props: TradeLogFieldsProps) => {
                     onChange={e => props.handleLogTextChange(e, "description")}
                     value={props.log.description}
                     multiline
-                    rows={6}
+                    rows={8}
                     fullWidth
                 />
             </Grid>
