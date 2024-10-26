@@ -9,78 +9,31 @@ import TableContainer from '@mui/material/TableContainer';
 import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { ItemRarityDictionary } from '../data/Dictionaries';
-import { MagicItem, MagicItemRow, Order, SortableTableHeadCell } from '../data/Types';
-import EnhancedTablePaginationActions from './EnhancedTablePaginationActions';
-import SortableTableHead, { getDescendingComparator } from './SortableTableHead';
+import { StoryAwardStatusDictionary } from '../../data/Dictionaries';
+import { Order, SortableTableHeadCell, StoryAward, StoryAwardRow } from '../../data/Types';
+import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
+import SortableTableHead, { getSortComparator } from '../shared/SortableTableHead';
 
-/**
- * Descending comparator function for Magic Item name edge case
- * @param a First element to be compared
- * @param b Second element to be compared
- * @param orderBy Key for attribute elements will be compared on
- * @returns Comparison result (-1, 0 or 1)
- */
-function getDescendingMagicItemNameComparator(a: MagicItem, b: MagicItem) {
-    const nameA = a["flavorName"] ?? a["name"];
-    const nameB = b["flavorName"] ?? b["name"];
-
-    if (nameB == null) {
-        if (nameA == null) {
-            return 0;
-        }
-        return -1;
-    }
-    if (nameA == null) {
-        return 1;
-    }
-    if (nameB < nameA) {
-        return -1;
-    }
-    if (nameB > nameA) {
-        return 1;
-    }
-    return 0;
-}
-
-/**
- * 
- * @param order Sort direction to be applied
- * @param orderBy Key for attribute elements will be compared on
- * @returns Result of comparator function
- */
-function getMagicItemSortComparator<Key extends keyof MagicItem>(
-    order: Order,
-    orderBy: Key,
-) : (
-    a: MagicItem,
-    b: MagicItem,
-) => number {
-    return order === 'desc'
-        ? (a, b) => orderBy === "name" ? getDescendingMagicItemNameComparator(a, b) : getDescendingComparator(a, b, orderBy)
-        : (a, b) => orderBy === "name" ? -getDescendingMagicItemNameComparator(a, b) : -getDescendingComparator(a, b, orderBy);
+interface StoryAwardTableProps {
+    storyAwards: StoryAwardRow[],
 };
 
-interface MagicItemTableProps {
-    magicItems: MagicItemRow[],
-};
-
-const MagicItemTable = (props: MagicItemTableProps) => {
+const StoryAwardTable = (props: StoryAwardTableProps) => {
     // Table's current sort direction
     const [order, setOrder] = useState<Order>('asc');
     // Attribute name used to sort the table
-    const [orderBy, setOrderBy] = useState<keyof MagicItem>('name');
+    const [orderBy, setOrderBy] = useState<keyof StoryAward>('name');
     // Current page number
     const [page, setPage] = useState(0);
     // Number of records showed per page
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    // Magic items
-    const { magicItems } = props;
+    // Story awards
+    const { storyAwards } = props;
 
     // Object containing subset of records being shown in table
     const visibleRows = useMemo(
-        () => magicItems.slice().sort(getMagicItemSortComparator(order, orderBy)).slice(
+        () => storyAwards.slice().sort(getSortComparator(order, orderBy)).slice(
             page * rowsPerPage,
             page * rowsPerPage + rowsPerPage,
         ),
@@ -96,25 +49,13 @@ const MagicItemTable = (props: MagicItemTableProps) => {
             isSortable: true,
         },
         {
-            id: 'rarity',
-            label: 'Item Rarity',
+            id: 'status',
+            label: 'Current Status',
             alignment: 'left',
             isSortable: true,
         },
         {
-            id: 'isConsumable',
-            label: 'Category',
-            alignment: 'left',
-            isSortable: true,
-        },
-        {
-            id: 'requiresAttunement',
-            label: 'Attunement',
-            alignment: 'left',
-            isSortable: true,
-        },
-        {
-            id: 'originLogTitle',
+            id: 'originLogId',
             label: 'Origin Log',
             alignment: 'left',
             isSortable: false,
@@ -128,13 +69,13 @@ const MagicItemTable = (props: MagicItemTableProps) => {
     ];
 
     // Avoid a layout jump when reaching the last page with empty rows
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - magicItems.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - storyAwards.length) : 0;
 
     // Helper function triggered when sorting attributes are changed
     const handleRequestSort = (_: React.MouseEvent<unknown>, property: keyof any) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property as keyof MagicItem);
+        setOrderBy(property as keyof StoryAward);
     };
 
     // Helper function triggered when table page is changed
@@ -150,24 +91,22 @@ const MagicItemTable = (props: MagicItemTableProps) => {
 
     return (
         <TableContainer component={Paper} elevation={3}>
-            <Table sx={{ minWidth: 650 }} size="medium" aria-label="Magic Items table">
+            <Table sx={{ minWidth: 650 }} size="medium" aria-label="Story Awards table">
                 <SortableTableHead 
                     headCells={headCells}
                     order={order}
                     orderBy={orderBy as string}
                     onRequestSort={handleRequestSort}
-                    rowCount={magicItems.length}
+                    rowCount={storyAwards.length}
                 />
                 <TableBody>
-                { visibleRows.map((item) => (
-                    <TableRow key={item.id}>
+                { visibleRows.map((award) => (
+                    <TableRow key={award.id}>
                         <TableCell component="th" scope="row">
-                            {item.flavorName ? `${item.flavorName} (${item.name})` : item.name}
+                            {award.name}
                         </TableCell>
-                        <TableCell>{ItemRarityDictionary.get(item.rarity)}</TableCell>
-                        <TableCell>{item.isConsumable ? 'Consumable' : 'Permanent'}</TableCell>
-                        <TableCell>{item.requiresAttunement ? 'Yes' : 'No'}</TableCell>
-                        <TableCell>{item.originLogTitle}</TableCell>
+                        <TableCell>{StoryAwardStatusDictionary.get(award.status)}</TableCell>
+                        <TableCell>{award.originLogTitle}</TableCell>
                         <TableCell align="center">
                             <IconButton color="primary"><Icon>visibility</Icon></IconButton>
                             <IconButton color="primary"><Icon>edit</Icon></IconButton>
@@ -185,7 +124,7 @@ const MagicItemTable = (props: MagicItemTableProps) => {
                     <TableRow>
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25]}
-                            count={magicItems.length}
+                            count={storyAwards.length}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}
@@ -199,4 +138,4 @@ const MagicItemTable = (props: MagicItemTableProps) => {
     );
 };
 
-export default MagicItemTable;
+export default StoryAwardTable;

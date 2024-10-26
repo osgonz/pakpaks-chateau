@@ -4,8 +4,8 @@ import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
-import { CampaignDictionary } from "../data/Dictionaries";
-import { Character, MagicItem } from "../data/Types";
+import { CampaignDictionary } from "../../data/Dictionaries";
+import { Character, MagicItem } from "../../data/Types";
 
 interface SummaryProps {
     character: Character,

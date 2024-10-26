@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import { Tab, Tabs } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { CharacterLogRow, MagicItemRow, StoryAwardRow } from '../data/Types';
+import { CharacterLogRow, MagicItemRow, StoryAwardRow } from '../../data/Types';
 import CharacterDetailTabPanel from './CharacterDetailTabPanel';
 import CharacterLogTable from './CharacterLogTable';
 import StoryAwardTable from './StoryAwardTable';

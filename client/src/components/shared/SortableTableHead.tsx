@@ -5,7 +5,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
-import { Order, SortableTableHeadCell } from '../data/Types';
+import { Order, SortableTableHeadCell } from '../../data/Types';
 
 /**
  * Generic descending comparator function
