@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 import { useParams } from "react-router-dom";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
@@ -34,16 +35,16 @@ const CharacterLogForm = () => {
         title: '' as string,
         timestamp: new Date() as Date | null,
         location: '' as string,
-        dmName: '' as string,
-        dmDci: '' as string,
+        dmName: '' as string | null,
+        dmDci: '' as string | null,
         lengthHours: 0 as number,
         gold: 0 as number,
         downtime: 0 as number,
         levels: 0 as number,
         serviceHours: 0 as number,
-        traderCharacterName: '' as string,
-        traderOtherPlayer: '' as string,
-        description: '' as string,
+        traderCharacterName: '' as string | null,
+        traderOtherPlayer: '' as string | null,
+        description: '' as string | null,
     });
 
     // State object containing error flags for fields requiring validation
@@ -63,16 +64,16 @@ const CharacterLogForm = () => {
             ...log, 
             type: value,
             location: '' as string,
-            dmName: '' as string,
-            dmDci: '' as string,
+            dmName: '' as string | null,
+            dmDci: '' as string | null,
             lengthHours: 0 as number,
             gold: 0 as number,
             downtime: 0 as number,
             levels: 0 as number,
             serviceHours: 0 as number,
-            traderCharacterName: '' as string,
-            traderOtherPlayer: '' as string,
-            description: '' as string,
+            traderCharacterName: '' as string | null,
+            traderOtherPlayer: '' as string | null,
+            description: '' as string | null,
         });
         setLogError({
             ...logError,
@@ -122,11 +123,61 @@ const CharacterLogForm = () => {
         }
 
         if (Object.keys(errorsFound).length === 0) {
-            
+            cookAndSubmitCharacterLog();
         } else {
             setLogError({...logError, ...errorsFound});
         }
-    }
+    };
+
+    const cookAndSubmitCharacterLog = () => {
+        let rawLog = {...log};
+
+        if (!rawLog.lengthHours) {
+            rawLog.lengthHours = 0;
+        } else if (typeof rawLog.lengthHours == "string") {
+            rawLog.lengthHours = parseInt(rawLog.lengthHours);
+        }
+        if (!rawLog.levels) {
+            rawLog.levels = 0;
+        } else if (typeof rawLog.levels == "string") {
+            rawLog.levels = parseInt(rawLog.levels);
+        }
+        if (!rawLog.gold) {
+            rawLog.gold = 0;
+        } else if (typeof rawLog.gold == "string") {
+            rawLog.gold = parseFloat(rawLog.gold);
+        }
+        if (!rawLog.downtime) {
+            rawLog.downtime = 0;
+        } else if (typeof rawLog.downtime == "string") {
+            rawLog.downtime = parseInt(rawLog.downtime);
+        }
+        if (!rawLog.serviceHours) {
+            rawLog.serviceHours = 0;
+        } else if (typeof rawLog.serviceHours == "string") {
+            rawLog.serviceHours = parseInt(rawLog.serviceHours);
+        }
+
+        if (!rawLog.dmName) {
+            rawLog.dmName = null;
+        }
+        if (!rawLog.dmDci) {
+            rawLog.dmDci = null;
+        }
+        if (!rawLog.traderCharacterName) {
+            rawLog.traderCharacterName = null;
+        }
+        if (!rawLog.traderOtherPlayer) {
+            rawLog.traderOtherPlayer = null;
+        }
+        if (!rawLog.description) {
+            rawLog.description = null;
+        }
+
+        axios.post(`/api/characters/${characterId}/character-logs/create`, rawLog).then(res => {
+            console.log(res.data);
+        });
+    };
 
     return (
         <>

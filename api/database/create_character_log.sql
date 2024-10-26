@@ -19,9 +19,11 @@ CREATE OR REPLACE PROCEDURE create_character_log
 )
 READS SQL DATA
 BEGIN
-    INSERT INTO characterLog
+    DECLARE newId UUID DEFAULT uuid();
+	INSERT INTO characterLog
     (
-        type,
+        id,
+		type,
         title,
         timestamp,
         location,
@@ -38,7 +40,8 @@ BEGIN
         characterId
     )
     VALUES (
-        type,
+        newId,
+		type,
         title,
         timestamp,
         location,
@@ -54,5 +57,6 @@ BEGIN
         description,
         characterId
     );
+    SELECT newId;
 END; //
 DELIMITER ;

@@ -1,4 +1,5 @@
 import { PoolConnection } from 'mariadb';
+import { format } from 'date-fns';
 import db from '../connection';
 import { Request, Response } from 'express';
 
@@ -46,10 +47,10 @@ class CharacterLogController {
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            const res = await conn.query("call create_character_log(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
+            const [result] = await conn.query("call create_character_log(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
                 logContent.type,
                 logContent.title,
-                logContent.timestamp,
+                format(logContent.timestamp as Date, "yyyy-MM-dd HH:mm:ss"),
                 logContent.location,
                 logContent.dmName,
                 logContent.dmDci,
@@ -63,7 +64,7 @@ class CharacterLogController {
                 logContent.description,
                 characterId
             ]);
-            res.status(200).send(res.insertId);
+            res.status(200).send(result[0].newId);
         } finally {
             if (conn) {
                 conn.release();
