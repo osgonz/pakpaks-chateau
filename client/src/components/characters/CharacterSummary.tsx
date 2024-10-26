@@ -99,32 +99,34 @@ const CharacterSummary = (props: SummaryProps) => {
                 </Grid>
             </Grid>
             <Grid alignItems="center" container item xs={12} md={4.5}>
-                <Grid item xs={4}>
-                    <Typography gutterBottom>Carried Magic Items:</Typography>
+                <Grid alignItems="center" container item xs={12} sx={{ pb: 2 }}>
+                    <Grid item xs={4}>
+                        <Typography gutterBottom>Carried Magic Items:</Typography>
+                    </Grid>
+                    <Grid item xs={8} sx={{ pl: 1 }}>
+                        { props.permanentMagicItems.filter((item) => item.isEquipped).map((item) =>(
+                            <Typography key={item.id} gutterBottom>
+                                {item.flavorName ? `${item.flavorName} (${item.name})` : item.name}{item.requiresAttunement ? ' [A]' : ''}
+                            </Typography>
+                        ))}
+                    </Grid>
                 </Grid>
-                <Grid item xs={8} sx={{ pl: 1 }}>
-                    { props.permanentMagicItems.filter((item) => item.isEquipped).map((item) =>(
-                        <Typography key={item.id} gutterBottom>
-                            {item.flavorName ? `${item.flavorName} (${item.name})` : item.name}{item.requiresAttunement ? ' [A]' : ''}
-                        </Typography>
-                    ))}
-                </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} sx={{ pb: '0.35em' }}>
                     <Button 
                         component={Link}
                         to={`/characters/${props.character.id}/logs/new`}
-                        variant="contained"
+                        variant="outlined"
                         fullWidth
                     >
                         Add Character Log
                     </Button>
                 </Grid>
                 { props.character.characterSheetLink &&
-                    <Grid item xs={6} sx={{ pl: 1 }}>
+                    <Grid item xs={12} sx={{ pb: '0.35em' }}>
                         <Button 
                             href={props.character.characterSheetLink}
                             target="_blank"
-                            variant="contained"
+                            variant="outlined"
                             fullWidth
                         >
                             Character Sheet
