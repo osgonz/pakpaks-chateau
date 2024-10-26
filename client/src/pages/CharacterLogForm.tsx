@@ -1,21 +1,18 @@
 import { useState, useMemo } from 'react';
 import { useParams } from "react-router-dom";
 import Autocomplete from "@mui/material/Autocomplete";
-import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Icon from '@mui/material/Icon';
-import Link from '@mui/material/Link';
 import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { Link as RouterLink } from 'react-router-dom';
 import AdventureLogFields from '../components/character-logs/AdventureLogFields';
 import MerchantLogFields from '../components/character-logs/MerchantLogFields';
 import ServiceAwardLogFields from '../components/character-logs/ServiceAwardLogFields';
 import TradeLogFields from '../components/character-logs/TradeLogFields';
+import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import { CharacterLogTypeDictionary } from '../data/Dictionaries';
 import { CharacterLogType } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
@@ -59,37 +56,11 @@ const CharacterLogForm = () => {
         <>
             { character ? (
                 <Container maxWidth="lg">
-                    <Breadcrumbs
-                        aria-label="breadcrumb"
-                        separator={ <Icon>chevron_right</Icon> }
-                        sx={{
-                            pt: 1,
-                            pb: 2
-
-                        }}
-                    >
-                        <Link
-                            component={RouterLink}
-                            underline="hover"
-                            color="inherit"
-                            to="/"
-                        >
-                            Home
-                        </Link>
-                        <Link
-                            component={RouterLink}
-                            underline="hover"
-                            color="inherit"
-                            to={`/characters/${characterId}`}
-                        >
-                            {character.name}
-                        </Link>
-                        <Typography
-                            color="text.primary"
-                        >
-                            New Character Log
-                        </Typography>
-                    </Breadcrumbs>
+                    <BreadcrumbsMenu 
+                        characterId={characterId}
+                        characterName={character.name}
+                        currentPageTitle='New Character Log'
+                    />
                     <Paper 
                         elevation={1}
                         sx={{
