@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -24,6 +24,8 @@ const CharacterLogForm = () => {
     const { characterId } = useParams();
     // Character summary details
     const character = useCharacter(characterId!);
+    // Hook used to navigate programmatically
+    const navigate = useNavigate();
     // Array containing Character Log Type ids for Autocomplete field
     const characterLogTypeArray = Array.from(CharacterLogTypeDictionary.keys());
     // Default error message for required fields
@@ -176,6 +178,7 @@ const CharacterLogForm = () => {
 
         axios.post(`/api/characters/${characterId}/character-logs/create`, rawLog).then(res => {
             console.log(res.data);
+            navigate(`/characters/${characterId}`);
         });
     };
 
