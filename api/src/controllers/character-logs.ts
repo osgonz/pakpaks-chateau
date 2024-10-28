@@ -43,6 +43,7 @@ class CharacterLogController {
     createCharacterLog = async (req: Request, res: Response) => {
         // Extract character id from parameter
         const characterId = req.params.charId;
+        // Extract log payload from request body
         const logContent = req.body;
         let conn: PoolConnection | undefined;
         try {
@@ -65,6 +66,42 @@ class CharacterLogController {
                 characterId
             ]);
             res.status(200).send(result[0].newId);
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
+    };
+
+    // Update a character log
+    updateCharacterLog = async (req: Request, res: Response) => {
+        // Extract character log id from parameter
+        const id = req.params.id;
+        // Extract character id from parameter
+        const characterId = req.params.charId;
+        // Extract log payload from request body
+        const logContent = req.body;
+        let conn: PoolConnection | undefined;
+        try {
+            conn = await db.getConnection();
+            await conn.query("call update_character_log(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
+                id,
+                logContent.title,
+                format(logContent.timestamp as Date, "yyyy-MM-dd HH:mm:ss"),
+                logContent.location,
+                logContent.dmName,
+                logContent.dmDci,
+                logContent.lengthHours,
+                logContent.gold,
+                logContent.downtime,
+                logContent.levels,
+                logContent.serviceHours,
+                logContent.traderCharacterName,
+                logContent.traderOtherPlayer,
+                logContent.description,
+                characterId
+            ]);
+            res.status(200).send();
         } finally {
             if (conn) {
                 conn.release();

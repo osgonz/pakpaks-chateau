@@ -157,7 +157,13 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                                 >
                                     <Icon>visibility</Icon>
                                 </IconButton>
-                                <IconButton color="primary"><Icon>edit</Icon></IconButton>
+                                <IconButton 
+                                    color="primary"
+                                    component={Link}
+                                    to={`/characters/${log.characterId}/logs/${log.id}/edit`}
+                                >
+                                    <Icon>edit</Icon>
+                                </IconButton>
                                 <IconButton color="error"><Icon>delete</Icon></IconButton>
                             </TableCell>
                         </TableRow>

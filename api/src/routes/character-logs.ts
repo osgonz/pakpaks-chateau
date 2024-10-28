@@ -8,6 +8,9 @@ const router = express.Router({mergeParams: true});
 // POST route to create a character log
 router.post('/create', characterLogController.createCharacterLog);
 
+// POST route to update a character log
+router.post('/:id', characterLogController.updateCharacterLog);
+
 // GET route for a character log
 router.get('/:id', characterLogController.getCharacterLog);
 

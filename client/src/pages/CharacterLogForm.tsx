@@ -27,8 +27,6 @@ const CharacterLogForm = () => {
     const character = useCharacter(characterId!);
     // Character log details
     const currentLog = logId ? useCharacterLog(characterId!, logId) : null;
-    // Hook used to navigate programmatically
-    const navigate = useNavigate();
     // Flag indicating if form is in view mode
     const isViewing = !(logId == null || useLocation().pathname.includes("/edit"));
     // Array containing Character Log Type ids for Autocomplete field
@@ -181,9 +179,9 @@ const CharacterLogForm = () => {
             rawLog.description = null;
         }
 
-        axios.post(`/api/characters/${characterId}/character-logs/create`, rawLog).then(res => {
-            console.log(res.data);
-            navigate(`/characters/${characterId}`);
+        axios.post(`/api/characters/${characterId}/character-logs/${logId || 'create'}`, rawLog).then(res => {
+            // React won't properly load new log's view page using router navigate - standard href works!
+            window.location.href = `/characters/${characterId}/logs/${logId || res.data}`;
         });
     };
 
