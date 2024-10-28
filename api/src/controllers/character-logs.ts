@@ -101,7 +101,30 @@ class CharacterLogController {
                 logContent.description,
                 characterId
             ]);
-            res.status(200).send();
+            res.status(204).send();
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
+    };
+
+    // Delete a character log
+    deleteCharacterLog = async (req: Request, res: Response) => {
+        // Extract character log id from parameter
+        const id = req.params.id;
+        // Extract character id from parameter
+        const characterId = req.params.charId;
+        // Extract log payload from request body
+        const logContent = req.body;
+        let conn: PoolConnection | undefined;
+        try {
+            conn = await db.getConnection();
+            await conn.query("call delete_character_log(?,?)", [
+                id,
+                characterId
+            ]);
+            res.status(204).send();
         } finally {
             if (conn) {
                 conn.release();

@@ -20,4 +20,7 @@ router.get('/:id/magic-items', magicItemController.getMagicItemsByCharacterLog);
 // GET route for a character log's story awards
 router.get('/:id/story-awards', storyAwardController.getStoryAwardsByCharacterLog);
 
+// DELETE route for a character log
+router.delete('/:id', characterLogController.deleteCharacterLog);
+
 export default router;
