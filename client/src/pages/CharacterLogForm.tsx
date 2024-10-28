@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { useState } from 'react';
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -18,14 +18,19 @@ import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import { CharacterLogTypeDictionary } from '../data/Dictionaries';
 import { CharacterLogType } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
+import { useCharacterLog } from "../hooks/useCharacterLog";
 
 const CharacterLogForm = () => {
-    // Character Id value fetched from URL params
-    const { characterId } = useParams();
+    // Character & log id values fetched from URL params
+    const { characterId, logId } = useParams();
     // Character summary details
     const character = useCharacter(characterId!);
+    // Character log details
+    const currentLog = logId ? useCharacterLog(characterId!, logId) : null;
     // Hook used to navigate programmatically
     const navigate = useNavigate();
+    // Flag indicating if form is in view mode
+    const isViewing = !(logId == null || useLocation().pathname.includes("/edit"));
     // Array containing Character Log Type ids for Autocomplete field
     const characterLogTypeArray = Array.from(CharacterLogTypeDictionary.keys());
     // Default error message for required fields
@@ -182,14 +187,35 @@ const CharacterLogForm = () => {
         });
     };
 
+    useEffect(() => {
+        if (currentLog) {
+            setLog({
+                type: currentLog.type,
+                title: currentLog.title,
+                timestamp: new Date(currentLog.timestamp),
+                location: currentLog.location,
+                dmName: currentLog.dmName === null ? '' : currentLog.dmName,
+                dmDci: currentLog.dmDci === null ? '' : currentLog.dmDci,
+                lengthHours: currentLog.lengthHours,
+                gold: currentLog.gold,
+                downtime: currentLog.downtime,
+                levels: currentLog.levels,
+                serviceHours: currentLog.serviceHours,
+                traderCharacterName: currentLog.traderCharacterName === null ? '' : currentLog.traderCharacterName,
+                traderOtherPlayer: currentLog.traderOtherPlayer === null ? '' : currentLog.traderOtherPlayer,
+                description: currentLog.description === null ? '' : currentLog.description,
+            });
+        }
+    }, [currentLog]);
+
     return (
         <>
-            { character ? (
+            { (character && (!logId || (logId && currentLog))) ? (
                 <Container maxWidth="md">
                     <BreadcrumbsMenu 
                         characterId={characterId}
                         characterName={character.name}
-                        currentPageTitle='New Character Log'
+                        currentPageTitle={(logId ? (isViewing ? "View" : "Edit") : "New") + " Character Log"}
                     />
                     <Paper 
                         elevation={1}
@@ -212,11 +238,14 @@ const CharacterLogForm = () => {
                             }}
                         >
                             <Grid item xs={12}>
-                                <Typography variant="h3" component="h1" gutterBottom textAlign="center">New Character Log</Typography>
+                                <Typography variant="h3" component="h1" gutterBottom textAlign="center">
+                                    {(logId ? (isViewing ? "View" : "Edit") : "New") + " Character Log"}
+                                </Typography>
                             </Grid>
                             <Grid item md={8} xs={12}>
                                 <TextField 
                                     error={logError.title}
+                                    disabled={isViewing}
                                     required
                                     id="log-title"
                                     label="Title"
@@ -229,6 +258,7 @@ const CharacterLogForm = () => {
                             </Grid>
                             <Grid item md={4} xs={12}>
                                 <DateTimePicker 
+                                    disabled={isViewing}
                                     ampm={false}
                                     label="Date"
                                     format="yyyy-MM-dd HH:mm"
@@ -246,6 +276,7 @@ const CharacterLogForm = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <Autocomplete 
+                                    disabled={logId != null}
                                     id="log-type"
                                     options={characterLogTypeArray}
                                     getOptionLabel={(o) => CharacterLogTypeDictionary.get(o) || ''}
@@ -268,6 +299,7 @@ const CharacterLogForm = () => {
                                 <AdventureLogFields
                                     log={log}
                                     logError={logError}
+                                    isViewing={isViewing}
                                     requiredFieldErrorMessage={requiredFieldErrorMessage}
                                     handleLogTextChange={handleLogTextChange}
                                     handleRequiredFieldValidation={handleRequiredFieldValidation}
@@ -277,6 +309,7 @@ const CharacterLogForm = () => {
                                 <MerchantLogFields
                                     log={log}
                                     logError={logError}
+                                    isViewing={isViewing}
                                     requiredFieldErrorMessage={requiredFieldErrorMessage}
                                     handleLogTextChange={handleLogTextChange}
                                     handleRequiredFieldValidation={handleRequiredFieldValidation}
@@ -286,6 +319,7 @@ const CharacterLogForm = () => {
                                 <TradeLogFields
                                     log={log}
                                     logError={logError}
+                                    isViewing={isViewing}
                                     requiredFieldErrorMessage={requiredFieldErrorMessage}
                                     handleLogTextChange={handleLogTextChange}
                                     handleRequiredFieldValidation={handleRequiredFieldValidation}
@@ -295,6 +329,7 @@ const CharacterLogForm = () => {
                                 <ServiceAwardLogFields
                                     log={log}
                                     logError={logError}
+                                    isViewing={isViewing}
                                     requiredFieldErrorMessage={requiredFieldErrorMessage}
                                     handleLogTextChange={handleLogTextChange}
                                     handleRequiredFieldValidation={handleRequiredFieldValidation}
@@ -305,7 +340,7 @@ const CharacterLogForm = () => {
                                     <Typography>Magic Items and Story Awards... coming soon...</Typography>
                                 </Grid>
                             }
-                            { log.type != null &&
+                            { !(isViewing || log.type == null) &&
                                 <Grid justifyContent="flex-end" container item xs={12}>
                                     <Grid item md={1} xs={2}>
                                         <Button 

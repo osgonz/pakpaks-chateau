@@ -19,6 +19,14 @@ const router = createBrowserRouter([
       {
         path: "characters/:characterId/logs/new",
         element: <CharacterLogForm />
+      },
+      {
+        path: "characters/:characterId/logs/:logId",
+        element: <CharacterLogForm />
+      },
+      {
+        path: "characters/:characterId/logs/:logId/edit",
+        element: <CharacterLogForm />
       }
     ]
   }

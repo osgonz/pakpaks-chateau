@@ -12,6 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { Link } from "react-router-dom";
 import { CharacterLogTypeDictionary } from '../../data/Dictionaries';
 import { CharacterLog, CharacterLogRow, Order, SortableTableHeadCell } from '../../data/Types';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
@@ -149,7 +150,13 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                                 </List>
                             </TableCell>
                             <TableCell align="center">
-                                <IconButton color="primary"><Icon>visibility</Icon></IconButton>
+                                <IconButton 
+                                    color="primary"
+                                    component={Link}
+                                    to={`/characters/${log.characterId}/logs/${log.id}`}
+                                >
+                                    <Icon>visibility</Icon>
+                                </IconButton>
                                 <IconButton color="primary"><Icon>edit</Icon></IconButton>
                                 <IconButton color="error"><Icon>delete</Icon></IconButton>
                             </TableCell>

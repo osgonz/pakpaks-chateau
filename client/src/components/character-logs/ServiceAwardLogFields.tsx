@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 interface ServiceAwardLogFieldsProps {
     log: any,
     logError: any,
+    isViewing: boolean,
     requiredFieldErrorMessage: string,
     handleLogTextChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldName: string) => void,
     handleRequiredFieldValidation: (fieldName: string) => void,
@@ -15,6 +16,7 @@ const ServiceAwardLogFields = (props: ServiceAwardLogFieldsProps) => {
             <Grid item xs={12}>
                 <TextField 
                     error={props.logError.location}
+                    disabled={props.isViewing}
                     required
                     id="log-location"
                     label="Location"
@@ -27,6 +29,7 @@ const ServiceAwardLogFields = (props: ServiceAwardLogFieldsProps) => {
             </Grid>
             <Grid item md={3} xs={12}>
                 <TextField 
+                    disabled={props.isViewing}
                     id="log-levels"
                     label="Levels"
                     onChange={e => props.handleLogTextChange(e, "levels")}
@@ -37,6 +40,7 @@ const ServiceAwardLogFields = (props: ServiceAwardLogFieldsProps) => {
             </Grid>
             <Grid item md={3} xs={12}>
                 <TextField 
+                    disabled={props.isViewing}
                     id="log-gold"
                     label="Gold"
                     onChange={e => props.handleLogTextChange(e, "gold")}
@@ -47,6 +51,7 @@ const ServiceAwardLogFields = (props: ServiceAwardLogFieldsProps) => {
             </Grid>
             <Grid item md={3} xs={12}>
                 <TextField 
+                    disabled={props.isViewing}
                     id="log-downtime"
                     label="Downtime"
                     onChange={e => props.handleLogTextChange(e, "downtime")}
@@ -57,6 +62,7 @@ const ServiceAwardLogFields = (props: ServiceAwardLogFieldsProps) => {
             </Grid>
             <Grid item md={3} xs={12}>
                 <TextField 
+                    disabled={props.isViewing}
                     id="log-service-hours"
                     label="Service Hours"
                     onChange={e => props.handleLogTextChange(e, "serviceHours")}
@@ -67,6 +73,7 @@ const ServiceAwardLogFields = (props: ServiceAwardLogFieldsProps) => {
             </Grid>
             <Grid item xs={12}>
                 <TextField 
+                    disabled={props.isViewing}
                     id="log-description"
                     label="Description"
                     onChange={e => props.handleLogTextChange(e, "description")}

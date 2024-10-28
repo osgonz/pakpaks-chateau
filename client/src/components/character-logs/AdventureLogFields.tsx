@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 interface AdventureLogFieldsProps {
     log: any,
     logError: any,
+    isViewing: boolean,
     requiredFieldErrorMessage: string,
     handleLogTextChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldName: string) => void,
     handleRequiredFieldValidation: (fieldName: string) => void,
@@ -14,6 +15,7 @@ const AdventureLogFields = (props: AdventureLogFieldsProps) => {
         <>
             <Grid item md={4} xs={12}>
                 <TextField 
+                    disabled={props.isViewing}
                     id="log-length-hours"
                     label="Hours"
                     onChange={e => props.handleLogTextChange(e, "lengthHours")}
@@ -25,6 +27,7 @@ const AdventureLogFields = (props: AdventureLogFieldsProps) => {
             <Grid item md={8} xs={12}>
                 <TextField 
                     error={props.logError.location}
+                    disabled={props.isViewing}
                     required
                     id="log-location"
                     label="Location"
@@ -38,6 +41,7 @@ const AdventureLogFields = (props: AdventureLogFieldsProps) => {
             <Grid item md={6} xs={12}>
                 <TextField 
                     error={props.logError.dmName}
+                    disabled={props.isViewing}
                     required
                     id="log-dm-name"
                     label="Dungeon Master"
@@ -50,6 +54,7 @@ const AdventureLogFields = (props: AdventureLogFieldsProps) => {
             </Grid>
             <Grid item md={6} xs={12}>
                 <TextField 
+                    disabled={props.isViewing}
                     id="log-dm-dci"
                     label="DCI"
                     onChange={e => props.handleLogTextChange(e, "dmDci")}
@@ -59,6 +64,7 @@ const AdventureLogFields = (props: AdventureLogFieldsProps) => {
             </Grid>
             <Grid item md={3} xs={12}>
                 <TextField 
+                    disabled={props.isViewing}
                     id="log-levels"
                     label="Levels"
                     onChange={e => props.handleLogTextChange(e, "levels")}
@@ -69,6 +75,7 @@ const AdventureLogFields = (props: AdventureLogFieldsProps) => {
             </Grid>
             <Grid item md={3} xs={12}>
                 <TextField 
+                    disabled={props.isViewing}
                     id="log-gold"
                     label="Gold"
                     onChange={e => props.handleLogTextChange(e, "gold")}
@@ -79,6 +86,7 @@ const AdventureLogFields = (props: AdventureLogFieldsProps) => {
             </Grid>
             <Grid item md={3} xs={12}>
                 <TextField 
+                    disabled={props.isViewing}
                     id="log-downtime"
                     label="Downtime"
                     onChange={e => props.handleLogTextChange(e, "downtime")}
@@ -89,6 +97,7 @@ const AdventureLogFields = (props: AdventureLogFieldsProps) => {
             </Grid>
             <Grid item md={3} xs={12}>
                 <TextField 
+                    disabled={props.isViewing}
                     id="log-service-hours"
                     label="Service Hours"
                     onChange={e => props.handleLogTextChange(e, "serviceHours")}
@@ -99,6 +108,7 @@ const AdventureLogFields = (props: AdventureLogFieldsProps) => {
             </Grid>
             <Grid item xs={12}>
                 <TextField 
+                    disabled={props.isViewing}
                     id="log-description"
                     label="Description"
                     onChange={e => props.handleLogTextChange(e, "description")}
