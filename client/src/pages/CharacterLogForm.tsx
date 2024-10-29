@@ -181,7 +181,7 @@ const CharacterLogForm = () => {
             rawLog.description = null;
         }
 
-        axios.post(`/api/characters/${characterId}/character-logs/${logId || 'create'}`, rawLog).then(res => {
+        axios.post(`/api/characters/${characterId}/character-logs/${logId || 'create'}`, rawLog).then(_ => {
             navigate(`/characters/${characterId}`);
         });
     };

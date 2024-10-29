@@ -26,28 +26,3 @@ export function useCharacterLog(characterId: string, logId: string) {
 
     return characterLog;
 }
-
-/**
- * Custom hook that returns a specific character's player logs
- * @param characterId - Id corresponding to a character
- * @returns Array containing the character's player logs
- */
-export function useCharacterLogsByCharacter(characterId: string) {
-    const [characterLogs, setCharacterLogs] = useState<CharacterLogRow[] | undefined>();
-
-    /**
-     * Asynchronous function that pulls a character's player logs
-     * @param characterId - Id corresponding to a character
-     * @returns Array containing the character's player logs
-     */
-    const loadCharacterLogsByCharacter = async(characterId: string) => {
-        return axios.get(`/api/characters/${characterId}/character-logs`).then((res) => res.data) as Promise<CharacterLogRow[]>;
-    };
-
-    useEffect(() => {
-        loadCharacterLogsByCharacter(characterId)
-            .then(setCharacterLogs);
-    }, []);
-
-    return characterLogs;
-}

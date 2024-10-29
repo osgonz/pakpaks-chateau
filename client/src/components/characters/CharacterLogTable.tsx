@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState, useMemo } from 'react';
 import { format } from 'date-fns';
 import Icon from '@mui/material/Icon';
@@ -15,11 +16,13 @@ import TableRow from '@mui/material/TableRow';
 import { Link } from "react-router-dom";
 import { CharacterLogTypeDictionary } from '../../data/Dictionaries';
 import { CharacterLog, CharacterLogRow, Order, SortableTableHeadCell } from '../../data/Types';
+import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
 import SortableTableHead, { getSortComparator } from '../shared/SortableTableHead';
 
 interface CharacterLogTableProps {
     characterLogs: CharacterLogRow[],
+    handleRemoveCharacterLogByIndex: (index: number) => void,
 };
 
 const CharacterLogTable = (props: CharacterLogTableProps) => {
@@ -31,6 +34,10 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
     const [page, setPage] = useState(0);
     // Number of records showed per page
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    // Flag used to display Character Log Delete dialog
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    // Log currently set for deletion
+    const [logToBeDeleted, setLogToBeDeleted] = useState<CharacterLog | null>(null);
 
     // Character logs
     const { characterLogs } = props;
@@ -41,7 +48,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
             page * rowsPerPage,
             page * rowsPerPage + rowsPerPage,
         ),
-        [order, orderBy, page, rowsPerPage]
+        [characterLogs, order, orderBy, page, rowsPerPage]
     );
     
     // Metadata for table headers
@@ -117,6 +124,25 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
         setPage(0);
     };
 
+    // Helper function triggered when attempting to Delete a Character Log
+    const handleDeleteOpen = (log: CharacterLogRow) => {
+        setLogToBeDeleted(log);
+        setDeleteOpen(true);
+    };
+
+    // Helper function triggered when closing the Delete Character Log Confirmation dialog
+    const handleDeleteClose = () => {
+        setDeleteOpen(false);
+        setLogToBeDeleted(null);
+    };
+
+    // Function used to delete a character log following confirmation
+    const deleteCharacterLog = async() => {
+        await axios.delete(`/api/characters/${logToBeDeleted?.characterId}/character-logs/${logToBeDeleted?.id}`);
+        props.handleRemoveCharacterLogByIndex(characterLogs.findIndex((log) => log.id === logToBeDeleted?.id));
+        handleDeleteClose();
+    };
+
     return (
         <>
             <TableContainer component={Paper} elevation={3}>
@@ -151,6 +177,8 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                             </TableCell>
                             <TableCell align="center">
                                 <IconButton 
+                                    id={`view-${log.id}`}
+                                    aria-label={`View ${log.title}`}
                                     color="primary"
                                     component={Link}
                                     to={`/characters/${log.characterId}/logs/${log.id}`}
@@ -158,13 +186,22 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                                     <Icon>visibility</Icon>
                                 </IconButton>
                                 <IconButton 
+                                    id={`edit-${log.id}`}
+                                    aria-label={`Edit ${log.title}`}
                                     color="primary"
                                     component={Link}
                                     to={`/characters/${log.characterId}/logs/${log.id}/edit`}
                                 >
                                     <Icon>edit</Icon>
                                 </IconButton>
-                                <IconButton color="error"><Icon>delete</Icon></IconButton>
+                                <IconButton 
+                                    id={`delete-${log.id}`}
+                                    aria-label={`Delete ${log.title}`}
+                                    color="error"
+                                    onClick={() => handleDeleteOpen(log)}
+                                >
+                                    <Icon>delete</Icon>
+                                </IconButton>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -189,6 +226,13 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                     </TableFooter>
                 </Table>
             </TableContainer>
+            <DeleteConfirmationDialog
+                open={deleteOpen}
+                handleClose={handleDeleteClose}
+                entityTypeToDelete='Character Log'
+                confirmationDialogText={`You are deleting a log titled '${logToBeDeleted?.title}'. You will not be able to recover this data.`}
+                deleteFunction={deleteCharacterLog}
+            />
         </>
     );
 };

@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import axios from 'axios';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
@@ -6,9 +7,8 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import CharacterSummary from '../components/characters/CharacterSummary';
 import CharacterDetailTabs from '../components/characters/CharacterDetailTabs';
-import { MagicItem } from '../data/Types';
+import { CharacterLogRow, MagicItem } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
-import { useCharacterLogsByCharacter } from '../hooks/useCharacterLog';
 import { useMagicItemsByCharacter } from "../hooks/useMagicItem";
 import { useStoryAwardsByCharacter } from '../hooks/useStoryAward';
 
@@ -18,7 +18,7 @@ const CharacterHome = () => {
     // Character summary details
     const character = useCharacter(characterId!);
     // Player logs
-    const characterLogs = useCharacterLogsByCharacter(characterId!);
+    const [characterLogs, setCharacterLogs] = useState<CharacterLogRow[] | undefined>();
     // Magic item details
     const magicItems = useMagicItemsByCharacter(characterId!);
     // Story award details
@@ -48,6 +48,27 @@ const CharacterHome = () => {
         return [result?.consumableItems, result?.permanentItems]
     }, [magicItems]);
 
+    // Helper function used to refresh data following a log deletion
+    const handleRemoveCharacterLogByIndex = (index: number) => {
+        let splicedLogs = [...(characterLogs as CharacterLogRow[])];
+        splicedLogs.splice(index, 1);
+        setCharacterLogs(splicedLogs);
+    };
+
+    useEffect(() => {
+        /**
+         * Asynchronous function that pulls a character's player logs
+         * @param characterId - Id corresponding to a character
+         * @returns Array containing the character's player logs
+         */
+        const loadCharacterLogsByCharacter = async(characterId: string) => {
+            return axios.get(`/api/characters/${characterId}/character-logs`).then((res) => res.data) as Promise<CharacterLogRow[]>;
+        };
+        loadCharacterLogsByCharacter(characterId!)
+            .then(setCharacterLogs);
+        
+    }, []);
+
     return (
         <>
             { character && characterLogs && magicItems && storyAwards ? (
@@ -69,6 +90,7 @@ const CharacterHome = () => {
                         <Divider variant="middle"/>
                         <CharacterDetailTabs 
                             characterLogs={characterLogs}
+                            handleRemoveCharacterLogByIndex={handleRemoveCharacterLogByIndex}
                             magicItems={magicItems}
                             storyAwards={storyAwards}
                         />
