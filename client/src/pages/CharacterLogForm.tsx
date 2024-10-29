@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -27,6 +27,8 @@ const CharacterLogForm = () => {
     const character = useCharacter(characterId!);
     // Character log details
     const currentLog = logId ? useCharacterLog(characterId!, logId) : null;
+    // Hook used to navigate programmatically
+    const navigate = useNavigate();
     // Flag indicating if form is in view mode
     const isViewing = !(logId == null || useLocation().pathname.includes("/edit"));
     // Array containing Character Log Type ids for Autocomplete field
@@ -180,8 +182,7 @@ const CharacterLogForm = () => {
         }
 
         axios.post(`/api/characters/${characterId}/character-logs/${logId || 'create'}`, rawLog).then(res => {
-            // React won't properly load new log's view page using router navigate - standard href works!
-            window.location.href = `/characters/${characterId}/logs/${logId || res.data}`;
+            navigate(`/characters/${characterId}`);
         });
     };
 
