@@ -9,6 +9,7 @@ import CharacterSummary from '../components/characters/CharacterSummary';
 import CharacterDetailTabs from '../components/characters/CharacterDetailTabs';
 import { CharacterLogRow, MagicItem } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
+import { useCharacterLogsByCharacter } from '../hooks/useCharacterLog';
 import { useMagicItemsByCharacter } from "../hooks/useMagicItem";
 import { useStoryAwardsByCharacter } from '../hooks/useStoryAward';
 
@@ -18,6 +19,7 @@ const CharacterHome = () => {
     // Character summary details
     const character = useCharacter(characterId!);
     // Player logs
+    const loadedCharacterLogs = useCharacterLogsByCharacter(characterId!);
     const [characterLogs, setCharacterLogs] = useState<CharacterLogRow[] | undefined>();
     // Magic item details
     const magicItems = useMagicItemsByCharacter(characterId!);
@@ -56,18 +58,8 @@ const CharacterHome = () => {
     };
 
     useEffect(() => {
-        /**
-         * Asynchronous function that pulls a character's player logs
-         * @param characterId - Id corresponding to a character
-         * @returns Array containing the character's player logs
-         */
-        const loadCharacterLogsByCharacter = async(characterId: string) => {
-            return axios.get(`/api/characters/${characterId}/character-logs`).then((res) => res.data) as Promise<CharacterLogRow[]>;
-        };
-        loadCharacterLogsByCharacter(characterId!)
-            .then(setCharacterLogs);
-        
-    }, []);
+        setCharacterLogs(loadedCharacterLogs);
+    }, [loadedCharacterLogs]);
 
     return (
         <>
