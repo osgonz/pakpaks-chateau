@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
+import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
@@ -14,11 +15,15 @@ import AdventureLogFields from '../components/character-logs/AdventureLogFields'
 import MerchantLogFields from '../components/character-logs/MerchantLogFields';
 import ServiceAwardLogFields from '../components/character-logs/ServiceAwardLogFields';
 import TradeLogFields from '../components/character-logs/TradeLogFields';
+import CharacterLogMagicItemTable from '../components/character-logs/CharacterLogMagicItemTable';
+import CharacterLogStoryAwardTable from '../components/character-logs/CharacterLogStoryAwardTable';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import { CharacterLogTypeDictionary } from '../data/Dictionaries';
 import { CharacterLogType } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
 import { useCharacterLog } from "../hooks/useCharacterLog";
+import { useMagicItemsByCharacterLog } from "../hooks/useMagicItem";
+import { useStoryAwardsByCharacterLog } from '../hooks/useStoryAward';
 
 const CharacterLogForm = () => {
     // Character & log id values fetched from URL params
@@ -27,6 +32,10 @@ const CharacterLogForm = () => {
     const character = useCharacter(characterId!);
     // Character log details
     const currentLog = logId ? useCharacterLog(characterId!, logId) : null;
+    // Magic item details
+    const currentMagicItems = logId ? useMagicItemsByCharacterLog(characterId!, logId) : null;
+    // Story award details
+    const currentStoryAwards = logId ? useStoryAwardsByCharacterLog(characterId!, logId) : null;
     // Hook used to navigate programmatically
     const navigate = useNavigate();
     // Flag indicating if form is in view mode
@@ -63,7 +72,10 @@ const CharacterLogForm = () => {
         dmName: false,
         traderCharacterName: false,
         traderOtherPlayer: false,
-    })
+    });
+
+    // State object containing loading flag for View/Edit scenarios
+    const [isLogLoading, setIsLogLoading] = useState(true);
 
     // Helper function triggered when updating an Autocomplete field
     const handleLogTypeChange = (_: React.BaseSyntheticEvent, value: CharacterLogType | null) => {
@@ -204,12 +216,13 @@ const CharacterLogForm = () => {
                 traderOtherPlayer: currentLog.traderOtherPlayer === null ? '' : currentLog.traderOtherPlayer,
                 description: currentLog.description === null ? '' : currentLog.description,
             });
+            setIsLogLoading(false);
         }
     }, [currentLog]);
 
     return (
         <>
-            { (character && (!logId || (logId && currentLog))) ? (
+            { (character && (!logId || (logId && !isLogLoading))) ? (
                 <Container maxWidth="md">
                     <BreadcrumbsMenu 
                         characterId={characterId}
@@ -335,9 +348,20 @@ const CharacterLogForm = () => {
                                 />
                             }
                             { log.type != null && log.type != CharacterLogType.Trade &&
-                                <Grid item xs={12}>
-                                    <Typography>Magic Items and Story Awards... coming soon...</Typography>
-                                </Grid>
+                                <>
+                                    <Grid item xs={12}>
+                                        <Divider variant="fullWidth"/>
+                                    </Grid>
+                                    <CharacterLogMagicItemTable 
+                                        magicItems={currentMagicItems}
+                                    />
+                                    <Grid item xs={12}>
+                                        <Divider variant="fullWidth"/>
+                                    </Grid>
+                                    <CharacterLogStoryAwardTable 
+                                        storyAwards={currentStoryAwards}
+                                    />
+                                </>
                             }
                             { !(isViewing || log.type == null) &&
                                 <Grid justifyContent="flex-end" container item xs={12}>

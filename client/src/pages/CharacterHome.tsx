@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from "react-router-dom";
 import Container from "@mui/material/Container";
