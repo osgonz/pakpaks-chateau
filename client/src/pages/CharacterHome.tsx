@@ -6,7 +6,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import CharacterSummary from '../components/characters/CharacterSummary';
 import CharacterDetailTabs from '../components/characters/CharacterDetailTabs';
-import { CharacterLogRow, MagicItem } from '../data/Types';
+import { CharacterLogRow, MagicItemRow } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
 import { useCharacterLogsByCharacter } from '../hooks/useCharacterLog';
 import { useMagicItemsByCharacter } from "../hooks/useMagicItem";
@@ -21,7 +21,8 @@ const CharacterHome = () => {
     const loadedCharacterLogs = useCharacterLogsByCharacter(characterId!);
     const [characterLogs, setCharacterLogs] = useState<CharacterLogRow[] | undefined>();
     // Magic item details
-    const magicItems = useMagicItemsByCharacter(characterId!);
+    const loadedMagicItems = useMagicItemsByCharacter(characterId!);
+    const [magicItems, setMagicItems] = useState<MagicItemRow[] | undefined>();
     // Story award details
     const storyAwards = useStoryAwardsByCharacter(characterId!);
 
@@ -39,15 +40,6 @@ const CharacterHome = () => {
 
         return [level, gold, downtime]
     }, [characterLogs]);
-    // Objects containing split permanent and consumable magic item lists (cached)
-    const [consumableMagicItems, permanentMagicItems] = useMemo(() => {
-        let result = magicItems?.reduce((r, o) => {
-            r[o.isConsumable ? 'consumableItems' : 'permanentItems'].push(o);
-            return r;
-        }, { permanentItems: [] as MagicItem[], consumableItems: [] as MagicItem[] });
-        
-        return [result?.consumableItems, result?.permanentItems]
-    }, [magicItems]);
 
     // Helper function used to refresh data following a log deletion
     const handleRemoveCharacterLogByIndex = (index: number) => {
@@ -56,9 +48,20 @@ const CharacterHome = () => {
         setCharacterLogs(splicedLogs);
     };
 
+    // Helper function used to refresh data following a magic item deletion
+    const handleRemoveMagicItemByIndex = (index: number) => {
+        let splicedItems = [...(magicItems as MagicItemRow[])];
+        splicedItems.splice(index, 1);
+        setMagicItems(splicedItems);
+    };
+
     useEffect(() => {
         setCharacterLogs(loadedCharacterLogs);
     }, [loadedCharacterLogs]);
+
+    useEffect(() => {
+        setMagicItems(loadedMagicItems);
+    }, [loadedMagicItems]);
 
     return (
         <>
@@ -75,13 +78,12 @@ const CharacterHome = () => {
                             level={level}
                             gold={gold}
                             downtime={downtime}
-                            consumableMagicItems={consumableMagicItems!}
-                            permanentMagicItems={permanentMagicItems!}
                         />
                         <Divider variant="middle"/>
                         <CharacterDetailTabs 
                             characterLogs={characterLogs}
                             handleRemoveCharacterLogByIndex={handleRemoveCharacterLogByIndex}
+                            handleRemoveMagicItemByIndex={handleRemoveMagicItemByIndex}
                             magicItems={magicItems}
                             storyAwards={storyAwards}
                         />

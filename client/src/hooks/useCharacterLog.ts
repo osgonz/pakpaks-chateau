@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from "react";
-import { CharacterLog, CharacterLogRow } from "../data/Types";
+import { CharacterLog, CharacterLogAbstract, CharacterLogRow } from "../data/Types";
 
 /**
  * Custom hook that returns a specific player log
@@ -46,6 +46,26 @@ export function useCharacterLogsByCharacter(characterId: string) {
 
     useEffect(() => {
         loadCharacterLogsByCharacter(characterId)
+            .then(setCharacterLogs);
+    }, []);
+    
+    return characterLogs;
+}
+
+/**
+ * Custom hook that returns a specific character's player log abstracts (for dropdowns)
+ * @param characterId - Id corresponding to a character
+ * @returns Array containing the character's player log abstracts
+ */
+export function useCharacterLogsDropdownByCharacter(characterId: string) {
+    const [characterLogs, setCharacterLogs] = useState<CharacterLogAbstract[] | undefined>();
+
+    const loadCharacterLogsDropdownByCharacter = async(characterId: string) => {
+        return axios.get(`/api/characters/${characterId}/character-logs-dropdown`).then((res) => res.data) as Promise<CharacterLogAbstract[]>;
+    };
+
+    useEffect(() => {
+        loadCharacterLogsDropdownByCharacter(characterId)
             .then(setCharacterLogs);
     }, []);
     

@@ -5,15 +5,13 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { CampaignDictionary } from "../../data/Dictionaries";
-import { Character, MagicItem } from "../../data/Types";
+import { Character } from "../../data/Types";
 
 interface SummaryProps {
     character: Character,
     level: number,
     gold: number,
     downtime: number,
-    consumableMagicItems: MagicItem[],
-    permanentMagicItems: MagicItem[],
 };
 
 const CharacterSummary = (props: SummaryProps) => {
@@ -99,18 +97,6 @@ const CharacterSummary = (props: SummaryProps) => {
                 </Grid>
             </Grid>
             <Grid alignItems="center" container item xs={12} md={4.5}>
-                <Grid alignItems="center" container item xs={12} sx={{ pb: 2 }}>
-                    <Grid item xs={4}>
-                        <Typography gutterBottom>Carried Magic Items:</Typography>
-                    </Grid>
-                    <Grid item xs={8} sx={{ pl: 1 }}>
-                        { props.permanentMagicItems.filter((item) => item.isEquipped).map((item) =>(
-                            <Typography key={item.id} gutterBottom>
-                                {item.flavorName ? `${item.flavorName} (${item.name})` : item.name}{item.requiresAttunement ? ' [A]' : ''}
-                            </Typography>
-                        ))}
-                    </Grid>
-                </Grid>
                 <Grid item xs={12} sx={{ pb: '0.35em' }}>
                     <Button 
                         component={Link}
@@ -119,6 +105,24 @@ const CharacterSummary = (props: SummaryProps) => {
                         fullWidth
                     >
                         Add Character Log
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sx={{ pb: '0.35em' }}>
+                    <Button 
+                        component={Link}
+                        to={`/characters/${props.character.id}/magic-items/new`}
+                        variant="outlined"
+                        fullWidth
+                    >
+                        Add Magic Item
+                    </Button>
+                </Grid>
+                <Grid item xs={12} sx={{ pb: '0.35em' }}>
+                    <Button 
+                        variant="outlined"
+                        fullWidth
+                    >
+                        Add Story Award
                     </Button>
                 </Grid>
                 { props.character.characterSheetLink &&

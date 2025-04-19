@@ -117,6 +117,12 @@ export interface CharacterLogRow extends CharacterLog {
     lostMagicItemNames: string | null;
 };
 
+export type CharacterLogAbstract = {
+    id: string;
+    title: string;
+    timestamp: Date;
+};
+
 // Story Award type definition
 export type StoryAward = {
     id: string;

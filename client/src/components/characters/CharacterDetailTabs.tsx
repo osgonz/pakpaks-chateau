@@ -21,6 +21,7 @@ interface CharacterDetailsProps {
     magicItems: MagicItemRow[],
     storyAwards: StoryAwardRow[],
     handleRemoveCharacterLogByIndex: (index: number) => void,
+    handleRemoveMagicItemByIndex: (index: number) => void,
 };
 
 const CharacterDetailTabs = (props: CharacterDetailsProps) => {
@@ -84,6 +85,7 @@ const CharacterDetailTabs = (props: CharacterDetailsProps) => {
                 >
                     <MagicItemTable
                         magicItems={props.magicItems}
+                        handleRemoveMagicItemByIndex={props.handleRemoveMagicItemByIndex}
                     />
                 </CharacterDetailTabPanel>
                 <CharacterDetailTabPanel 

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState, useMemo } from 'react';
 import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
@@ -9,8 +10,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { Link } from "react-router-dom";
 import { ItemRarityDictionary } from '../../data/Dictionaries';
 import { MagicItem, MagicItemRow, Order, SortableTableHeadCell } from '../../data/Types';
+import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
 import SortableTableHead, { getDescendingComparator } from '../shared/SortableTableHead';
 
@@ -63,6 +66,7 @@ function getMagicItemSortComparator<Key extends keyof MagicItem>(
 
 interface MagicItemTableProps {
     magicItems: MagicItemRow[],
+    handleRemoveMagicItemByIndex: (index: number) => void,
 };
 
 const MagicItemTable = (props: MagicItemTableProps) => {
@@ -74,6 +78,10 @@ const MagicItemTable = (props: MagicItemTableProps) => {
     const [page, setPage] = useState(0);
     // Number of records showed per page
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    // Flag used to display Magic Item Delete dialog
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    // Item currently set for deletion
+    const [itemToBeDeleted, setItemToBeDeleted] = useState<MagicItem | null>(null);
 
     // Magic items
     const { magicItems } = props;
@@ -84,7 +92,7 @@ const MagicItemTable = (props: MagicItemTableProps) => {
             page * rowsPerPage,
             page * rowsPerPage + rowsPerPage,
         ),
-        [order, orderBy, page, rowsPerPage]
+        [magicItems, order, orderBy, page, rowsPerPage]
     );
     
     // Metadata for table headers
@@ -148,54 +156,105 @@ const MagicItemTable = (props: MagicItemTableProps) => {
         setPage(0);
     };
 
+    // Helper function triggered when attempting to Delete a Magic Item
+    const handleDeleteOpen = (log: MagicItemRow) => {
+        setItemToBeDeleted(log);
+        setDeleteOpen(true);
+    };
+
+    // Helper function triggered when closing the Delete Magic Item Confirmation dialog
+    const handleDeleteClose = () => {
+        setDeleteOpen(false);
+        setItemToBeDeleted(null);
+    };
+
+    // Function used to delete a magic item following confirmation
+    const deleteMagicItem = async() => {
+        await axios.delete(`/api/characters/${itemToBeDeleted?.characterId}/magic-items/${itemToBeDeleted?.id}`);
+        props.handleRemoveMagicItemByIndex(magicItems.findIndex((item) => item.id === itemToBeDeleted?.id));
+        handleDeleteClose();
+    };
+
     return (
-        <TableContainer component={Paper} elevation={3}>
-            <Table sx={{ minWidth: 650 }} size="medium" aria-label="Magic Items table">
-                <SortableTableHead 
-                    headCells={headCells}
-                    order={order}
-                    orderBy={orderBy as string}
-                    onRequestSort={handleRequestSort}
-                    rowCount={magicItems.length}
-                />
-                <TableBody>
-                { visibleRows.map((item) => (
-                    <TableRow key={item.id}>
-                        <TableCell component="th" scope="row">
-                            {item.flavorName ? `${item.flavorName} (${item.name})` : item.name}
-                        </TableCell>
-                        <TableCell>{ItemRarityDictionary.get(item.rarity)}</TableCell>
-                        <TableCell>{item.isConsumable ? 'Consumable' : 'Permanent'}</TableCell>
-                        <TableCell>{item.requiresAttunement ? 'Yes' : 'No'}</TableCell>
-                        <TableCell>{item.originLogTitle}</TableCell>
-                        <TableCell align="center">
-                            <IconButton color="primary"><Icon>visibility</Icon></IconButton>
-                            <IconButton color="primary"><Icon>edit</Icon></IconButton>
-                            <IconButton color="error"><Icon>delete</Icon></IconButton>
-                        </TableCell>
-                    </TableRow>
-                ))}
-                {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                        <TableCell colSpan={6} />
-                    </TableRow>
-                )}
-                </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
-                            count={magicItems.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={EnhancedTablePaginationActions}
-                        />
-                    </TableRow>
-                </TableFooter>
-            </Table>
-        </TableContainer>
+        <>
+            <TableContainer component={Paper} elevation={3}>
+                <Table sx={{ minWidth: 650 }} size="medium" aria-label="Magic Items table">
+                    <SortableTableHead 
+                        headCells={headCells}
+                        order={order}
+                        orderBy={orderBy as string}
+                        onRequestSort={handleRequestSort}
+                        rowCount={magicItems.length}
+                    />
+                    <TableBody>
+                    { visibleRows.map((item) => (
+                        <TableRow key={item.id}>
+                            <TableCell component="th" scope="row">
+                                {item.flavorName ? `${item.flavorName} (${item.name})` : item.name}
+                            </TableCell>
+                            <TableCell>{ItemRarityDictionary.get(item.rarity)}</TableCell>
+                            <TableCell>{item.isConsumable ? 'Consumable' : 'Permanent'}</TableCell>
+                            <TableCell>{item.requiresAttunement ? 'Yes' : 'No'}</TableCell>
+                            <TableCell>{item.originLogTitle}</TableCell>
+                            <TableCell align="center">
+                                <IconButton 
+                                    id={`view-${item.id}`}
+                                    aria-label={`View ${item.flavorName ? `${item.flavorName} (${item.name})` : item.name}`}
+                                    color="primary"
+                                    component={Link}
+                                    to={`/characters/${item.characterId}/magic-items/${item.id}`}
+                                >
+                                    <Icon>visibility</Icon>
+                                </IconButton>
+                                <IconButton 
+                                    id={`edit-${item.id}`}
+                                    aria-label={`Edit ${item.flavorName ? `${item.flavorName} (${item.name})` : item.name}`}
+                                    color="primary"
+                                    component={Link}
+                                    to={`/characters/${item.characterId}/magic-items/${item.id}/edit`}
+                                >
+                                    <Icon>edit</Icon>
+                                </IconButton>
+                                <IconButton 
+                                    id={`delete-${item.id}`}
+                                    aria-label={`Delete ${item.flavorName ? `${item.flavorName} (${item.name})` : item.name}`}
+                                    color="error"
+                                    onClick={() => handleDeleteOpen(item)}
+                                >
+                                    <Icon>delete</Icon>
+                                </IconButton>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                    {emptyRows > 0 && (
+                        <TableRow style={{ height: 53 * emptyRows }}>
+                            <TableCell colSpan={6} />
+                        </TableRow>
+                    )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25]}
+                                count={magicItems.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={EnhancedTablePaginationActions}
+                            />
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </TableContainer>
+            <DeleteConfirmationDialog
+                open={deleteOpen}
+                handleClose={handleDeleteClose}
+                entityTypeToDelete='Magic Item'
+                confirmationDialogText={`You are deleting a magic item titled '${itemToBeDeleted?.flavorName ? `${itemToBeDeleted.flavorName} (${itemToBeDeleted.name})` : itemToBeDeleted?.name }'. You will not be able to recover this data.`}
+                deleteFunction={deleteMagicItem}
+            />
+        </>
     );
 };
 
