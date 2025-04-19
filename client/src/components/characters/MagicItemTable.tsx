@@ -157,8 +157,8 @@ const MagicItemTable = (props: MagicItemTableProps) => {
     };
 
     // Helper function triggered when attempting to Delete a Magic Item
-    const handleDeleteOpen = (log: MagicItemRow) => {
-        setItemToBeDeleted(log);
+    const handleDeleteOpen = (item: MagicItemRow) => {
+        setItemToBeDeleted(item);
         setDeleteOpen(true);
     };
 

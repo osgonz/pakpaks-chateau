@@ -160,7 +160,7 @@ const MagicItemForm = () => {
 
     return (
         <>
-            { (character && (!magicItemId || (magicItemId && !isMagicItemLoading))) ? (
+            { (character && characterLogIds && (!magicItemId || (magicItemId && !isMagicItemLoading))) ? (
                 <Container maxWidth="md">
                     <BreadcrumbsMenu 
                         characterId={characterId}
