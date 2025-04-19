@@ -15,6 +15,9 @@ router.get('/:id', characterController.getCharacter);
 // GET route for one character's logs
 router.get('/:id/character-logs', characterLogController.getCharacterLogsByCharacter);
 
+// GET route for one character's logs dropdown abstract
+router.get('/:id/character-logs-dropdown', characterLogController.getCharacterLogsDropdownByCharacter);
+
 // GET route for one character's magic items
 router.get('/:id/magic-items', magicItemController.getMagicItemsByCharacter);
 

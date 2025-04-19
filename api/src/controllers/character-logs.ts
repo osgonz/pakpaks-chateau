@@ -20,6 +20,22 @@ class CharacterLogController {
         }
     };
 
+    // Get a specific character's log abstract for UI dropdowns
+    getCharacterLogsDropdownByCharacter = async (req: Request, res: Response) => {
+        // Extract character id from parameter
+        const characterId = req.params.id;
+        let conn: PoolConnection | undefined;
+        try {
+            conn = await db.getConnection();
+            const [logs] = await conn.query("call get_character_log_dropdown_list(?)", [characterId]);
+            res.status(200).send(logs);
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
+    };
+
     // Get a character log
     getCharacterLog = async (req: Request, res: Response) => {
         // Extract character log id from parameter
@@ -115,8 +131,6 @@ class CharacterLogController {
         const id = req.params.id;
         // Extract character id from parameter
         const characterId = req.params.charId;
-        // Extract log payload from request body
-        const logContent = req.body;
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
