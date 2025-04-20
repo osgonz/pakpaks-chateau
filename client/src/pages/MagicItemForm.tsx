@@ -99,7 +99,7 @@ const MagicItemForm = () => {
         let errorsFound: any = {};
 
         if (magicItem.name === null || magicItem.name === "")
-            errorsFound['title'] = true;
+            errorsFound['name'] = true;
         if (magicItem.type === null)
             errorsFound['type'] = true;
         if (magicItem.rarity === null)

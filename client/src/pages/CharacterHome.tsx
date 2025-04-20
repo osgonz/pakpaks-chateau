@@ -6,7 +6,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import CharacterSummary from '../components/characters/CharacterSummary';
 import CharacterDetailTabs from '../components/characters/CharacterDetailTabs';
-import { CharacterLogRow, MagicItemRow } from '../data/Types';
+import { CharacterLogRow, MagicItemRow, StoryAwardRow } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
 import { useCharacterLogsByCharacter } from '../hooks/useCharacterLog';
 import { useMagicItemsByCharacter } from "../hooks/useMagicItem";
@@ -24,7 +24,8 @@ const CharacterHome = () => {
     const loadedMagicItems = useMagicItemsByCharacter(characterId!);
     const [magicItems, setMagicItems] = useState<MagicItemRow[] | undefined>();
     // Story award details
-    const storyAwards = useStoryAwardsByCharacter(characterId!);
+    const loadedStoryAwards = useStoryAwardsByCharacter(characterId!);
+    const [storyAwards, setStoryAwards] = useState<StoryAwardRow[] | undefined>();
 
     // Object containing calculated Character values (cached)
     const [level, gold, downtime] = useMemo(() => {
@@ -55,6 +56,13 @@ const CharacterHome = () => {
         setMagicItems(splicedItems);
     };
 
+    // Helper function used to refresh data following a story award deletion
+    const handleRemoveStoryAwardByIndex = (index: number) => {
+        let splicedItems = [...(storyAwards as StoryAwardRow[])];
+        splicedItems.splice(index, 1);
+        setStoryAwards(splicedItems);
+    };
+
     useEffect(() => {
         setCharacterLogs(loadedCharacterLogs);
     }, [loadedCharacterLogs]);
@@ -62,6 +70,10 @@ const CharacterHome = () => {
     useEffect(() => {
         setMagicItems(loadedMagicItems);
     }, [loadedMagicItems]);
+
+    useEffect(() => {
+        setStoryAwards(loadedStoryAwards);
+    }, [loadedStoryAwards]);
 
     return (
         <>
@@ -84,6 +96,7 @@ const CharacterHome = () => {
                             characterLogs={characterLogs}
                             handleRemoveCharacterLogByIndex={handleRemoveCharacterLogByIndex}
                             handleRemoveMagicItemByIndex={handleRemoveMagicItemByIndex}
+                            handleRemoveStoryAwardByIndex={handleRemoveStoryAwardByIndex}
                             magicItems={magicItems}
                             storyAwards={storyAwards}
                         />

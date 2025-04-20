@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState, useMemo } from 'react';
 import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
@@ -9,13 +10,16 @@ import TableContainer from '@mui/material/TableContainer';
 import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { Link } from "react-router-dom";
 import { StoryAwardStatusDictionary } from '../../data/Dictionaries';
 import { Order, SortableTableHeadCell, StoryAward, StoryAwardRow } from '../../data/Types';
+import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
 import SortableTableHead, { getSortComparator } from '../shared/SortableTableHead';
 
 interface StoryAwardTableProps {
     storyAwards: StoryAwardRow[],
+    handleRemoveStoryAwardByIndex: (index: number) => void,
 };
 
 const StoryAwardTable = (props: StoryAwardTableProps) => {
@@ -27,6 +31,10 @@ const StoryAwardTable = (props: StoryAwardTableProps) => {
     const [page, setPage] = useState(0);
     // Number of records showed per page
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    // Flag used to display Story Award Delete dialog
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    // Item currently set for deletion
+    const [itemToBeDeleted, setItemToBeDeleted] = useState<StoryAward | null>(null);
 
     // Story awards
     const { storyAwards } = props;
@@ -37,7 +45,7 @@ const StoryAwardTable = (props: StoryAwardTableProps) => {
             page * rowsPerPage,
             page * rowsPerPage + rowsPerPage,
         ),
-        [order, orderBy, page, rowsPerPage]
+        [storyAwards, order, orderBy, page, rowsPerPage]
     );
     
     // Metadata for table headers
@@ -89,52 +97,103 @@ const StoryAwardTable = (props: StoryAwardTableProps) => {
         setPage(0);
     };
 
+    // Helper function triggered when attempting to Delete a Story Award
+    const handleDeleteOpen = (item: StoryAwardRow) => {
+        setItemToBeDeleted(item);
+        setDeleteOpen(true);
+    };
+
+    // Helper function triggered when closing the Delete Story Award Confirmation dialog
+    const handleDeleteClose = () => {
+        setDeleteOpen(false);
+        setItemToBeDeleted(null);
+    };
+
+    // Function used to delete a story award following confirmation
+    const deleteStoryAward = async() => {
+        await axios.delete(`/api/characters/${itemToBeDeleted?.characterId}/story-awards/${itemToBeDeleted?.id}`);
+        props.handleRemoveStoryAwardByIndex(storyAwards.findIndex((item) => item.id === itemToBeDeleted?.id));
+        handleDeleteClose();
+    };
+
     return (
-        <TableContainer component={Paper} elevation={3}>
-            <Table sx={{ minWidth: 650 }} size="medium" aria-label="Story Awards table">
-                <SortableTableHead 
-                    headCells={headCells}
-                    order={order}
-                    orderBy={orderBy as string}
-                    onRequestSort={handleRequestSort}
-                    rowCount={storyAwards.length}
-                />
-                <TableBody>
-                { visibleRows.map((award) => (
-                    <TableRow key={award.id}>
-                        <TableCell component="th" scope="row">
-                            {award.name}
-                        </TableCell>
-                        <TableCell>{StoryAwardStatusDictionary.get(award.status)}</TableCell>
-                        <TableCell>{award.originLogTitle}</TableCell>
-                        <TableCell align="center">
-                            <IconButton color="primary"><Icon>visibility</Icon></IconButton>
-                            <IconButton color="primary"><Icon>edit</Icon></IconButton>
-                            <IconButton color="error"><Icon>delete</Icon></IconButton>
-                        </TableCell>
-                    </TableRow>
-                ))}
-                {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                        <TableCell colSpan={6} />
-                    </TableRow>
-                )}
-                </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
-                            count={storyAwards.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={EnhancedTablePaginationActions}
-                        />
-                    </TableRow>
-                </TableFooter>
-            </Table>
-        </TableContainer>
+        <>
+            <TableContainer component={Paper} elevation={3}>
+                <Table sx={{ minWidth: 650 }} size="medium" aria-label="Story Awards table">
+                    <SortableTableHead 
+                        headCells={headCells}
+                        order={order}
+                        orderBy={orderBy as string}
+                        onRequestSort={handleRequestSort}
+                        rowCount={storyAwards.length}
+                    />
+                    <TableBody>
+                    { visibleRows.map((award) => (
+                        <TableRow key={award.id}>
+                            <TableCell component="th" scope="row">
+                                {award.name}
+                            </TableCell>
+                            <TableCell>{StoryAwardStatusDictionary.get(award.status)}</TableCell>
+                            <TableCell>{award.originLogTitle}</TableCell>
+                            <TableCell align="center">
+                                <IconButton 
+                                    id={`view-${award.id}`}
+                                    aria-label={`View ${award.name}`}
+                                    color="primary"
+                                    component={Link}
+                                    to={`/characters/${award.characterId}/story-awards/${award.id}`}
+                                >
+                                    <Icon>visibility</Icon>
+                                </IconButton>
+                                <IconButton 
+                                    id={`edit-${award.id}`}
+                                    aria-label={`Edit ${award.name}`}
+                                    color="primary"
+                                    component={Link}
+                                    to={`/characters/${award.characterId}/story-awards/${award.id}/edit`}
+                                >
+                                    <Icon>edit</Icon>
+                                </IconButton>
+                                <IconButton 
+                                    id={`delete-${award.id}`}
+                                    aria-label={`Delete ${award.name}`}
+                                    color="error"
+                                    onClick={() => handleDeleteOpen(award)}
+                                >
+                                    <Icon>delete</Icon>
+                                </IconButton>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                    {emptyRows > 0 && (
+                        <TableRow style={{ height: 53 * emptyRows }}>
+                            <TableCell colSpan={6} />
+                        </TableRow>
+                    )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25]}
+                                count={storyAwards.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={EnhancedTablePaginationActions}
+                            />
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </TableContainer>
+            <DeleteConfirmationDialog
+                open={deleteOpen}
+                handleClose={handleDeleteClose}
+                entityTypeToDelete='Story Award'
+                confirmationDialogText={`You are deleting a story award titled '${itemToBeDeleted?.name }'. You will not be able to recover this data.`}
+                deleteFunction={deleteStoryAward}
+            />
+        </>
     );
 };
 

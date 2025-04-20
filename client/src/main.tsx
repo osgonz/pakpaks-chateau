@@ -5,6 +5,7 @@ import App from './pages/App.tsx';
 import CharacterHome from './pages/CharacterHome.tsx';
 import CharacterLogForm from './pages/CharacterLogForm.tsx';
 import MagicItemForm from './pages/MagicItemForm.tsx';
+import StoryAwardForm from './pages/StoryAwardForm.tsx';
 import Home from './pages/Home.tsx';
 
 const router = createBrowserRouter([
@@ -40,6 +41,18 @@ const router = createBrowserRouter([
       {
         path: "characters/:characterId/logs/:logId/edit",
         element: <CharacterLogForm />
+      },
+      {
+        path: "characters/:characterId/story-awards/new",
+        element: <StoryAwardForm />
+      },
+      {
+        path: "characters/:characterId/story-awards/:storyAwardId",
+        element: <StoryAwardForm />
+      },
+      {
+        path: "characters/:characterId/story-awards/:storyAwardId/edit",
+        element: <StoryAwardForm />
       }
     ]
   }

@@ -119,6 +119,8 @@ const CharacterSummary = (props: SummaryProps) => {
                 </Grid>
                 <Grid item xs={12} sx={{ pb: '0.35em' }}>
                     <Button 
+                        component={Link}
+                        to={`/characters/${props.character.id}/story-awards/new`}
                         variant="outlined"
                         fullWidth
                     >
