@@ -3,10 +3,10 @@ import magicItemController from '../controllers/magic-items';
 
 const router = express.Router({mergeParams: true});
 
-// POST route to create a character log
+// POST route to create a magic item
 router.post('/create', magicItemController.createMagicItem);
 
-// POST route to update a character log
+// POST route to update a magic item
 router.post('/:id', magicItemController.updateMagicItem);
 
 // GET route for one magic item
