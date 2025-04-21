@@ -17,6 +17,9 @@ router.get('/:id', characterLogController.getCharacterLog);
 // GET route for a character log's magic items
 router.get('/:id/magic-items', magicItemController.getMagicItemsByCharacterLog);
 
+// GET route for a character log's lost magic items
+router.get('/:id/lost-magic-items', magicItemController.getMagicItemsLostByCharacterLog);
+
 // GET route for a character log's story awards
 router.get('/:id/story-awards', storyAwardController.getStoryAwardsByCharacterLog);
 
