@@ -19,10 +19,10 @@ import CharacterLogMagicItemTable from '../components/character-logs/CharacterLo
 import CharacterLogStoryAwardTable from '../components/character-logs/CharacterLogStoryAwardTable';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import { CharacterLogTypeDictionary } from '../data/Dictionaries';
-import { CharacterLogType } from '../data/Types';
+import { CharacterLogType, MagicItem, MagicItemRow } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
 import { useCharacterLog } from "../hooks/useCharacterLog";
-import { useMagicItemsByCharacterLog } from "../hooks/useMagicItem";
+import { useMagicItemsByCharacter, useMagicItemsByCharacterLog, useMagicItemsLostByCharacterLog } from "../hooks/useMagicItem";
 import { useStoryAwardsByCharacterLog } from '../hooks/useStoryAward';
 
 const CharacterLogForm = () => {
@@ -30,10 +30,20 @@ const CharacterLogForm = () => {
     const { characterId, logId } = useParams();
     // Character summary details
     const character = useCharacter(characterId!);
+    const currentCharacterMagicItems = useMagicItemsByCharacter(characterId!);
+    const [characterMagicItems, setCharacterMagicItems] = useState<MagicItemRow[]>([]);
     // Character log details
     const currentLog = logId ? useCharacterLog(characterId!, logId) : null;
-    // Magic item details
+    // Earned magic item details
     const currentMagicItems = logId ? useMagicItemsByCharacterLog(characterId!, logId) : null;
+    const [magicItems, setMagicItems] = useState<MagicItem[]>([]);
+    const [magicItemsToAdd, setMagicItemsToAdd] = useState<MagicItem[]>([]);
+    const [itemIdsToRemove, setItemIdsToRemove] = useState<string[]>([]);
+    // Lost magic item details
+    const currentLostMagicItems = logId ? useMagicItemsLostByCharacterLog(characterId!, logId) : null;
+    const [lostMagicItems, setLostMagicItems] = useState<MagicItem[]>([]);
+    const [lostMagicItemsToAdd, setLostMagicItemsToAdd] = useState<MagicItem[]>([]);
+    const [lostItemIdsToRemove, setLostItemIdsToRemove] = useState<string[]>([]);
     // Story award details
     const currentStoryAwards = logId ? useStoryAwardsByCharacterLog(characterId!, logId) : null;
     // Hook used to navigate programmatically
@@ -110,6 +120,48 @@ const CharacterLogForm = () => {
     const handleRequiredFieldValidation = (fieldName: string) => {
         let dynamicKey = fieldName as keyof (typeof log);
         setLogError({ ...logError, [fieldName]: (log[dynamicKey] === null || log[dynamicKey] === "") });
+    };
+    
+    // Helper function used to add a new earned magic item
+    const handleAddEarnedMagicItem = (newItem: MagicItem) => {
+        setMagicItemsToAdd([...magicItemsToAdd, newItem]);
+    };
+
+    // Helper function used to add a new lost magic item
+    const handleAddLostMagicItem = (newItem: MagicItem) => {
+        setLostMagicItemsToAdd([...lostMagicItemsToAdd, newItem]);
+    };
+
+    // Helper function used to remove an unsaved earned magic item
+    const handleRemoveUnsavedEarnedMagicItem = (index: number) => {
+        let splicedItems = [...magicItemsToAdd];
+        splicedItems.splice(index, 1);
+        setMagicItemsToAdd(splicedItems);
+    };
+
+    // Helper function used to remove an unsaved lost magic item
+    const handleRemoveUnsavedLostMagicItem = (index: number) => {
+        let splicedItems = [...lostMagicItemsToAdd];
+        splicedItems.splice(index, 1);
+        setLostMagicItemsToAdd(splicedItems);
+    };
+
+    // Helper function used to refresh data following an earned magic item deletion
+    const handleRemoveMagicItemByIndex = (index: number) => {
+        let splicedItems = [...(magicItems as MagicItem[])];
+        let idToRemove = magicItems[index].id;
+        splicedItems.splice(index, 1);
+        setItemIdsToRemove([...itemIdsToRemove, idToRemove]);
+        setMagicItems(splicedItems);
+    };
+
+    // Helper function used to refresh data following an earned magic item deletion
+    const handleRemoveLostMagicItemByIndex = (index: number) => {
+        let splicedItems = [...(lostMagicItems as MagicItem[])];
+        let idToRemove = lostMagicItems[index].id;
+        splicedItems.splice(index, 1);
+        setLostItemIdsToRemove([...lostItemIdsToRemove, idToRemove]);
+        setLostMagicItems(splicedItems);
     };
 
     // Function that validates form before submitting
@@ -219,6 +271,22 @@ const CharacterLogForm = () => {
             setIsLogLoading(false);
         }
     }, [currentLog]);
+
+    useEffect(() => {
+        if (currentCharacterMagicItems)
+            setCharacterMagicItems(currentCharacterMagicItems);
+    }, [currentCharacterMagicItems]);
+
+    useEffect(() => {
+        if (currentMagicItems)
+            setMagicItems(currentMagicItems);
+    }, [currentMagicItems]);
+
+    useEffect(() => {
+        if (currentLostMagicItems)
+            setLostMagicItems(currentLostMagicItems);
+    }, [currentLostMagicItems]);
+
 
     return (
         <>
@@ -352,8 +420,30 @@ const CharacterLogForm = () => {
                                     <Grid item xs={12}>
                                         <Divider variant="fullWidth"/>
                                     </Grid>
+                                    <Grid item xs={12}>
+                                        <Typography variant="h4" component="h2" gutterBottom>
+                                            Magic Items
+                                        </Typography>
+                                    </Grid>
                                     <CharacterLogMagicItemTable 
-                                        magicItems={currentMagicItems}
+                                        magicItems={magicItems}
+                                        magicItemsToAdd={magicItemsToAdd}
+                                        characterMagicItems={characterMagicItems}
+                                        hasEarned={true}
+                                        isViewing={isViewing}
+                                        handleAddMagicItem={handleAddEarnedMagicItem}
+                                        handleRemoveMagicItemByIndex={handleRemoveMagicItemByIndex}
+                                        handleRemoveUnsavedMagicItemByIndex={handleRemoveUnsavedEarnedMagicItem}
+                                    />
+                                    <CharacterLogMagicItemTable 
+                                        magicItems={lostMagicItems}
+                                        magicItemsToAdd={lostMagicItemsToAdd}
+                                        characterMagicItems={characterMagicItems}
+                                        hasEarned={false}
+                                        isViewing={isViewing}
+                                        handleAddMagicItem={handleAddLostMagicItem}
+                                        handleRemoveMagicItemByIndex={handleRemoveLostMagicItemByIndex}
+                                        handleRemoveUnsavedMagicItemByIndex={handleRemoveUnsavedLostMagicItem}
                                     />
                                     <Grid item xs={12}>
                                         <Divider variant="fullWidth"/>
