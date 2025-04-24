@@ -22,14 +22,14 @@ const DeleteConfirmationDialog = (props: DeleteConfirmationDialogProps) => {
         <Dialog
             open={props.open}
             onClose={props.handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
+            aria-labelledby="delete-dialog-title"
+            aria-describedby="delete-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title">
+            <DialogTitle id="delete-dialog-title">
                 {`Delete ${props.entityTypeToDelete}?`}
             </DialogTitle>
             <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText id="delete-dialog-description">
                     {props.confirmationDialogText}
                 </DialogContentText>
             </DialogContent>
