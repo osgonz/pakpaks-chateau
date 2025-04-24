@@ -15,54 +15,7 @@ import { ItemRarityDictionary } from '../../data/Dictionaries';
 import { MagicItem, MagicItemRow, Order, SortableTableHeadCell } from '../../data/Types';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
-import SortableTableHead, { getDescendingComparator } from '../shared/SortableTableHead';
-
-/**
- * Descending comparator function for Magic Item name edge case
- * @param a First element to be compared
- * @param b Second element to be compared
- * @param orderBy Key for attribute elements will be compared on
- * @returns Comparison result (-1, 0 or 1)
- */
-function getDescendingMagicItemNameComparator(a: MagicItem, b: MagicItem) {
-    const nameA = a["flavorName"] ?? a["name"];
-    const nameB = b["flavorName"] ?? b["name"];
-
-    if (nameB == null) {
-        if (nameA == null) {
-            return 0;
-        }
-        return -1;
-    }
-    if (nameA == null) {
-        return 1;
-    }
-    if (nameB < nameA) {
-        return -1;
-    }
-    if (nameB > nameA) {
-        return 1;
-    }
-    return 0;
-}
-
-/**
- * 
- * @param order Sort direction to be applied
- * @param orderBy Key for attribute elements will be compared on
- * @returns Result of comparator function
- */
-function getMagicItemSortComparator<Key extends keyof MagicItem>(
-    order: Order,
-    orderBy: Key,
-) : (
-    a: MagicItem,
-    b: MagicItem,
-) => number {
-    return order === 'desc'
-        ? (a, b) => orderBy === "name" ? getDescendingMagicItemNameComparator(a, b) : getDescendingComparator(a, b, orderBy)
-        : (a, b) => orderBy === "name" ? -getDescendingMagicItemNameComparator(a, b) : -getDescendingComparator(a, b, orderBy);
-};
+import SortableTableHead, { getMagicItemSortComparator } from '../shared/SortableTableHead';
 
 interface MagicItemTableProps {
     magicItems: MagicItemRow[],

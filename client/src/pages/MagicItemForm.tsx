@@ -4,16 +4,14 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { format } from 'date-fns';
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
 import Container from "@mui/material/Container";
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import BaseMagicItemFields from '../components/magic-items/BaseMagicItemFields';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
-import { ItemTypeDictionary, ItemRarityDictionary } from '../data/Dictionaries';
 import { ItemType, ItemRarity } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
 import { useCharacterLogsDropdownByCharacter } from "../hooks/useCharacterLog";
@@ -32,9 +30,6 @@ const MagicItemForm = () => {
     const navigate = useNavigate();
     // Flag indicating if form is in view mode
     const isViewing = !(magicItemId == null || useLocation().pathname.includes("/edit"));
-    // Array containing Magic Item Type and Rarity ids for Autocomplete fields
-    const magicItemTypeArray = Array.from(ItemTypeDictionary.keys());
-    const magicItemRarityArray = Array.from(ItemRarityDictionary.keys());
     // Default error message for required fields
     const requiredFieldErrorMessage = "This field is required.";
 
@@ -192,132 +187,16 @@ const MagicItemForm = () => {
                                     {(magicItemId ? (isViewing ? "View" : "Edit") : "New") + " Magic Item"}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={12}>
-                                <TextField 
-                                    error={magicItemError.name}
-                                    disabled={isViewing}
-                                    required
-                                    id="magic-item-name"
-                                    label="Name"
-                                    helperText={magicItemError.name ? requiredFieldErrorMessage : ''}
-                                    onChange={e => handleMagicItemTextChange(e, "name")}
-                                    onBlur={_ => handleRequiredFieldValidation("name")}
-                                    value={magicItem.name}
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField 
-                                    disabled={isViewing}
-                                    id="magic-item-flavor-name"
-                                    label="Flavor Name"
-                                    onChange={e => handleMagicItemTextChange(e, "flavorName")}
-                                    value={magicItem.flavorName}
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item md={6} xs={12}>
-                                <Autocomplete 
-                                    disabled={isViewing}
-                                    id="magic-item-type"
-                                    options={magicItemTypeArray}
-                                    getOptionLabel={(o) => ItemTypeDictionary.get(o) || ''}
-                                    onChange={(e, v) => handleMagicItemAutocompleteChange(e, v, "type")}
-                                    onBlur={_ => handleRequiredFieldValidation("type")}
-                                    value={magicItem.type}
-                                    fullWidth
-                                    renderInput={(params) => (
-                                        <TextField 
-                                            {...params} 
-                                            error={magicItemError.type} 
-                                            required 
-                                            label="Type" 
-                                            helperText={magicItemError.type ? requiredFieldErrorMessage : ''}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid item md={6} xs={12}>
-                                <Autocomplete 
-                                    disabled={isViewing}
-                                    id="magic-item-rarity"
-                                    options={magicItemRarityArray}
-                                    getOptionLabel={(o) => ItemRarityDictionary.get(o) || ''}
-                                    onChange={(e, v) => handleMagicItemAutocompleteChange(e, v, "rarity")}
-                                    onBlur={_ => handleRequiredFieldValidation("rarity")}
-                                    value={magicItem.rarity}
-                                    fullWidth
-                                    renderInput={(params) => (
-                                        <TextField 
-                                            {...params} 
-                                            error={magicItemError.rarity} 
-                                            required 
-                                            label="Rarity" 
-                                            helperText={magicItemError.rarity ? requiredFieldErrorMessage : ''}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid item sm={6} xs={12}>
-                                <FormControlLabel 
-                                    label="Consumable"
-                                    control={
-                                        <Checkbox 
-                                            disabled={isViewing}
-                                            checked={magicItem.isConsumable}
-                                            onChange={e => handleMagicItemCheckboxChange(e, "isConsumable")}
-                                        />
-                                    }
-                                />
-                            </Grid>
-                            <Grid item sm={6} xs={12}>
-                                <FormControlLabel 
-                                    label="Attunement"
-                                    control={
-                                        <Checkbox 
-                                            disabled={isViewing}
-                                            checked={magicItem.requiresAttunement}
-                                            onChange={e => handleMagicItemCheckboxChange(e, "requiresAttunement")}
-                                        />
-                                    }
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField 
-                                    disabled={isViewing}
-                                    id="magic-item-description"
-                                    label="Description"
-                                    onChange={e => handleMagicItemTextChange(e, "description")}
-                                    value={magicItem.description}
-                                    multiline
-                                    rows={6}
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField 
-                                    disabled={isViewing}
-                                    id="magic-item-flavor-description"
-                                    label="Flavor Description"
-                                    onChange={e => handleMagicItemTextChange(e, "flavorDescription")}
-                                    value={magicItem.flavorDescription}
-                                    multiline
-                                    rows={3}
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField 
-                                    disabled={isViewing}
-                                    id="magic-item-properties"
-                                    label="Properties"
-                                    onChange={e => handleMagicItemTextChange(e, "properties")}
-                                    value={magicItem.properties}
-                                    multiline
-                                    rows={3}
-                                    fullWidth
-                                />
-                            </Grid>
+                            <BaseMagicItemFields
+                                magicItem={magicItem}
+                                magicItemError={magicItemError}
+                                isViewing={isViewing}
+                                requiredFieldErrorMessage={requiredFieldErrorMessage}
+                                handleMagicItemAutocompleteChange={handleMagicItemAutocompleteChange}
+                                handleMagicItemCheckboxChange={handleMagicItemCheckboxChange}
+                                handleMagicItemTextChange={handleMagicItemTextChange}
+                                handleRequiredFieldValidation={handleRequiredFieldValidation}
+                            />
                             <Grid item xs={12}>
                                 <Autocomplete 
                                     disabled={magicItemId != null}
