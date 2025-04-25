@@ -179,7 +179,7 @@ const CharacterLogMagicItemTable = (props: CharacterLogMagicItemTableProps) => {
             { (magicItems.length + magicItemsToAdd.length) > 0 &&
                 <Grid item xs={12}>
                     <TableContainer component={Paper} elevation={3}>
-                        <Table sx={{ minWidth: 650 }} size="medium" aria-label="Magic Items table">
+                        <Table sx={{ minWidth: 650 }} size="medium" aria-label={`${hasEarned ? 'Earned' : 'Lost'} Magic Items table`}>
                             <SortableTableHead 
                                 headCells={headCells}
                                 order={order}
