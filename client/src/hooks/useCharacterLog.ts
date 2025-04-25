@@ -61,7 +61,7 @@ export function useCharacterLogsDropdownByCharacter(characterId: string) {
     const [characterLogs, setCharacterLogs] = useState<CharacterLogAbstract[] | undefined>();
 
     const loadCharacterLogsDropdownByCharacter = async(characterId: string) => {
-        return axios.get(`/api/characters/${characterId}/character-logs-dropdown`).then((res) => res.data) as Promise<CharacterLogAbstract[]>;
+        return axios.get(`/api/characters/${characterId}/character-logs/abstracts`).then((res) => res.data) as Promise<CharacterLogAbstract[]>;
     };
 
     useEffect(() => {

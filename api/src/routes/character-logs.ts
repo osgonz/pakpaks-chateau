@@ -11,6 +11,12 @@ router.post('/create', characterLogController.createCharacterLog);
 // POST route to update a character log
 router.post('/:id', characterLogController.updateCharacterLog);
 
+// POST route to add lost magic items to a character log
+router.post('/:id/lost-magic-items', magicItemController.updateMagicItemsLostByCharacterLog);
+
+// GET route for one character's logs dropdown abstract
+router.get('/abstracts', characterLogController.getCharacterLogsDropdownByCharacter);
+
 // GET route for a character log
 router.get('/:id', characterLogController.getCharacterLog);
 

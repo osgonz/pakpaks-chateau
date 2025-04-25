@@ -245,7 +245,19 @@ const CharacterLogForm = () => {
             rawLog.description = null;
         }
 
-        axios.post(`/api/characters/${characterId}/character-logs/${logId || 'create'}`, rawLog).then(_ => {
+        axios.post(`/api/characters/${characterId}/character-logs/${logId || 'create'}`, rawLog).then(res => {
+            // If successful
+            if (res.status == 200 || res.status == 204) {
+                // Update Lost Magic Items
+                if (lostMagicItemsToAdd.length > 0 || lostItemIdsToRemove.length > 0) {
+                    return axios.post(`/api/characters/${characterId}/character-logs/${logId || (res.data as string)}/lost-magic-items`, {
+                        lostItemIdsToAdd: lostMagicItemsToAdd.map((item) => item.id),
+                        lostItemIdsToRemove: lostItemIdsToRemove
+                    });
+                }
+                return null;
+            }
+        }).then(_ => {
             navigate(`/characters/${characterId}`);
         });
     };

@@ -144,6 +144,31 @@ class MagicItemController {
         }
     };
 
+    // Update a specific character log's lost magic items
+    updateMagicItemsLostByCharacterLog = async (req: Request, res: Response) => {
+        // Extract character log id from parameter
+        const logId = req.params.id;
+        // Extract character id from parameter
+        const characterId = req.params.charId;
+        // Extract magic item payload from request body
+        const itemContent = req.body;
+        let conn: PoolConnection | undefined;
+        try {
+            conn = await db.getConnection();
+            await conn.query("call update_character_log_lost_magic_item_list(?,?,?,?)", [
+                characterId,
+                logId,
+                JSON.stringify(itemContent.lostItemIdsToAdd),
+                JSON.stringify(itemContent.lostItemIdsToRemove)
+            ]);
+            res.status(204).send();
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
+    };
+
     // Delete a magic item
     deleteMagicItem = async (req: Request, res: Response) => {
         // Extract magic item id from parameter

@@ -64,13 +64,6 @@ const CharacterLogMagicItemTable = (props: CharacterLogMagicItemTableProps) => {
         ),
         [magicItems, magicItemsToAdd, order, orderBy, page, rowsPerPage]
     );
-    const visibleRowz = useMemo(
-        () => magicItems.slice().sort(getMagicItemSortComparator(order, orderBy)).slice(
-            page * rowsPerPage,
-            page * rowsPerPage + rowsPerPage,
-        ),
-        [magicItems, order, orderBy, page, rowsPerPage]
-    );
     
     // Metadata for table headers
     const headCells: readonly SortableTableHeadCell[] = [
