@@ -67,8 +67,8 @@ const CharacterLogMagicItemDialog = (props: CharacterLogMagicItemDialogProps) =>
                 flavorName: value.flavorName === null ? '' : value.flavorName,
                 type: value.type,
                 rarity: value.rarity,
-                isConsumable: value.isConsumable,
-                requiresAttunement: value.requiresAttunement,
+                isConsumable: !!value.isConsumable,
+                requiresAttunement: !!value.requiresAttunement,
                 description: value.description === null ? '' : value.description,
                 flavorDescription: value.flavorDescription === null ? '' : value.flavorDescription,
                 properties: value.properties === null ? '' : value.properties,
@@ -232,6 +232,7 @@ const CharacterLogMagicItemDialog = (props: CharacterLogMagicItemDialogProps) =>
                             <Autocomplete 
                                 id="magic-item-to-lose"
                                 options={characterMagicItems || []}
+                                getOptionKey={(o) => o.id}
                                 getOptionLabel={(o) => (o.flavorName ? `${o.flavorName} (${o.name})` : o.name) + ` [${o.originLogTitle}]`}
                                 onChange={(e, v) => handleMagicItemToLoseChange(e, v)}
                                 onBlur={_ => setMagicItemToLoseError(magicItemToLose == null)}

@@ -100,7 +100,7 @@ const CharacterLogMagicItemTable = (props: CharacterLogMagicItemTableProps) => {
     ];
 
     // Avoid a layout jump when reaching the last page with empty rows
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - magicItems.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (magicItems.length + magicItemsToAdd.length)) : 0;
 
     // Helper function triggered when sorting attributes are changed
     const handleRequestSort = (_: React.MouseEvent<unknown>, property: keyof any) => {
@@ -185,7 +185,7 @@ const CharacterLogMagicItemTable = (props: CharacterLogMagicItemTableProps) => {
                                 order={order}
                                 orderBy={orderBy as string}
                                 onRequestSort={handleRequestSort}
-                                rowCount={magicItems.length}
+                                rowCount={magicItems.length + magicItemsToAdd.length}
                             />
                             <TableBody>
                             { visibleRows.map((item) => (
