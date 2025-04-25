@@ -256,6 +256,22 @@ const CharacterLogForm = () => {
                         lostItemIdsToRemove: lostItemIdsToRemove
                     }));
                 }
+                magicItemsToAdd.forEach((item) => {
+                    promiseArray.push(axios.post(`/api/characters/${characterId}/magic-items/create`, {
+                        name: item.name,
+                        flavorName: item.flavorName,
+                        type: item.type,
+                        rarity: item.rarity,
+                        isConsumable: item.isConsumable,
+                        requiresAttunement: item.requiresAttunement,
+                        description: item.description,
+                        flavorDescription: item.flavorDescription,
+                        properties: item.properties,
+                        isEquipped: item.isEquipped,
+                        originLogId: logId || (res.data as string),
+                        lossLogId: item.lossLogId,
+                    }));
+                });
                 // Delete Earned Magic Items
                 itemIdsToRemove.forEach((id) => promiseArray.push(axios.delete(`/api/characters/${characterId}/magic-items/${id}`)));
                 return Promise.all(promiseArray);
