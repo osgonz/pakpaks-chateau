@@ -10,6 +10,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import BaseStoryAwardFields from '../components/story-awards/BaseStoryAwardFields';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import { StoryAwardStatusDictionary } from '../data/Dictionaries';
 import { StoryAwardStatus } from '../data/Types';
@@ -154,53 +155,15 @@ const StoryAwardForm = () => {
                                     {(storyAwardId ? (isViewing ? "View" : "Edit") : "New") + " Story Award"}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={12}>
-                                <TextField 
-                                    error={storyAwardError.name}
-                                    disabled={isViewing}
-                                    required
-                                    id="story-award-name"
-                                    label="Name"
-                                    helperText={storyAwardError.name ? requiredFieldErrorMessage : ''}
-                                    onChange={e => handleStoryAwardTextChange(e, "name")}
-                                    onBlur={_ => handleRequiredFieldValidation("name")}
-                                    value={storyAward.name}
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField 
-                                    disabled={isViewing}
-                                    id="story-award-description"
-                                    label="Description"
-                                    onChange={e => handleStoryAwardTextChange(e, "description")}
-                                    value={storyAward.description}
-                                    multiline
-                                    rows={8}
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Autocomplete 
-                                    disabled={isViewing}
-                                    id="story-award-status"
-                                    options={storyAwardStatusArray}
-                                    getOptionLabel={(o) => StoryAwardStatusDictionary.get(o) || ''}
-                                    onChange={(e, v) => handleStoryAwardAutocompleteChange(e, v, "status")}
-                                    onBlur={_ => handleRequiredFieldValidation("status")}
-                                    value={storyAward.status}
-                                    fullWidth
-                                    renderInput={(params) => (
-                                        <TextField 
-                                            {...params} 
-                                            error={storyAwardError.status} 
-                                            required 
-                                            label="Status" 
-                                            helperText={storyAwardError.status ? requiredFieldErrorMessage : ''}
-                                        />
-                                    )}
-                                />
-                            </Grid>
+                            <BaseStoryAwardFields
+                                storyAward={storyAward}
+                                storyAwardError={storyAwardError}
+                                isViewing={isViewing}
+                                requiredFieldErrorMessage={requiredFieldErrorMessage}
+                                handleStoryAwardAutocompleteChange={handleStoryAwardAutocompleteChange}
+                                handleStoryAwardTextChange={handleStoryAwardTextChange}
+                                handleRequiredFieldValidation={handleRequiredFieldValidation}
+                            />
                             <Grid item xs={12}>
                                 <Autocomplete 
                                     disabled={storyAwardId != null}
