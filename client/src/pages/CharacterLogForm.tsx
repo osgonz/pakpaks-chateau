@@ -201,6 +201,7 @@ const CharacterLogForm = () => {
     };
 
     const cookAndSubmitCharacterLog = () => {
+        let promiseArray: Promise<any>[] = [];
         let rawLog = {...log};
 
         if (!rawLog.lengthHours) {
@@ -250,12 +251,14 @@ const CharacterLogForm = () => {
             if (res.status == 200 || res.status == 204) {
                 // Update Lost Magic Items
                 if (lostMagicItemsToAdd.length > 0 || lostItemIdsToRemove.length > 0) {
-                    return axios.post(`/api/characters/${characterId}/character-logs/${logId || (res.data as string)}/lost-magic-items`, {
+                    promiseArray.push(axios.post(`/api/characters/${characterId}/character-logs/${logId || (res.data as string)}/lost-magic-items`, {
                         lostItemIdsToAdd: lostMagicItemsToAdd.map((item) => item.id),
                         lostItemIdsToRemove: lostItemIdsToRemove
-                    });
+                    }));
                 }
-                return null;
+                // Delete Earned Magic Items
+                itemIdsToRemove.forEach((id) => promiseArray.push(axios.delete(`/api/characters/${characterId}/magic-items/${id}`)));
+                return Promise.all(promiseArray);
             }
         }).then(_ => {
             navigate(`/characters/${characterId}`);
