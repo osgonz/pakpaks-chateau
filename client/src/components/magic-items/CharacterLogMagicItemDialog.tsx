@@ -8,7 +8,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import BaseMagicItemFields from '../magic-items/BaseMagicItemFields';
+import BaseMagicItemFields from './BaseMagicItemFields';
 import { ItemType, ItemRarity, MagicItem, MagicItemRow } from "../../data/Types";
 
 interface CharacterLogMagicItemDialogProps {

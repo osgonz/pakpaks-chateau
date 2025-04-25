@@ -15,8 +15,8 @@ import AdventureLogFields from '../components/character-logs/AdventureLogFields'
 import MerchantLogFields from '../components/character-logs/MerchantLogFields';
 import ServiceAwardLogFields from '../components/character-logs/ServiceAwardLogFields';
 import TradeLogFields from '../components/character-logs/TradeLogFields';
-import CharacterLogMagicItemTable from '../components/character-logs/CharacterLogMagicItemTable';
-import CharacterLogStoryAwardTable from '../components/character-logs/CharacterLogStoryAwardTable';
+import CharacterLogMagicItemTable from '../components/magic-items/CharacterLogMagicItemTable';
+import CharacterLogStoryAwardTable from '../components/story-awards/CharacterLogStoryAwardTable';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import { CharacterLogTypeDictionary } from '../data/Dictionaries';
 import { CharacterLogType, MagicItem, MagicItemRow, StoryAward } from '../data/Types';

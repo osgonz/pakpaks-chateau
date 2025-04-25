@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
-import BaseStoryAwardFields from '../story-awards/BaseStoryAwardFields';
+import BaseStoryAwardFields from './BaseStoryAwardFields';
 import { StoryAward, StoryAwardStatus } from "../../data/Types";
 
 interface CharacterLogStoryAwardDialogProps {

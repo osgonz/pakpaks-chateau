@@ -17,12 +17,12 @@ import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
 import SortableTableHead, { getSortComparator } from '../shared/SortableTableHead';
 
-interface StoryAwardTableProps {
+interface CharacterStoryAwardTableProps {
     storyAwards: StoryAwardRow[],
     handleRemoveStoryAwardByIndex: (index: number) => void,
 };
 
-const StoryAwardTable = (props: StoryAwardTableProps) => {
+const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
     // Table's current sort direction
     const [order, setOrder] = useState<Order>('asc');
     // Attribute name used to sort the table
@@ -197,4 +197,4 @@ const StoryAwardTable = (props: StoryAwardTableProps) => {
     );
 };
 
-export default StoryAwardTable;
+export default CharacterStoryAwardTable;

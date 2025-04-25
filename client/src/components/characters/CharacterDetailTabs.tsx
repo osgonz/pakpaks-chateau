@@ -5,9 +5,9 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { CharacterLogRow, MagicItemRow, StoryAwardRow } from '../../data/Types';
 import CharacterDetailTabPanel from './CharacterDetailTabPanel';
-import CharacterLogTable from './CharacterLogTable';
-import StoryAwardTable from './StoryAwardTable';
-import MagicItemTable from './MagicItemTable';
+import CharacterLogTable from '../character-logs/CharacterLogTable';
+import StoryAwardTable from '../story-awards/CharacterStoryAwardTable';
+import MagicItemTable from '../magic-items/CharacterMagicItemTable';
 
 function getA11yPropsForTabs(tabName: string) {
     return {

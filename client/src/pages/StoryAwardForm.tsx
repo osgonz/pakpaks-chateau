@@ -12,7 +12,6 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import BaseStoryAwardFields from '../components/story-awards/BaseStoryAwardFields';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
-import { StoryAwardStatusDictionary } from '../data/Dictionaries';
 import { StoryAwardStatus } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
 import { useCharacterLogsDropdownByCharacter } from "../hooks/useCharacterLog";
@@ -31,8 +30,6 @@ const StoryAwardForm = () => {
     const navigate = useNavigate();
     // Flag indicating if form is in view mode
     const isViewing = !(storyAwardId == null || useLocation().pathname.includes("/edit"));
-    // Array containing Story Award Status ids for Autocomplete fields
-    const storyAwardStatusArray = Array.from(StoryAwardStatusDictionary.keys());
     // Default error message for required fields
     const requiredFieldErrorMessage = "This field is required.";
 

@@ -17,12 +17,12 @@ import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
 import SortableTableHead, { getMagicItemSortComparator } from '../shared/SortableTableHead';
 
-interface MagicItemTableProps {
+interface CharacterMagicItemTableProps {
     magicItems: MagicItemRow[],
     handleRemoveMagicItemByIndex: (index: number) => void,
 };
 
-const MagicItemTable = (props: MagicItemTableProps) => {
+const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
     // Table's current sort direction
     const [order, setOrder] = useState<Order>('asc');
     // Attribute name used to sort the table
@@ -211,4 +211,4 @@ const MagicItemTable = (props: MagicItemTableProps) => {
     );
 };
 
-export default MagicItemTable;
+export default CharacterMagicItemTable;
