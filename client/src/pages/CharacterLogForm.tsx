@@ -19,7 +19,7 @@ import CharacterLogMagicItemTable from '../components/character-logs/CharacterLo
 import CharacterLogStoryAwardTable from '../components/character-logs/CharacterLogStoryAwardTable';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import { CharacterLogTypeDictionary } from '../data/Dictionaries';
-import { CharacterLogType, MagicItem, MagicItemRow } from '../data/Types';
+import { CharacterLogType, MagicItem, MagicItemRow, StoryAward } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
 import { useCharacterLog } from "../hooks/useCharacterLog";
 import { useMagicItemsByCharacter, useMagicItemsByCharacterLog, useMagicItemsLostByCharacterLog } from "../hooks/useMagicItem";
@@ -46,6 +46,9 @@ const CharacterLogForm = () => {
     const [lostItemIdsToRemove, setLostItemIdsToRemove] = useState<string[]>([]);
     // Story award details
     const currentStoryAwards = logId ? useStoryAwardsByCharacterLog(characterId!, logId) : null;
+    const [storyAwards, setStoryAwards] = useState<StoryAward[]>([]);
+    const [storyAwardsToAdd, setStoryAwardsToAdd] = useState<StoryAward[]>([]);
+    const [awardIdsToRemove, setAwardIdsToRemove] = useState<string[]>([]);
     // Hook used to navigate programmatically
     const navigate = useNavigate();
     // Flag indicating if form is in view mode
@@ -132,6 +135,11 @@ const CharacterLogForm = () => {
         setLostMagicItemsToAdd([...lostMagicItemsToAdd, newItem]);
     };
 
+    // Helper function used to add a new story award
+    const handleAddStoryAward = (newAward: StoryAward) => {
+        setStoryAwardsToAdd([...storyAwardsToAdd, newAward]);
+    };
+
     // Helper function used to remove an unsaved earned magic item
     const handleRemoveUnsavedEarnedMagicItem = (index: number) => {
         let splicedItems = [...magicItemsToAdd];
@@ -144,6 +152,13 @@ const CharacterLogForm = () => {
         let splicedItems = [...lostMagicItemsToAdd];
         splicedItems.splice(index, 1);
         setLostMagicItemsToAdd(splicedItems);
+    };
+
+    // Helper function used to remove an unsaved story award
+    const handleRemoveUnsavedStoryAward = (index: number) => {
+        let splicedAwards = [...storyAwardsToAdd];
+        splicedAwards.splice(index, 1);
+        setStoryAwardsToAdd(splicedAwards);
     };
 
     // Helper function used to refresh data following an earned magic item deletion
@@ -162,6 +177,15 @@ const CharacterLogForm = () => {
         splicedItems.splice(index, 1);
         setLostItemIdsToRemove([...lostItemIdsToRemove, idToRemove]);
         setLostMagicItems(splicedItems);
+    };
+
+    // Helper function used to refresh data following a story award deletion
+    const handleRemoveStoryAwardByIndex = (index: number) => {
+        let splicedAwards = [...(storyAwards as StoryAward[])];
+        let idToRemove = storyAwards[index].id;
+        splicedAwards.splice(index, 1);
+        setAwardIdsToRemove([...awardIdsToRemove, idToRemove]);
+        setStoryAwards(splicedAwards);
     };
 
     // Function that validates form before submitting
@@ -256,6 +280,7 @@ const CharacterLogForm = () => {
                         lostItemIdsToRemove: lostItemIdsToRemove
                     }));
                 }
+                // Create Earned Magic Items
                 magicItemsToAdd.forEach((item) => {
                     promiseArray.push(axios.post(`/api/characters/${characterId}/magic-items/create`, {
                         name: item.name,
@@ -274,6 +299,17 @@ const CharacterLogForm = () => {
                 });
                 // Delete Earned Magic Items
                 itemIdsToRemove.forEach((id) => promiseArray.push(axios.delete(`/api/characters/${characterId}/magic-items/${id}`)));
+                // Create Story Awards
+                storyAwardsToAdd.forEach((award) => {
+                    promiseArray.push(axios.post(`/api/characters/${characterId}/story-awards/create`, {
+                        name: award.name,
+                        description: award.description,
+                        status: award.status,
+                        originLogId: logId || (res.data as string),
+                    }));
+                });
+                // Delete Story Awards
+                awardIdsToRemove.forEach((id) => promiseArray.push(axios.delete(`/api/characters/${characterId}/story-awards/${id}`)));
                 return Promise.all(promiseArray);
             }
         }).then(_ => {
@@ -318,6 +354,10 @@ const CharacterLogForm = () => {
             setLostMagicItems(currentLostMagicItems);
     }, [currentLostMagicItems]);
 
+    useEffect(() => {
+        if (currentStoryAwards)
+            setStoryAwards(currentStoryAwards);
+    }, [currentStoryAwards]);
 
     return (
         <>
@@ -480,7 +520,12 @@ const CharacterLogForm = () => {
                                         <Divider variant="fullWidth"/>
                                     </Grid>
                                     <CharacterLogStoryAwardTable 
-                                        storyAwards={currentStoryAwards}
+                                        storyAwards={storyAwards}
+                                        storyAwardsToAdd={storyAwardsToAdd}
+                                        isViewing={isViewing}
+                                        handleAddStoryAward={handleAddStoryAward}
+                                        handleRemoveStoryAwardByIndex={handleRemoveStoryAwardByIndex}
+                                        handleRemoveUnsavedStoryAwardByIndex={handleRemoveUnsavedStoryAward}
                                     />
                                 </>
                             }
