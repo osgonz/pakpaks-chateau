@@ -50,6 +50,7 @@ const CharacterSummary = (props: SummaryProps) => {
                     src={props.character.imageUrl || "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"}
                     height={isScreenLgOrLarger ? 200 : 150} 
                     width={isScreenLgOrLarger? 200: 150} 
+                    alt={`Avatar image for a character named ${props.character.name}.`}
                 />
             </Grid>
             <Grid alignItems="center" container item xs={12} md={4.5}>
