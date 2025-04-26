@@ -30,6 +30,16 @@ const BreadcrumbsMenu = (props: BreadcrumbsMenuProps) => {
                 Home
             </Link>
             { props.characterName &&
+                <Link
+                    component={RouterLink}
+                    underline="hover"
+                    color="inherit"
+                    to={"/characters"}
+                >
+                    Characters
+                </Link>
+            }
+            { props.characterName &&
                 ( props.characterId ?
                     <Link
                         component={RouterLink}

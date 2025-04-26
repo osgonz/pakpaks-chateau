@@ -4,6 +4,7 @@ import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
+import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import CharacterSummary from '../components/characters/CharacterSummary';
 import CharacterDetailTabs from '../components/characters/CharacterDetailTabs';
 import { CharacterLogRow, MagicItemRow, StoryAwardRow } from '../data/Types';
@@ -31,7 +32,7 @@ const CharacterHome = () => {
     const [level, gold, downtime] = useMemo(() => {
         let downtime = 0;
         let gold = 0;
-        let level = 0;
+        let level = 1;
 
         characterLogs?.forEach((log) => {
             downtime += log.downtime;
@@ -79,6 +80,9 @@ const CharacterHome = () => {
         <>
             { character && characterLogs && magicItems && storyAwards ? (
                 <Container maxWidth="lg">
+                    <BreadcrumbsMenu 
+                        characterName={character.name}
+                    />
                     <Paper 
                         elevation={1}
                         sx={{

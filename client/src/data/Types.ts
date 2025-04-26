@@ -58,6 +58,10 @@ export type Character = {
     imageUrl: string | null;
 };
 
+export interface CharacterRow extends Character {
+    characterLevel: number;
+};
+
 // DM Log type definition
 export type DMLog = {
     id: string;

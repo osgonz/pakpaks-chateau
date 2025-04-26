@@ -2,16 +2,23 @@ DELIMITER //
 CREATE OR REPLACE PROCEDURE get_character_list()
 READS SQL DATA
 BEGIN
-    SELECT id,
-        name,
-        campaign,
-        lineage,
-        classes,
-        background,
-        backstory,
-        notes,
-        characterSheetLink,
-        imageUrl
-    FROM `character`;
+    SELECT c.id,
+        c.name,
+        c.campaign,
+        c.lineage,
+        c.classes,
+        c.background,
+        c.backstory,
+        c.notes,
+        c.characterSheetLink,
+        c.imageUrl,
+        1 + l.gainedLevels AS characterLevel
+    FROM `character` c
+    LEFT JOIN (
+        SELECT characterId,
+        SUM(levels) AS gainedLevels
+        FROM characterLog
+        GROUP BY characterId
+    ) AS l ON c.id = l.characterId;
 END; //
 DELIMITER ;
