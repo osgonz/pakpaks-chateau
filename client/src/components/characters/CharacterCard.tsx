@@ -22,7 +22,7 @@ const CharacterCard = (props: CharacterCardProps) => {
     return (
         <Grid item xs={12} md={6}>
             <Card sx={{ display: 'flex' }}>
-                <Stack alignItems={{ xs: "stretch", sm: "center" }} sx={{ flex: 1 }}>
+                <Stack sx={{ flex: 1 }}>
                     <CardContent>
                         <Typography component="h2" variant="h4" gutterBottom>
                             {character.name}
@@ -31,7 +31,7 @@ const CharacterCard = (props: CharacterCardProps) => {
                             {`${character.lineage} ${character.classes}`}
                         </Typography>
                         <Typography component="div" variant="subtitle1">
-                            {`Level ${character.characterLevel}`}
+                            {`Level ${character.characterLevel || 1}`}
                         </Typography>
                         <Typography component="div" variant="subtitle1" color="text.secondary">
                             {`${CampaignDictionary.get(character.campaign)} Campaign`}
@@ -65,7 +65,7 @@ const CharacterCard = (props: CharacterCardProps) => {
                 </Stack>
                 <CardMedia
                     component="img"
-                    sx={{ display: { xs: 'none', sm: 'block' }, flex: '0 0 200px' }}
+                    sx={{ display: { xs: 'none', sm: 'block' }, flex: '0 0 200px', width: 200 }}
                     src={character.imageUrl || "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"}
                     alt={`Avatar image for a character named ${character.name}.`}
                 />

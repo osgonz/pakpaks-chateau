@@ -29,7 +29,7 @@ const BreadcrumbsMenu = (props: BreadcrumbsMenuProps) => {
             >
                 Home
             </Link>
-            { props.characterName &&
+            { (props.characterName || props.currentPageTitle?.includes("Character")) &&
                 <Link
                     component={RouterLink}
                     underline="hover"

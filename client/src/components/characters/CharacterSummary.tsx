@@ -25,11 +25,10 @@ const CharacterSummary = (props: SummaryProps) => {
             container 
             direction="row" 
             justifyContent="center" 
-            rowSpacing={2}
-            columnSpacing={2}
+            spacing={2}
             sx={{
                 pb: 2,
-                pr: 2,
+                pr: 4,
                 ml: "auto",
                 mr: "auto",
 
@@ -42,7 +41,6 @@ const CharacterSummary = (props: SummaryProps) => {
                 container 
                 item
                 alignContent="center"
-                justifyContent="center" 
                 md={3} 
                 sx={{ display: { xs: 'none', md: 'flex' } }}
             >
@@ -61,7 +59,7 @@ const CharacterSummary = (props: SummaryProps) => {
                     <Typography gutterBottom>{CampaignDictionary.get(props.character.campaign)}</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography gutterBottom>Lineage:</Typography>
+                    <Typography gutterBottom>Species:</Typography>
                 </Grid>
                 <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{props.character.lineage}</Typography>
