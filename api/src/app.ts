@@ -4,6 +4,7 @@ import logger from 'morgan';
 
 import charactersRouter from './routes/characters';
 import characterLogsRouter from './routes/character-logs';
+import dmLogsRouter from './routes/dm-logs';
 import magicItemsRouter from './routes/magic-items';
 import storyAwardsRouter from './routes/story-awards';
 
@@ -20,6 +21,7 @@ app.use('/api/characters', charactersRouter);
 app.use('/api/characters/:charId/character-logs', characterLogsRouter);
 app.use('/api/characters/:charId/magic-items', magicItemsRouter);
 app.use('/api/characters/:charId/story-awards', storyAwardsRouter);
+app.use('/api/dm-logs', dmLogsRouter);
 
 // Server starts listening to incoming requests
 app.listen(PORT, () => {
