@@ -9,10 +9,11 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Link } from "react-router-dom";
 import { CampaignDictionary } from '../../data/Dictionaries';
-import { CharacterRow } from "../../data/Types";
+import { Character, CharacterRow } from "../../data/Types";
 
 interface CharacterCardProps {
     character: CharacterRow,
+    handleDeleteOpen: (character: Character) => void,
 };
 
 const CharacterCard = (props: CharacterCardProps) => {
@@ -57,7 +58,7 @@ const CharacterCard = (props: CharacterCardProps) => {
                         <IconButton 
                             aria-label={`Delete character ${character.name}`}
                             color="error"
-                            /*onClick={() => handleDeleteOpen(item)}*/
+                            onClick={() => props.handleDeleteOpen(character)}
                         >
                             <Icon>delete</Icon>
                         </IconButton>

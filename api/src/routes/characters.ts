@@ -6,6 +6,12 @@ import storyAwardController from '../controllers/story-awards';
 
 const router = express.Router();
 
+// POST route to create a character
+router.post('/create', characterController.createCharacter);
+
+// POST route to update a character
+router.post('/:id', characterController.updateCharacter);
+
 // GET route for all characters
 router.get('/', characterController.getCharacters);
 
@@ -20,5 +26,8 @@ router.get('/:id/magic-items', magicItemController.getMagicItemsByCharacter);
 
 // GET route for one character's story awards
 router.get('/:id/story-awards', storyAwardController.getStoryAwardsByCharacter);
+
+// DELETE route for a character
+router.delete('/:id', characterController.deleteCharacter);
 
 export default router;

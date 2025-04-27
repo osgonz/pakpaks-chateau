@@ -32,6 +32,79 @@ class CharacterController {
             }
         }
     };
+
+    // Create a character
+    createCharacter = async (req: Request, res: Response) => {
+        // Extract character payload from request body
+        const characterContent = req.body;
+        let conn: PoolConnection | undefined;
+        try {
+            conn = await db.getConnection();
+            const [result] = await conn.query("call create_character(?,?,?,?,?,?,?,?,?)", [
+                characterContent.name,
+                characterContent.campaign,
+                characterContent.lineage,
+                characterContent.classes,
+                characterContent.background,
+                characterContent.backstory,
+                characterContent.notes,
+                characterContent.characterSheetLink,
+                characterContent.imageUrl
+            ]);
+            res.status(200).send(result[0].newId);
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
+    };
+
+    // Update a character
+    updateCharacter = async (req: Request, res: Response) => {
+        // Extract character id from parameter
+        const id = req.params.id;
+        // Extract character payload from request body
+        const characterContent = req.body;
+        let conn: PoolConnection | undefined;
+        try {
+            conn = await db.getConnection();
+            await conn.query("call update_character(?,?,?,?,?,?,?,?,?,?)", [
+                id,
+                characterContent.name,
+                characterContent.campaign,
+                characterContent.lineage,
+                characterContent.classes,
+                characterContent.background,
+                characterContent.backstory,
+                characterContent.notes,
+                characterContent.characterSheetLink,
+                characterContent.imageUrl
+            ]);
+            res.status(204).send();
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
+    };
+
+    // Delete a character
+    deleteCharacter = async (req: Request, res: Response) => {
+        // Extract character id from parameter
+        const id = req.params.id;
+        let conn: PoolConnection | undefined;
+        try {
+            conn = await db.getConnection();
+            await conn.query("call delete_character(?)", [
+                id
+            ]);
+            res.status(204).send();
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
+    };
 };
 
 export default new CharacterController();

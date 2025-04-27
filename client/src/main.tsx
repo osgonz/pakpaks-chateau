@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './pages/App.tsx';
 import CharacterHome from './pages/CharacterHome.tsx';
+import CharacterForm from './pages/CharacterForm.tsx';
 import CharacterLogForm from './pages/CharacterLogForm.tsx';
 import CharactersMenu from './pages/CharactersMenu.tsx';
 import MagicItemForm from './pages/MagicItemForm.tsx';
@@ -19,9 +20,17 @@ const router = createBrowserRouter([
         path: "characters",
         element: <CharactersMenu />,
       },
+      {
+        path: "characters/new",
+        element: <CharacterForm />,
+      },
       { 
         path: "characters/:characterId",
         element: <CharacterHome />,
+      },
+      {
+        path: "characters/:characterId/edit",
+        element: <CharacterForm />,
       },
       {
         path: "characters/:characterId/magic-items/new",
