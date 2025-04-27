@@ -1,50 +1,39 @@
-# pakpaks-chateau
+# Pakpak's Chateau
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple React + Express web app for D&D Adventurers League logging purposes. It is heavily inspired by [Adventurer's League Log](https://www.adventurersleaguelog.com/) (repository can be found [here](https://github.com/Ariel-Thomas/adventurers-league-log)).
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. In both, the `client` and `api` directories, install dependencies with [yarn](https://yarnpkg.com/):
 
-## Expanding the ESLint configuration
+```cmd
+cd client
+yarn install
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+cd ../api
+yarn install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. In the `api` directory, copy `.env.example` as `.env`:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+```cmd
+cp .env.example .env
+```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+3. The project uses [MariaDB Server](https://mariadb.org/download/) for database purposes. The [MariaDB Basics](https://mariadb.com/kb/en/mariadb-basics/) article from the MariaDB Server Knowledge Base is a good place to start.
+
+4. Create the database by running the [schema](./api/database/schema.sql) script.
+
+5. Create the stored procedures by running the rest of the scripts under `api/database`.
+
+## Run the App Locally
+
+```cmd
+cd api
+yarn dev
+```
+
+```cmd
+cd client
+yarn dev
 ```
