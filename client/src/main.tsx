@@ -6,6 +6,7 @@ import CharacterHome from './pages/CharacterHome.tsx';
 import CharacterForm from './pages/CharacterForm.tsx';
 import CharacterLogForm from './pages/CharacterLogForm.tsx';
 import CharactersMenu from './pages/CharactersMenu.tsx';
+import DMLogForm from './pages/DMLogForm.tsx';
 import MagicItemForm from './pages/MagicItemForm.tsx';
 import StoryAwardForm from './pages/StoryAwardForm.tsx';
 import Home from './pages/Home.tsx';
@@ -67,6 +68,14 @@ const router = createBrowserRouter([
       {
         path: "characters/:characterId/story-awards/:storyAwardId/edit",
         element: <StoryAwardForm />
+      },
+      {
+        path: "dm-logs/new",
+        element: <DMLogForm />,
+      },
+      {
+        path: "dm-logs/:logId/edit",
+        element: <DMLogForm />,
       }
     ]
   }

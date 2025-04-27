@@ -29,7 +29,7 @@ const BreadcrumbsMenu = (props: BreadcrumbsMenuProps) => {
             >
                 Home
             </Link>
-            { (props.characterName || props.currentPageTitle?.includes("Character")) &&
+            { (props.characterName || props.currentPageTitle?.includes(" Character")) &&
                 <Link
                     component={RouterLink}
                     underline="hover"
@@ -37,6 +37,16 @@ const BreadcrumbsMenu = (props: BreadcrumbsMenuProps) => {
                     to={"/characters"}
                 >
                     Characters
+                </Link>
+            }
+            { (props.currentPageTitle?.includes(" DM")) &&
+                <Link
+                    component={RouterLink}
+                    underline="hover"
+                    color="inherit"
+                    to={"/dm-logs"}
+                >
+                    DM Logs
                 </Link>
             }
             { props.characterName &&
