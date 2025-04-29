@@ -231,7 +231,7 @@ const CharacterLogMagicItemDialog = (props: CharacterLogMagicItemDialogProps) =>
                         <Grid item xs={12}>
                             <Autocomplete 
                                 id="magic-item-to-lose"
-                                options={characterMagicItems || []}
+                                options={characterMagicItems.sort((a,b) => -(b.flavorName ? b.flavorName : b.name).localeCompare(a.flavorName ? a.flavorName : a.name)) || []}
                                 getOptionKey={(o) => o.id}
                                 getOptionLabel={(o) => (o.flavorName ? `${o.flavorName} (${o.name})` : o.name) + ` [${o.originLogTitle}]`}
                                 onChange={(e, v) => handleMagicItemToLoseChange(e, v)}

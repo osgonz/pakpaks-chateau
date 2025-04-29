@@ -486,7 +486,7 @@ const CharacterLogForm = () => {
                                     handleRequiredFieldValidation={handleRequiredFieldValidation}
                                 />
                             }
-                            { log.type != null && log.type != CharacterLogType.Trade &&
+                            { log.type != null &&
                                 <>
                                     <Grid item xs={12}>
                                         <Divider variant="fullWidth"/>
@@ -516,6 +516,10 @@ const CharacterLogForm = () => {
                                         handleRemoveMagicItemByIndex={handleRemoveLostMagicItemByIndex}
                                         handleRemoveUnsavedMagicItemByIndex={handleRemoveUnsavedLostMagicItem}
                                     />
+                                </>
+                            }
+                            { log.type != null && log.type != CharacterLogType.Trade &&
+                                <>
                                     <Grid item xs={12}>
                                         <Divider variant="fullWidth"/>
                                     </Grid>
