@@ -1,7 +1,7 @@
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 
-interface MerchantLogFieldsProps {
+interface DowntimeLogFieldsProps {
     log: any,
     logError: any,
     isViewing: boolean,
@@ -10,10 +10,10 @@ interface MerchantLogFieldsProps {
     handleRequiredFieldValidation: (fieldName: string) => void,
 };
 
-const MerchantLogFields = (props: MerchantLogFieldsProps) => {
+const DowntimeLogFields = (props: DowntimeLogFieldsProps) => {
     return (
         <>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
                 <TextField 
                     error={props.logError.location}
                     disabled={props.isViewing}
@@ -27,7 +27,18 @@ const MerchantLogFields = (props: MerchantLogFieldsProps) => {
                     fullWidth
                 />
             </Grid>
-            <Grid item md={3} xs={12}>
+            <Grid item md={4} xs={12}>
+                <TextField 
+                    disabled={props.isViewing}
+                    id="log-levels"
+                    label="Levels"
+                    onChange={e => props.handleLogTextChange(e, "levels")}
+                    value={props.log.levels}
+                    type="number"
+                    fullWidth
+                />
+            </Grid>
+            <Grid item md={4} xs={12}>
                 <TextField 
                     disabled={props.isViewing}
                     id="log-gold"
@@ -38,7 +49,7 @@ const MerchantLogFields = (props: MerchantLogFieldsProps) => {
                     fullWidth
                 />
             </Grid>
-            <Grid item md={3} xs={12}>
+            <Grid item md={4} xs={12}>
                 <TextField 
                     disabled={props.isViewing}
                     id="log-downtime"
@@ -65,4 +76,4 @@ const MerchantLogFields = (props: MerchantLogFieldsProps) => {
     );
 };
 
-export default MerchantLogFields;
+export default DowntimeLogFields;

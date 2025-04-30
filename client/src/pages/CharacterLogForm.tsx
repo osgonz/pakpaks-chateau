@@ -12,6 +12,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import AdventureLogFields from '../components/character-logs/AdventureLogFields';
+import DowntimeLogFields from '../components/character-logs/DowntimeLogFields';
 import MerchantLogFields from '../components/character-logs/MerchantLogFields';
 import ServiceAwardLogFields from '../components/character-logs/ServiceAwardLogFields';
 import TradeLogFields from '../components/character-logs/TradeLogFields';
@@ -456,7 +457,17 @@ const CharacterLogForm = () => {
                                     handleRequiredFieldValidation={handleRequiredFieldValidation}
                                 />
                             }
-                            { (log.type == CharacterLogType.Merchant || log.type == CharacterLogType.Downtime) &&
+                            { log.type == CharacterLogType.Downtime &&
+                                <DowntimeLogFields
+                                    log={log}
+                                    logError={logError}
+                                    isViewing={isViewing}
+                                    requiredFieldErrorMessage={requiredFieldErrorMessage}
+                                    handleLogTextChange={handleLogTextChange}
+                                    handleRequiredFieldValidation={handleRequiredFieldValidation}
+                                />
+                            }
+                            { log.type == CharacterLogType.Merchant &&
                                 <MerchantLogFields
                                     log={log}
                                     logError={logError}
