@@ -33,7 +33,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
     // Current page number
     const [page, setPage] = useState(0);
     // Number of records showed per page
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     // Flag used to display Character Log Delete dialog
     const [deleteOpen, setDeleteOpen] = useState(false);
     // Log currently set for deletion

@@ -30,7 +30,7 @@ const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
     // Current page number
     const [page, setPage] = useState(0);
     // Number of records showed per page
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     // Flag used to display Story Award Delete dialog
     const [deleteOpen, setDeleteOpen] = useState(false);
     // Item currently set for deletion
