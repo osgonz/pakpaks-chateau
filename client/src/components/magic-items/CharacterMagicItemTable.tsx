@@ -13,6 +13,7 @@ import TableRow from '@mui/material/TableRow';
 import { Link } from "react-router-dom";
 import { ItemRarityDictionary } from '../../data/Dictionaries';
 import { MagicItem, MagicItemRow, Order, SortableTableHeadCell } from '../../data/Types';
+import { useTableSearchParams } from '../../hooks/useSearchParams';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
 import SortableTableHead, { getMagicItemSortComparator } from '../shared/SortableTableHead';
@@ -23,14 +24,12 @@ interface CharacterMagicItemTableProps {
 };
 
 const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
+    // Page and rows per page details
+    const { page, setPage, rows, setRows } = useTableSearchParams();
     // Table's current sort direction
     const [order, setOrder] = useState<Order>('asc');
     // Attribute name used to sort the table
     const [orderBy, setOrderBy] = useState<keyof MagicItem>('name');
-    // Current page number
-    const [page, setPage] = useState(0);
-    // Number of records showed per page
-    const [rowsPerPage, setRowsPerPage] = useState(10);
     // Flag used to display Magic Item Delete dialog
     const [deleteOpen, setDeleteOpen] = useState(false);
     // Item currently set for deletion
@@ -42,10 +41,10 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
     // Object containing subset of records being shown in table
     const visibleRows = useMemo(
         () => magicItems.slice().sort(getMagicItemSortComparator(order, orderBy)).slice(
-            page * rowsPerPage,
-            page * rowsPerPage + rowsPerPage,
+            page * rows,
+            page * rows + rows,
         ),
-        [magicItems, order, orderBy, page, rowsPerPage]
+        [magicItems, order, orderBy, page, rows]
     );
     
     // Metadata for table headers
@@ -89,7 +88,7 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
     ];
 
     // Avoid a layout jump when reaching the last page with empty rows
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - magicItems.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rows - magicItems.length) : 0;
 
     // Helper function triggered when sorting attributes are changed
     const handleRequestSort = (_: React.MouseEvent<unknown>, property: keyof any) => {
@@ -105,8 +104,7 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
 
     // Helper function triggered when number of rows per page is changed
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
+        setRows(parseInt(event.target.value, 10));
     };
 
     // Helper function triggered when attempting to Delete a Magic Item
@@ -190,7 +188,7 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25]}
                                 count={magicItems.length}
-                                rowsPerPage={rowsPerPage}
+                                rowsPerPage={rows}
                                 page={page}
                                 onPageChange={handleChangePage}
                                 onRowsPerPageChange={handleChangeRowsPerPage}

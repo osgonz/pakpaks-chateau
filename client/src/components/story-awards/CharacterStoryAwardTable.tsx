@@ -13,6 +13,7 @@ import TableRow from '@mui/material/TableRow';
 import { Link } from "react-router-dom";
 import { StoryAwardStatusDictionary } from '../../data/Dictionaries';
 import { Order, SortableTableHeadCell, StoryAward, StoryAwardRow } from '../../data/Types';
+import { useTableSearchParams } from '../../hooks/useSearchParams';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
 import SortableTableHead, { getSortComparator } from '../shared/SortableTableHead';
@@ -23,14 +24,12 @@ interface CharacterStoryAwardTableProps {
 };
 
 const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
+    // Page and rows per page details
+    const { page, setPage, rows, setRows } = useTableSearchParams();
     // Table's current sort direction
     const [order, setOrder] = useState<Order>('asc');
     // Attribute name used to sort the table
     const [orderBy, setOrderBy] = useState<keyof StoryAward>('name');
-    // Current page number
-    const [page, setPage] = useState(0);
-    // Number of records showed per page
-    const [rowsPerPage, setRowsPerPage] = useState(10);
     // Flag used to display Story Award Delete dialog
     const [deleteOpen, setDeleteOpen] = useState(false);
     // Item currently set for deletion
@@ -42,10 +41,10 @@ const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
     // Object containing subset of records being shown in table
     const visibleRows = useMemo(
         () => storyAwards.slice().sort(getSortComparator(order, orderBy)).slice(
-            page * rowsPerPage,
-            page * rowsPerPage + rowsPerPage,
+            page * rows,
+            page * rows + rows,
         ),
-        [storyAwards, order, orderBy, page, rowsPerPage]
+        [storyAwards, order, orderBy, page, rows]
     );
     
     // Metadata for table headers
@@ -77,7 +76,7 @@ const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
     ];
 
     // Avoid a layout jump when reaching the last page with empty rows
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - storyAwards.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rows - storyAwards.length) : 0;
 
     // Helper function triggered when sorting attributes are changed
     const handleRequestSort = (_: React.MouseEvent<unknown>, property: keyof any) => {
@@ -93,8 +92,7 @@ const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
 
     // Helper function triggered when number of rows per page is changed
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
+        setRows(parseInt(event.target.value, 10));
     };
 
     // Helper function triggered when attempting to Delete a Story Award
@@ -176,7 +174,7 @@ const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25]}
                                 count={storyAwards.length}
-                                rowsPerPage={rowsPerPage}
+                                rowsPerPage={rows}
                                 page={page}
                                 onPageChange={handleChangePage}
                                 onRowsPerPageChange={handleChangeRowsPerPage}

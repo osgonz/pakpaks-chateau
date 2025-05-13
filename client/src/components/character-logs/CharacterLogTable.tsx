@@ -16,6 +16,7 @@ import TableRow from '@mui/material/TableRow';
 import { Link } from "react-router-dom";
 import { CharacterLogTypeDictionary } from '../../data/Dictionaries';
 import { CharacterLog, CharacterLogRow, Order, SortableTableHeadCell } from '../../data/Types';
+import { useTableSearchParams } from '../../hooks/useSearchParams';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
 import SortableTableHead, { getSortComparator } from '../shared/SortableTableHead';
@@ -26,14 +27,12 @@ interface CharacterLogTableProps {
 };
 
 const CharacterLogTable = (props: CharacterLogTableProps) => {
+    // Page and rows per page details
+    const { page, setPage, rows, setRows } = useTableSearchParams();
     // Table's current sort direction
     const [order, setOrder] = useState<Order>('desc');
     // Attribute name used to sort the table
     const [orderBy, setOrderBy] = useState<keyof CharacterLog>('timestamp');
-    // Current page number
-    const [page, setPage] = useState(0);
-    // Number of records showed per page
-    const [rowsPerPage, setRowsPerPage] = useState(10);
     // Flag used to display Character Log Delete dialog
     const [deleteOpen, setDeleteOpen] = useState(false);
     // Log currently set for deletion
@@ -45,10 +44,10 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
     // Object containing subset of records being shown in table
     const visibleRows = useMemo(
         () => characterLogs.slice().sort(getSortComparator(order, orderBy)).slice(
-            page * rowsPerPage,
-            page * rowsPerPage + rowsPerPage,
+            page * rows,
+            page * rows + rows,
         ),
-        [characterLogs, order, orderBy, page, rowsPerPage]
+        [characterLogs, order, orderBy, page, rows]
     );
     
     // Metadata for table headers
@@ -104,7 +103,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
     ];
 
     // Avoid a layout jump when reaching the last page with empty rows
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - characterLogs.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rows - characterLogs.length) : 0;
 
     // Helper function triggered when sorting attributes are changed
     const handleRequestSort = (_: React.MouseEvent<unknown>, property: keyof any) => {
@@ -120,8 +119,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
 
     // Helper function triggered when number of rows per page is changed
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
+        setRows(parseInt(event.target.value, 10));
     };
 
     // Helper function triggered when attempting to Delete a Character Log
@@ -216,7 +214,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25]}
                                 count={characterLogs.length}
-                                rowsPerPage={rowsPerPage}
+                                rowsPerPage={rows}
                                 page={page}
                                 onPageChange={handleChangePage}
                                 onRowsPerPageChange={handleChangeRowsPerPage}
