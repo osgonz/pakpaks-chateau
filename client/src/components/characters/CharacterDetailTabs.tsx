@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import Grid from "@mui/material/Grid";
 import { Tab, Tabs } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { CharacterLogRow, MagicItemRow, StoryAwardRow } from '../../data/Types';
+import { useCharacterTabSearchParams } from '../../hooks/useSearchParams';
 import CharacterDetailTabPanel from './CharacterDetailTabPanel';
 import CharacterLogTable from '../character-logs/CharacterLogTable';
 import StoryAwardTable from '../story-awards/CharacterStoryAwardTable';
@@ -31,56 +30,13 @@ const CharacterDetailTabs = (props: CharacterDetailsProps) => {
     const theme = useTheme();
     // Helper boolean to apply properties conditional on screen size
     const isScreenMdOrLarger = useMediaQuery(theme.breakpoints.up("md"));
-    // Object representing query params
-    const [searchParams, setSearchParams] = useSearchParams();
     // Value representing currently selected tab
-    const [tabValue, setTabValue] = useState(0);
+    const { tabValue, setTabValue } = useCharacterTabSearchParams();
 
     // Helper function triggered when detail tab is changed
     const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
-        setSearchParams(prevParams => {
-            prevParams.delete('page');
-            prevParams.delete('rows');
-
-            switch(newValue) {
-                case 1:
-                    prevParams.set('tab', 'items');
-                    break;
-                case 2:
-                    prevParams.set('tab', 'awards');
-                    break;
-                case 3:
-                    prevParams.set('tab', 'other');
-                    break;
-                default:
-                    prevParams.delete('tab');
-                    break;
-            };
-
-            return prevParams;
-        });
+        setTabValue(newValue);
     };
-
-    useEffect(() => {
-        if (searchParams) {
-            let tabParam = searchParams.get('tab');
-
-            switch (tabParam) {
-                case 'items':
-                    setTabValue(1);
-                    break;
-                case 'awards':
-                    setTabValue(2);
-                    break;
-                case 'other':
-                    setTabValue(3);
-                    break;
-                default:
-                    setTabValue(0);
-                    break;
-            };
-        }
-    }, [searchParams]);
 
     return (
         <>
