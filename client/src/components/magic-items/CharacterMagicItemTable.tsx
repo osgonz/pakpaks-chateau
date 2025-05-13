@@ -12,7 +12,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Link } from "react-router-dom";
 import { ItemRarityDictionary } from '../../data/Dictionaries';
-import { MagicItem, MagicItemRow, Order, SortableTableHeadCell } from '../../data/Types';
+import { MagicItem, MagicItemRow, SortableTableHeadCell } from '../../data/Types';
 import { useTableSearchParams } from '../../hooks/useSearchParams';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
@@ -24,12 +24,8 @@ interface CharacterMagicItemTableProps {
 };
 
 const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
-    // Page and rows per page details
-    const { page, setPage, rows, setRows } = useTableSearchParams();
-    // Table's current sort direction
-    const [order, setOrder] = useState<Order>('asc');
-    // Attribute name used to sort the table
-    const [orderBy, setOrderBy] = useState<keyof MagicItem>('name');
+    // Order, sort, page and rows per page details
+    const { order, sort, setOrderSort, page, setPage, rows, setRows } = useTableSearchParams(['name', 'rarity', 'isConsumable', 'requiresAttunement']);
     // Flag used to display Magic Item Delete dialog
     const [deleteOpen, setDeleteOpen] = useState(false);
     // Item currently set for deletion
@@ -40,11 +36,11 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
 
     // Object containing subset of records being shown in table
     const visibleRows = useMemo(
-        () => magicItems.slice().sort(getMagicItemSortComparator(order, orderBy)).slice(
+        () => magicItems.slice().sort(getMagicItemSortComparator(order, sort as keyof MagicItem)).slice(
             page * rows,
             page * rows + rows,
         ),
-        [magicItems, order, orderBy, page, rows]
+        [magicItems, order, sort, page, rows]
     );
     
     // Metadata for table headers
@@ -92,9 +88,8 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
 
     // Helper function triggered when sorting attributes are changed
     const handleRequestSort = (_: React.MouseEvent<unknown>, property: keyof any) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property as keyof MagicItem);
+        const isAsc = sort === property && order === 'asc';
+        setOrderSort(isAsc, property as keyof MagicItem);
     };
 
     // Helper function triggered when table page is changed
@@ -133,7 +128,7 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
                     <SortableTableHead 
                         headCells={headCells}
                         order={order}
-                        orderBy={orderBy as string}
+                        orderBy={sort}
                         onRequestSort={handleRequestSort}
                         rowCount={magicItems.length}
                     />

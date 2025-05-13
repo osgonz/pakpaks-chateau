@@ -13,7 +13,7 @@ import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Link } from "react-router-dom";
-import { DMLog, Order, SortableTableHeadCell } from "../../data/Types";
+import { DMLog, SortableTableHeadCell } from "../../data/Types";
 import { useTableSearchParams } from '../../hooks/useSearchParams';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
@@ -25,12 +25,8 @@ interface DMLogTableProps {
 };
 
 const DMLogTable = (props: DMLogTableProps) => {
-    // Page and rows per page details
-    const { page, setPage, rows, setRows } = useTableSearchParams();
-    // Table's current sort direction
-    const [order, setOrder] = useState<Order>('desc');
-    // Attribute name used to sort the table
-    const [orderBy, setOrderBy] = useState<keyof DMLog>('timestamp');
+    // Order, sort, page and rows per page details
+    const { order, sort, setOrderSort, page, setPage, rows, setRows } = useTableSearchParams(['timestamp', 'title', 'serviceHours']);
     // Flag used to display DM Log Delete dialog
     const [deleteOpen, setDeleteOpen] = useState(false);
     // Character currently set for deletion
@@ -41,11 +37,11 @@ const DMLogTable = (props: DMLogTableProps) => {
 
     // Object containing subset of records being shown in table
     const visibleRows = useMemo(
-        () => logs.slice().sort(getSortComparator(order, orderBy)).slice(
+        () => logs.slice().sort(getSortComparator(order, sort as keyof DMLog)).slice(
             page * rows,
             page * rows + rows,
         ),
-        [logs, order, orderBy, page, rows]
+        [logs, order, sort, page, rows]
     );
     
     // Metadata for table headers
@@ -81,9 +77,8 @@ const DMLogTable = (props: DMLogTableProps) => {
 
     // Helper function triggered when sorting attributes are changed
     const handleRequestSort = (_: React.MouseEvent<unknown>, property: keyof any) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property as keyof DMLog);
+        const isAsc = sort === property && order === 'asc';
+        setOrderSort(isAsc, property as keyof DMLog);
     };
 
     // Helper function triggered when table page is changed
@@ -123,7 +118,7 @@ const DMLogTable = (props: DMLogTableProps) => {
                     <SortableTableHead 
                         headCells={headCells}
                         order={order}
-                        orderBy={orderBy as string}
+                        orderBy={sort}
                         onRequestSort={handleRequestSort}
                         rowCount={logs.length}
                     />

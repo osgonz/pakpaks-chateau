@@ -1,4 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
+import { Order } from '../data/Types';
 
 /**
  * Custom hook that returns the active character tab index and a method to modify it by injecting query params
@@ -31,8 +32,10 @@ export function useCharacterTabSearchParams() {
      */
     const setTabValue = (index: number) => {
         setSearchParams(prevParams => {
+            prevParams.delete('order');
             prevParams.delete('page');
             prevParams.delete('rows');
+            prevParams.delete('sort');
 
             switch(index) {
                 case 1:
@@ -57,17 +60,26 @@ export function useCharacterTabSearchParams() {
 }
 
 /**
- * Custom hook that returns a table's page, rows, and methods to modify these by injecting query params
- * @returns Page, rows, and methods to modify them
+ * Custom hook that returns a table's order, sort, page, rows, and methods to modify these by injecting query params
+ * @returns Order, sort, page, rows, and methods to modify them
  */
-export function useTableSearchParams() {
+export function useTableSearchParams(sortableKeys: string[]) {
     // Object representing query params
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const hasTimestamp = sortableKeys.includes('timestamp');
+    let order = hasTimestamp ? 'desc' : 'asc' as Order;
     let page = 0;
     let rows = 10;
+    let sort = hasTimestamp ? 'timestamp' : 'name';
+    const orderParam = searchParams.get('order');
     const pageParam = searchParams.get('page');
     const rowsParam = searchParams.get('rows');
+    const sortParam = searchParams.get('sort');
+
+    if (orderParam as Order) {
+        order = orderParam as Order;
+    }
 
     if (pageParam) {
         const parsedPage = parseInt(pageParam, 10);
@@ -83,6 +95,32 @@ export function useTableSearchParams() {
         }
     }
 
+    if (sortParam && sortableKeys.includes(sortParam)) {
+        sort = sortParam;
+    }
+
+    /**
+     * Function that updates the order and sort query parameters
+     * @param isAsc Flag indicating if property is unchanged and currently ordered asc
+     * @param property Property key to sort records by
+     */
+    const setOrderSort = (isAsc: boolean, property: string) => {
+        setSearchParams(prevParams => {
+            if (isAsc) {
+                prevParams.set('order', 'desc');
+            } else {
+                prevParams.set('order', 'asc');
+            }
+
+            if (property === (hasTimestamp ? 'timestamp' : 'name')) {
+                prevParams.delete('sort');
+            } else {
+                prevParams.set('sort', property);
+            }
+            return prevParams;
+        });
+    };
+    
     /**
      * Function that updates the page query parameter
      * @param page Zero-based index of the page
@@ -116,5 +154,5 @@ export function useTableSearchParams() {
         });
     };
 
-    return { page, setPage, rows, setRows };
+    return { page, setPage, rows, setRows, order, sort, setOrderSort };
 }

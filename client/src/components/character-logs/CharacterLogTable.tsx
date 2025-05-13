@@ -15,7 +15,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Link } from "react-router-dom";
 import { CharacterLogTypeDictionary } from '../../data/Dictionaries';
-import { CharacterLog, CharacterLogRow, Order, SortableTableHeadCell } from '../../data/Types';
+import { CharacterLog, CharacterLogRow, SortableTableHeadCell } from '../../data/Types';
 import { useTableSearchParams } from '../../hooks/useSearchParams';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
@@ -27,12 +27,8 @@ interface CharacterLogTableProps {
 };
 
 const CharacterLogTable = (props: CharacterLogTableProps) => {
-    // Page and rows per page details
-    const { page, setPage, rows, setRows } = useTableSearchParams();
-    // Table's current sort direction
-    const [order, setOrder] = useState<Order>('desc');
-    // Attribute name used to sort the table
-    const [orderBy, setOrderBy] = useState<keyof CharacterLog>('timestamp');
+    // Order, sort, page and rows per page details
+    const { order, sort, setOrderSort, page, setPage, rows, setRows } = useTableSearchParams(['timestamp', 'title', 'type', 'levels', 'gold', 'downtime']);
     // Flag used to display Character Log Delete dialog
     const [deleteOpen, setDeleteOpen] = useState(false);
     // Log currently set for deletion
@@ -43,11 +39,11 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
 
     // Object containing subset of records being shown in table
     const visibleRows = useMemo(
-        () => characterLogs.slice().sort(getSortComparator(order, orderBy)).slice(
+        () => characterLogs.slice().sort(getSortComparator(order, sort as keyof CharacterLog)).slice(
             page * rows,
             page * rows + rows,
         ),
-        [characterLogs, order, orderBy, page, rows]
+        [characterLogs, order, sort, page, rows]
     );
     
     // Metadata for table headers
@@ -107,9 +103,8 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
 
     // Helper function triggered when sorting attributes are changed
     const handleRequestSort = (_: React.MouseEvent<unknown>, property: keyof any) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property as keyof CharacterLog);
+        const isAsc = sort === property && order === 'asc';
+        setOrderSort(isAsc, property as keyof CharacterLog);
     };
 
     // Helper function triggered when table page is changed
@@ -148,7 +143,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                     <SortableTableHead 
                         headCells={headCells}
                         order={order}
-                        orderBy={orderBy as string}
+                        orderBy={sort}
                         onRequestSort={handleRequestSort}
                         rowCount={characterLogs.length}
                     />
