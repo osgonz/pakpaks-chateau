@@ -5,7 +5,7 @@ import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
+import Markdown from "./Markdown";
 
 interface ExpandableTableRowProps {
     children: ReactNode,
@@ -43,7 +43,7 @@ const ExpandableTableRow = (props: ExpandableTableRowProps) => {
                         unmountOnExit
                     >
                         <Box sx={{ margin: 1 }}>
-                            <Typography variant="body2">{expandableContent}</Typography>
+                            <Markdown>{expandableContent}</Markdown>
                         </Box>
                     </Collapse>
                 </TableCell>

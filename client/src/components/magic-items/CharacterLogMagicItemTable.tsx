@@ -220,7 +220,7 @@ const CharacterLogMagicItemTable = (props: CharacterLogMagicItemTableProps) => {
                             ))}
                             {emptyRows > 0 && (
                                 <TableRow style={{ height: 53 * emptyRows }}>
-                                    <TableCell colSpan={6} />
+                                    <TableCell colSpan={5} />
                                 </TableRow>
                             )}
                             </TableBody>

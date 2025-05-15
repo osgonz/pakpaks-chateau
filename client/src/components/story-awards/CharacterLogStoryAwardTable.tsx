@@ -204,7 +204,7 @@ const CharacterLogStoryAwardTable = (props: CharacterLogStoryAwardTableProps) =>
                             ))}
                             {emptyRows > 0 && (
                                 <TableRow style={{ height: 53 * emptyRows }}>
-                                    <TableCell colSpan={6} />
+                                    <TableCell colSpan={3} />
                                 </TableRow>
                             )}
                             </TableBody>
