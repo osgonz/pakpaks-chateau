@@ -99,17 +99,17 @@ export function getMagicItemSortComparator<Key extends keyof MagicItem>(
 };
 
 interface SortableTableHeadProps {
-    headCells: readonly SortableTableHeadCell[];
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof any) => void;
-    order: Order;
-    orderBy: string;
-    rowCount: number;
+    headCells: readonly SortableTableHeadCell[],
+    isExpandable?: boolean,
+    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof any) => void,
+    order: Order,
+    orderBy: string,
+    rowCount: number
 };
 
 const SortableTableHead = (props: SortableTableHeadProps) => {
-    // Variables containing head cell metadata, sorting direction, attribute used for sorting,
-    // and reference to helper sorting function
-    const { headCells, order, orderBy, onRequestSort } = props;
+    // Variables containing head cell metadata, sorting direction, attribute used for sorting, and reference to helper sorting function
+    const { headCells, isExpandable, order, orderBy, onRequestSort } = props;
 
     // Wrapper for helper sorting function
     const createSortHandler = (property: keyof any) => (event: React.MouseEvent<unknown>) => {
@@ -119,29 +119,32 @@ const SortableTableHead = (props: SortableTableHeadProps) => {
     return (
         <TableHead>
             <TableRow>
-            { headCells.map((headCell) => (
-                <TableCell
-                    key={headCell.id as Key}
-                    align={headCell.alignment}
-                    sortDirection={orderBy === headCell.id ? order : false}
-                >
-                    { headCell.isSortable ? (
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            { orderBy === headCell.id ? (
-                            <Box component="span" sx={visuallyHidden}>
-                                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                            </Box>
-                            ) : null }
-                        </TableSortLabel>
-                    ) : headCell.label
-                    }
-                </TableCell>
-            ))}
+                { isExpandable && (
+                    <TableCell />
+                )}
+                { headCells.map((headCell) => (
+                    <TableCell
+                        key={headCell.id as Key}
+                        align={headCell.alignment}
+                        sortDirection={orderBy === headCell.id ? order : false}
+                    >
+                        { headCell.isSortable ? (
+                            <TableSortLabel
+                                active={orderBy === headCell.id}
+                                direction={orderBy === headCell.id ? order : 'asc'}
+                                onClick={createSortHandler(headCell.id)}
+                            >
+                                {headCell.label}
+                                { orderBy === headCell.id ? (
+                                <Box component="span" sx={visuallyHidden}>
+                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                </Box>
+                                ) : null }
+                            </TableSortLabel>
+                        ) : headCell.label
+                        }
+                    </TableCell>
+                ))}
             </TableRow>
         </TableHead>
     );

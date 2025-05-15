@@ -19,6 +19,7 @@ import { CharacterLog, CharacterLogRow, SortableTableHeadCell } from '../../data
 import { useTableSearchParams } from '../../hooks/useSearchParams';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
+import ExpandableTableRow from '../shared/ExpandableTableRow';
 import SortableTableHead, { getSortComparator } from '../shared/SortableTableHead';
 
 interface CharacterLogTableProps {
@@ -146,10 +147,11 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                         orderBy={sort}
                         onRequestSort={handleRequestSort}
                         rowCount={characterLogs.length}
+                        isExpandable={true}
                     />
                     <TableBody>
                     { visibleRows.map((log) => (
-                        <TableRow key={log.id}>
+                        <ExpandableTableRow id={log.id} expandableContent={log.description ?? ''}>
                             <TableCell>{format(log.timestamp, "yyyy-MM-dd HH:mm")}</TableCell>
                             <TableCell component="th" scope="row">
                                 {log.title}
@@ -196,7 +198,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                                     <Icon>delete</Icon>
                                 </IconButton>
                             </TableCell>
-                        </TableRow>
+                        </ExpandableTableRow>
                     ))}
                     {emptyRows > 0 && (
                         <TableRow style={{ height: 53 * emptyRows }}>
