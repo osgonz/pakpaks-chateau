@@ -4,6 +4,22 @@ import Typography from '@mui/material/Typography';
 
 const options = {
     overrides: {
+        h1: {
+            component: Typography,
+            props: { gutterBottom: true, variant: 'h4' },
+        },
+        h2: {
+            component: Typography,
+            props: { gutterBottom: true, variant: 'h5' },
+        },
+        h3: {
+            component: Typography,
+            props: { gutterBottom: true, variant: 'h6' },
+        },
+        h4: {
+            component: Typography,
+            props: { gutterBottom: true, variant: 'subtitle1' },
+        },
         p: {
             component: Typography,
             props: { paragraph: true, variant: "body2" },
