@@ -5,7 +5,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
-import { MagicItem, Order, SortableTableHeadCell } from '../../data/Types';
+import { CharacterRow, CharacterSortByOption, MagicItem, Order, SortableTableHeadCell } from '../../data/Types';
 
 /**
  * Generic descending comparator function
@@ -96,6 +96,22 @@ export function getMagicItemSortComparator<Key extends keyof MagicItem>(
     return order === 'desc'
         ? (a, b) => orderBy === "name" ? getDescendingMagicItemNameComparator(a, b) : getDescendingComparator(a, b, orderBy)
         : (a, b) => orderBy === "name" ? -getDescendingMagicItemNameComparator(a, b) : -getDescendingComparator(a, b, orderBy);
+};
+
+/**
+ * Comparator function for Characters
+ * @param sortBy Sort option to be applies
+ * @returns Result of comparator function
+ */
+export function getCharacterSortComparator(
+    sortBy: CharacterSortByOption,
+) : (
+    a: CharacterRow,
+    b: CharacterRow,
+) => number {
+    return sortBy === CharacterSortByOption.LevelAscending || sortBy === CharacterSortByOption.NameAscending
+        ? (a, b) => sortBy === CharacterSortByOption.NameAscending ? -getDescendingComparator(a, b, "name") : -getDescendingComparator(a, b, "characterLevel")
+        : (a, b) => sortBy === CharacterSortByOption.NameDescending ? getDescendingComparator(a, b, "name") : getDescendingComparator(a, b, "characterLevel");
 };
 
 interface SortableTableHeadProps {

@@ -1,27 +1,66 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
+import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
+import Icon from "@mui/material/Icon";
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from "@mui/material/InputLabel";
 import LinearProgress from "@mui/material/LinearProgress";
+import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
 import Typography from '@mui/material/Typography';
 import { Link } from "react-router-dom";
 import { Character, CharacterRow } from '../data/Types';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import CharacterCard from "../components/characters/CharacterCard";
 import DeleteConfirmationDialog from '../components/shared/DeleteConfirmationDialog';
+import { CharacterSortByOptionDictionary, CampaignDictionary } from '../data/Dictionaries';
+import { CharacterSortByOption } from '../data/Types';
 import { useCharacters } from "../hooks/useCharacter";
+import { getCharacterSortComparator } from '../components/shared/SortableTableHead';
 
 const CharactersMenu = () => {
+    // Array containing Character Sort By Option ids for Select options
+    const characterSortByArray = Array.from(CharacterSortByOptionDictionary.keys());
+
     // Character details
     const loadedCharacters = useCharacters();
     const [characters, setCharacters] = useState<CharacterRow[] | undefined>();
+
+    // Variables storing
+    const [searchValue, setSearchValue] = useState("");
+    const [sortBy, setSortBy] = useState(CharacterSortByOption.LevelDescending);
 
     // Flag used to display Character Delete dialog
     const [deleteOpen, setDeleteOpen] = useState(false);
     // Character currently set for deletion
     const [characterToBeDeleted, setCharacterToBeDeleted] = useState<Character | null>(null);
+
+    // Object containing sorted subset of Characters
+    const sortedCharacters = useMemo(
+        () => characters?.slice().sort(getCharacterSortComparator(sortBy)),
+        [characters, sortBy]
+    );
+    const visibleCharacters = useMemo(
+        () => searchValue === "" ? sortedCharacters?.slice() : sortedCharacters?.slice().filter((character) => {
+            let sanitizedSearch = searchValue.toLowerCase().replace(/\s+/g, "");
+
+            return character.name.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch) 
+                || character.classes.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch) 
+                || character.lineage.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch)
+                || CampaignDictionary.get(character.campaign)?.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch)
+                || character.characterLevel === parseInt(searchValue) 
+                || (character.characterLevel >= 10 && (
+                    Math.floor(character.characterLevel / 10) === parseInt(searchValue) 
+                    || character.characterLevel % 10 === parseInt(searchValue)
+                ));
+        }),
+        [sortedCharacters, searchValue]
+    );
 
     // Helper function triggered when attempting to Delete a Character
     const handleDeleteOpen = (character: Character) => {
@@ -55,7 +94,7 @@ const CharactersMenu = () => {
 
     return (
         <>
-            { characters ? (
+            { visibleCharacters ? (
                 <>
                     <Container maxWidth="lg">
                         <BreadcrumbsMenu 
@@ -85,7 +124,7 @@ const CharactersMenu = () => {
                                     </Typography>
                                 </Grid>
                                 <Grid justifyContent="flex-end" container item xs={12}>
-                                    <Grid item md={4.5} xs={12} sx={{ pb: '0.35em' }}>
+                                    <Grid item md={4.5} xs={12}>
                                         <Button 
                                             component={Link}
                                             to={`/characters/new`}
@@ -96,12 +135,41 @@ const CharactersMenu = () => {
                                         </Button>
                                     </Grid>
                                 </Grid>
+                                <Grid item md={7.5} xs={12}>
+                                    <TextField
+                                        id="characters-search"
+                                        label="Search"
+                                        onChange={e => setSearchValue(e.target.value)}
+                                        placeholder="Search by Name, Level, Class, Species, or Campaign"
+                                        value={searchValue}
+                                        fullWidth
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start"><Icon>search</Icon></InputAdornment>,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item md={4.5} xs={12} sx={{ pb: '0.35em' }}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="characters-sort-label">Sort By</InputLabel>
+                                        <Select
+                                            id="characters-sort"
+                                            labelId="characters-sort-label"
+                                            label="Sort By"
+                                            onChange={e => setSortBy(e.target.value as CharacterSortByOption)}
+                                            value={sortBy}
+                                        >
+                                            { characterSortByArray.map((option) => (
+                                                <MenuItem key={option} value={option}>{CharacterSortByOptionDictionary.get(option)}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
                                 <Grid 
                                     container 
                                     item
                                     spacing={4}
                                 >
-                                    { characters.map((character) => (
+                                    { visibleCharacters.map((character) => (
                                         <CharacterCard
                                             key={character.id}
                                             character={character}

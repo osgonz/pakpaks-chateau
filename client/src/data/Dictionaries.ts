@@ -1,4 +1,4 @@
-import { Campaign, ItemType, ItemRarity, CharacterLogType, StoryAwardStatus } from "./Types";
+import { Campaign, ItemType, ItemRarity, CharacterLogType, StoryAwardStatus, CharacterSortByOption } from "./Types";
 
 // Dictionaries for enum types mapped to their string counterparts
 
@@ -43,4 +43,11 @@ export const StoryAwardStatusDictionary = new Map<StoryAwardStatus, string>([
     [StoryAwardStatus.Pending, "Pending Activation"],
     [StoryAwardStatus.Active, "Active"],
     [StoryAwardStatus.Consumed, "Consumed"]
+]);
+
+export const CharacterSortByOptionDictionary = new Map<CharacterSortByOption, string>([
+    [CharacterSortByOption.NameAscending, "Name: A to Z"],
+    [CharacterSortByOption.NameDescending, "Name: Z to A"],
+    [CharacterSortByOption.LevelAscending, "Level: Low to High"],
+    [CharacterSortByOption.LevelDescending, "Level: High to Low"]
 ]);

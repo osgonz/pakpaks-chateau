@@ -43,6 +43,13 @@ export enum StoryAwardStatus {
     Pending
 };
 
+export enum CharacterSortByOption {
+    NameAscending,
+    NameDescending,
+    LevelAscending,
+    LevelDescending
+};
+
 
 // Character type definition
 export type Character = {
