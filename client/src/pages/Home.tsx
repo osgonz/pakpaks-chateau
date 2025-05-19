@@ -1,12 +1,12 @@
-import { Button } from "@mui/material";
+import { Button, Stack, Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
   const navigate = useNavigate();
 
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         background:
           "linear-gradient(to bottom right, rgba(236, 72, 153, 0.15), rgba(59, 130, 246, 0.15))",
         height: "100vh",
@@ -15,25 +15,20 @@ function Home() {
         alignItems: "center",
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "10px",
-        }}
-      >
-        <h3 style={{ fontSize: "25px" }}>Home Page</h3>
-        <div style={{ display: "flex", gap: "10px" }}>
+      <Stack spacing={2} alignItems="center">
+        <Typography variant="h4" component="h3">
+          Home Page
+        </Typography>
+        <Stack direction="row" spacing={2}>
           <Button onClick={() => navigate("/characters")} variant="contained">
             Characters
           </Button>
           <Button onClick={() => navigate("/dm-logs")} variant="contained">
             Dm Logs
           </Button>
-        </div>
-      </div>
-    </div>
+        </Stack>
+      </Stack>
+    </Box>
   );
 }
 

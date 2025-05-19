@@ -1,10 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+/* The universal class below is required in every project to ensure there will no default margin/padding present */
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  font-style: normal;
 }
