@@ -1,4 +1,4 @@
-import { Children, Fragment, ReactNode, useState } from "react";
+import { Children, Fragment, ReactNode, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import Icon from '@mui/material/Icon';
@@ -18,6 +18,10 @@ const ExpandableTableRow = (props: ExpandableTableRowProps) => {
 
     // Flag used to expand the row
     const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        setOpen(false);
+    }, [id]);
 
     return (
         <Fragment key={id}>
