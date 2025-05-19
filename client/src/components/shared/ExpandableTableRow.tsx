@@ -1,4 +1,4 @@
-import { Children, Fragment, ReactNode, useEffect, useState } from "react";
+import { Children, ReactNode, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import Icon from '@mui/material/Icon';
@@ -24,7 +24,7 @@ const ExpandableTableRow = (props: ExpandableTableRowProps) => {
     }, [id]);
 
     return (
-        <Fragment key={id}>
+        <>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton
@@ -52,7 +52,7 @@ const ExpandableTableRow = (props: ExpandableTableRowProps) => {
                     </Collapse>
                 </TableCell>
             </TableRow>
-        </Fragment>
+        </>
     );
 };
 

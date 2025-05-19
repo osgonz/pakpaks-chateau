@@ -77,7 +77,7 @@ const DMLogTable = (props: DMLogTableProps) => {
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rows - logs.length) : 0;
 
     // Helper function triggered when sorting attributes are changed
-    const handleRequestSort = (_: React.MouseEvent<unknown>, property: unknown) => {
+    const handleRequestSort = (_: React.MouseEvent<unknown>, property: keyof any) => {
         const isAsc = sort === property && order === 'asc';
         setOrderSort(isAsc, property as keyof DMLog);
     };
@@ -126,7 +126,7 @@ const DMLogTable = (props: DMLogTableProps) => {
                     />
                     <TableBody>
                     { visibleRows.map((log) => (
-                        <ExpandableTableRow id={log.id} expandableContent={log.description ?? ''}>
+                        <ExpandableTableRow key={log.id} id={log.id} expandableContent={log.description ?? ''}>
                             <TableCell>{format(log.timestamp, "yyyy-MM-dd HH:mm")}</TableCell>
                             <TableCell component="th" scope="row">
                                 {log.title}

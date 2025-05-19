@@ -1,7 +1,0 @@
-/* The universal class below is required in every project to ensure there will no default margin/padding present */
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
