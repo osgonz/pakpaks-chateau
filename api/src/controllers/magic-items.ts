@@ -3,6 +3,20 @@ import db from '../connection';
 import { Request, Response } from 'express';
 
 class MagicItemController {
+    // Get a player's magic items
+    getMagicItemsByPlayer = async (req: Request, res: Response) => {
+        let conn: PoolConnection | undefined;
+        try {
+            conn = await db.getConnection();
+            const [items] = await conn.query("call get_player_magic_item_list()");
+            res.status(200).send(items);
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
+    };
+    
     // Get a specific character's magic items
     getMagicItemsByCharacter = async (req: Request, res: Response) => {
         // Extract character id from parameter
