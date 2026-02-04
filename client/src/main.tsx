@@ -8,6 +8,7 @@ import CharacterLogForm from "./pages/CharacterLogForm.tsx";
 import CharactersMenu from "./pages/CharactersMenu.tsx";
 import DMLogHome from "./pages/DMLogHome.tsx";
 import DMLogForm from "./pages/DMLogForm.tsx";
+import MagicItemHome from "./pages/MagicItemHome.tsx";
 import MagicItemForm from "./pages/MagicItemForm.tsx";
 import StoryAwardForm from "./pages/StoryAwardForm.tsx";
 import Home from "./pages/Home.tsx";
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
             {
                 path: "dm-logs/:logId/edit",
                 element: <DMLogForm />,
+            },
+            {
+                path: "magic-items",
+                element: <MagicItemHome />,
             },
         ],
     },

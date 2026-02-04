@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from "react";
-import { MagicItem, MagicItemRow } from "../data/Types";
+import { MagicItem, MagicItemRow, MagicItemGeneralRow } from "../data/Types";
 
 /**
  * Custom hook that returns a specific magic item's data
@@ -100,6 +100,29 @@ export function useMagicItemsLostByCharacterLog(characterId: string, logId: stri
 
     useEffect(() => {
         loadMagicItemsByCharacterLog(characterId, logId)
+            .then(setMagicItems);
+    }, []);
+
+    return magicItems;
+}
+
+/**
+ * Custom hook that returns all magic item data
+ * @returns Array containing all magic items
+ */
+export function useMagicItems() {
+    const [magicItems, setMagicItems] = useState<MagicItemGeneralRow[] | undefined>();
+
+    /**
+     * Asynchronous function that pulls all magic items data
+     * @returns Array containing all magic items
+     */
+    const loadMagicItems = async() => {
+        return axios.get(`/api/magic-items`).then((res) => res.data) as Promise<MagicItemGeneralRow[]>;
+    };
+
+    useEffect(() => {
+        loadMagicItems()
             .then(setMagicItems);
     }, []);
 

@@ -9,9 +9,6 @@ router.post('/create', magicItemController.createMagicItem);
 // POST route to update a magic item
 router.post('/:id', magicItemController.updateMagicItem);
 
-// GET route for all magic items
-router.get('/', magicItemController.getMagicItemsByPlayer);
-
 // GET route for one magic item
 router.get('/:id', magicItemController.getMagicItem);
 

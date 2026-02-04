@@ -25,6 +25,13 @@ function Home() {
                     >
                         Characters
                     </Button>
+                    <Button
+                        component={Link}
+                        to="/magic-items"
+                        variant="contained"
+                    >
+                        Magic Items
+                    </Button>
                     <Button 
                         component={Link}
                         to="/dm-logs"

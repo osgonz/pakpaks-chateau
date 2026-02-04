@@ -6,6 +6,7 @@ import charactersRouter from './routes/characters';
 import characterLogsRouter from './routes/character-logs';
 import dmLogsRouter from './routes/dm-logs';
 import magicItemsRouter from './routes/magic-items';
+import playerMagicItemsRouter from './routes/player-magic-items';
 import storyAwardsRouter from './routes/story-awards';
 
 const app = express();
@@ -22,6 +23,7 @@ app.use('/api/characters/:charId/character-logs', characterLogsRouter);
 app.use('/api/characters/:charId/magic-items', magicItemsRouter);
 app.use('/api/characters/:charId/story-awards', storyAwardsRouter);
 app.use('/api/dm-logs', dmLogsRouter);
+app.use('/api/magic-items', playerMagicItemsRouter);
 
 // Server starts listening to incoming requests
 app.listen(PORT, () => {

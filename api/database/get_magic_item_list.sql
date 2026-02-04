@@ -1,5 +1,5 @@
 DELIMITER //
-CREATE OR REPLACE PROCEDURE get_player_magic_item_list()
+CREATE OR REPLACE PROCEDURE get_magic_item_list()
 READS SQL DATA
 BEGIN
     SELECT m.id, 
@@ -17,7 +17,7 @@ BEGIN
         c.name AS characterName, 
         m.originLogId, 
         l.title AS originLogTitle, 
-        l.type AS originlogType, 
+        l.type AS originLogType, 
         l.timestamp AS originTimestamp 
     FROM magicitem m 
     JOIN characterlog l ON m.originLogId = l.id 
