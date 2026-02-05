@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import Icon from "@mui/material/Icon";
+import InputAdornment from '@mui/material/InputAdornment';
 import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
 import Typography from '@mui/material/Typography';
 import { MagicItemGeneralRow } from '../data/Types';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
@@ -13,6 +16,22 @@ const DMLogHome = () => {
     // Magic Items details
     const loadedItems = useMagicItems();
     const [items, setItems] = useState<MagicItemGeneralRow[] | undefined>();
+
+    // Variables storing
+    const [searchValue, setSearchValue] = useState("");
+
+    // Object containing a subset of filtered Magic Items
+    const filteredMagicItems = useMemo(
+        () => searchValue === "" ? items?.slice() : items?.slice().filter((item) => {
+            let sanitizedSearch = searchValue.toLowerCase().replace(/\s+/g, "");
+
+            return item.name.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch) 
+                || item.flavorName?.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch) 
+                || item.characterName.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch)
+                || item.flavorDescription?.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch);
+        }),
+        [items, searchValue]
+    );
 
     // Helper function used to refresh data following an item deletion
     const handleRemoveItemByIndex = (index: number) => {
@@ -27,7 +46,7 @@ const DMLogHome = () => {
 
     return (
         <>
-            { items ? (
+            { filteredMagicItems ? (
                 <>
                     <Container maxWidth="lg">
                         <BreadcrumbsMenu 
@@ -56,8 +75,21 @@ const DMLogHome = () => {
                                         Magic Items
                                     </Typography>
                                 </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="magic-item-search"
+                                        label="Search"
+                                        onChange={e => setSearchValue(e.target.value)}
+                                        placeholder="Search by Item Name, Owner, or Properties"
+                                        value={searchValue}
+                                        fullWidth
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start"><Icon>search</Icon></InputAdornment>,
+                                        }}
+                                    />
+                                </Grid>
                                 <MagicItemTable
-                                    magicItems={items}
+                                    magicItems={filteredMagicItems}
                                     handleRemoveMagicItemByIndex={handleRemoveItemByIndex}
                                 />
                             </Grid>
