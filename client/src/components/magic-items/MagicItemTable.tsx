@@ -55,13 +55,13 @@ const MagicItemTable = (props: MagicItemTableProps) => {
         },
         {
             id: 'name',
-            label: 'Item Name',
+            label: 'Name',
             alignment: 'left',
             isSortable: true,
         },
         {
             id: 'rarity',
-            label: 'Item Rarity',
+            label: 'Rarity',
             alignment: 'left',
             isSortable: true,
         },

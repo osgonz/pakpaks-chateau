@@ -1,36 +1,75 @@
 import { useState, useEffect, useMemo } from 'react';
+import Checkbox from "@mui/material/Checkbox";
 import Container from "@mui/material/Container";
+import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
 import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from "@mui/material/InputLabel";
 import LinearProgress from "@mui/material/LinearProgress";
+import ListItemText from "@mui/material/ListItemText";
+import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
+import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import Typography from '@mui/material/Typography';
-import { MagicItemGeneralRow } from '../data/Types';
+import { CharacterLogTypeDictionary, ItemRarityDictionary } from '../data/Dictionaries';
+import { CharacterLogType, ItemRarity, MagicItemGeneralRow } from '../data/Types';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import MagicItemTable from '../components/magic-items/MagicItemTable';
 import { useMagicItems } from "../hooks/useMagicItem";
 
 const DMLogHome = () => {
+    // Array containing Character Sort By Option ids for Select options
+    const itemRarityArray = Array.from(ItemRarityDictionary.keys());
+    const charLogTypeArray = Array.from(CharacterLogTypeDictionary.keys());
+
     // Magic Items details
     const loadedItems = useMagicItems();
     const [items, setItems] = useState<MagicItemGeneralRow[] | undefined>();
 
     // Variables storing
     const [searchValue, setSearchValue] = useState("");
+    const [categoryFilter, setCategoryFilter] = useState<number>(-1);
+    const [attunementFilter, setAttunementFilter] = useState<number>(-1);
+    const [rarityFilter, setRarityFilter] = useState<ItemRarity[]>([]);
+    const [originLogTypeFilter, setOriginLogTypeFilter] = useState<CharacterLogType[]>([]);
 
     // Object containing a subset of filtered Magic Items
     const filteredMagicItems = useMemo(
-        () => searchValue === "" ? items?.slice() : items?.slice().filter((item) => {
+        () => {
+            let filteredItems = items?.slice();
+
+            if (categoryFilter > -1) {
+                filteredItems = filteredItems?.filter((item) => item.isConsumable == Boolean(categoryFilter));
+            }
+
+            if (attunementFilter > -1) {
+                filteredItems = filteredItems?.filter((item) => item.requiresAttunement == Boolean(attunementFilter));
+            }
+
+            if (rarityFilter.length > 0) {
+                filteredItems = filteredItems?.filter((item) => rarityFilter.indexOf(item.rarity) >= 0);
+            }
+
+            if (originLogTypeFilter.length > 0) {
+                filteredItems = filteredItems?.filter((item) => originLogTypeFilter.indexOf(item.originLogType) >= 0);
+            }
+
+            return filteredItems;
+        },
+        [items, categoryFilter, attunementFilter, rarityFilter, originLogTypeFilter]
+    );
+    const searchedMagicItems = useMemo(
+        () => searchValue === "" ? filteredMagicItems?.slice() : filteredMagicItems?.slice().filter((item) => {
             let sanitizedSearch = searchValue.toLowerCase().replace(/\s+/g, "");
 
             return item.name.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch) 
                 || item.flavorName?.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch) 
                 || item.characterName.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch)
-                || item.flavorDescription?.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch);
+                || item.properties?.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch);
         }),
-        [items, searchValue]
+        [filteredMagicItems, searchValue]
     );
 
     // Helper function used to refresh data following an item deletion
@@ -46,7 +85,7 @@ const DMLogHome = () => {
 
     return (
         <>
-            { filteredMagicItems ? (
+            { searchedMagicItems ? (
                 <>
                     <Container maxWidth="lg">
                         <BreadcrumbsMenu 
@@ -88,8 +127,96 @@ const DMLogHome = () => {
                                         }}
                                     />
                                 </Grid>
+                                <Grid item md={3} sm={6} xs={12} sx={{ pb: '0.35em' }}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="magic-item-rarity-label">Rarity</InputLabel>
+                                        <Select
+                                            id="magic-item-rarity"
+                                            labelId="magic-item-rarity-label"
+                                            label="Rarity"
+                                            multiple
+                                            onChange={e => setRarityFilter(e.target.value as ItemRarity[])}
+                                            renderValue={(selected) => selected.map(o => ItemRarityDictionary.get(o)).join(', ')}
+                                            value={rarityFilter}
+                                        >
+                                            { itemRarityArray.map((option) => (
+                                                <MenuItem key={option} value={option}>
+                                                    <Checkbox checked={ rarityFilter.indexOf(option) > -1 } />
+                                                    <ListItemText primary={ItemRarityDictionary.get(option)} />
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item md={3} sm={6} xs={12} sx={{ pb: '0.35em' }}>
+                                    <FormControl fullWidth>
+                                        <InputLabel 
+                                            id="magic-item-category-label"
+                                            shrink={categoryFilter >= 0}
+                                        >
+                                            Category
+                                        </InputLabel>
+                                        <Select
+                                            id="magic-item-category"
+                                            labelId="magic-item-category-label"
+                                            label="Category"
+                                            notched={categoryFilter >= 0}
+                                            onChange={e => setCategoryFilter(e.target.value as number)}
+                                            renderValue={s => s == 1 ? 'Consumable' : s == 0 ? 'Permanent' : ''}
+                                            value={categoryFilter}
+                                        >
+                                            <MenuItem value={-1}>—</MenuItem>
+                                            <MenuItem value={0}>Permanent</MenuItem>
+                                            <MenuItem value={1}>Consumable</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item md={3} sm={6} xs={12} sx={{ pb: '0.35em' }}>
+                                    <FormControl fullWidth>
+                                        <InputLabel 
+                                            id="magic-item-attunement-label"
+                                            shrink={attunementFilter >= 0}
+                                        >
+                                            Attunement
+                                        </InputLabel>
+                                        <Select
+                                            id="magic-item-attunement"
+                                            labelId="magic-item-attunement-label"
+                                            label="Attunement"
+                                            notched={attunementFilter >= 0}
+                                            onChange={e => setAttunementFilter(e.target.value as number)}
+                                            renderValue={s => s == 1 ? 'Yes' : s == 0 ? 'No' : ''}
+                                            value={attunementFilter}
+                                        >
+                                            <MenuItem value={-1}>—</MenuItem>
+                                            <MenuItem value={0}>No</MenuItem>
+                                            <MenuItem value={1}>Yes</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item md={3} sm={6} xs={12} sx={{ pb: '0.35em' }}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="magic-item-origin-type-label">Origin Type</InputLabel>
+                                        <Select
+                                            id="magic-item-origin-type"
+                                            labelId="magic-item-origin-type-label"
+                                            label="Origin Type"
+                                            multiple
+                                            onChange={e => setOriginLogTypeFilter(e.target.value as CharacterLogType[])}
+                                            renderValue={(selected) => selected.map(o => CharacterLogTypeDictionary.get(o)).join(', ')}
+                                            value={originLogTypeFilter}
+                                        >
+                                            { charLogTypeArray.map((option) => (
+                                                <MenuItem key={option} value={option}>
+                                                    <Checkbox checked={ originLogTypeFilter.indexOf(option) > -1 } />
+                                                    <ListItemText primary={CharacterLogTypeDictionary.get(option)} />
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
                                 <MagicItemTable
-                                    magicItems={filteredMagicItems}
+                                    magicItems={searchedMagicItems}
                                     handleRemoveMagicItemByIndex={handleRemoveItemByIndex}
                                 />
                             </Grid>
