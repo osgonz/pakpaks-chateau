@@ -1,5 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
-import { Order } from '../data/Types';
+import { CharacterLogTypeDictionary, ItemRarityDictionary } from '../data/Dictionaries';
+import { CharacterLogType, ItemRarity, Order } from '../data/Types';
 
 /**
  * Custom hook that returns the active character tab index and a method to modify it by injecting query params
@@ -10,7 +11,7 @@ export function useCharacterTabSearchParams() {
     const [searchParams, setSearchParams] = useSearchParams();
 
     let tabValue = 0;
-    const tabParam = searchParams.get('tab');
+    const tabParam = searchParams.get('tab')?.toLowerCase();
 
     switch (tabParam) {
         case 'items':
@@ -59,20 +60,28 @@ export function useCharacterTabSearchParams() {
     return { tabValue, setTabValue };
 }
 
+/**
+ * Custom hook that returns a magic item view's category, attunement, rarities, origins, and methods to modify these by injecting query params
+ * @returns Category, attunement, rarities, origins, and methods to modify them
+ */
 export function useMagicItemSearchParams() {
     // Object representing query params
     const [searchParams, setSearchParams] = useSearchParams();
 
     let categoryValue = -1;
     let attunementValue= -1;
-    const categoryParam = searchParams.get('category');
-    const attunementParam = searchParams.get('attunement');
+    let rarities = [] as ItemRarity[];
+    let origins = [] as CharacterLogType[];
+    const categoryParam = searchParams.get('consumable')?.toLowerCase();
+    const attunementParam = searchParams.get('attunement')?.toLowerCase();
+    const raritiesParam = searchParams.get('rarities');
+    const originsParam = searchParams.get('origins');
 
     switch (categoryParam) {
-        case 'permanent':
+        case 'no':
             categoryValue = 0;
             break;
-        case 'consumable':
+        case 'yes':
             categoryValue = 1;
             break;
         default:
@@ -91,6 +100,60 @@ export function useMagicItemSearchParams() {
             break;
     };
 
+    if (raritiesParam) {
+        raritiesParam.split(',').forEach(r => {
+            switch (r.toLowerCase()) {
+                case 'common':
+                    rarities.push(ItemRarity.Common);
+                    break;
+                case 'uncommon':
+                    rarities.push(ItemRarity.Uncommon);
+                    break;
+                case 'rare':
+                    rarities.push(ItemRarity.Rare);
+                    break;
+                case 'very rare':
+                    rarities.push(ItemRarity.VeryRare);
+                    break;
+                case 'legendary':
+                    rarities.push(ItemRarity.Legendary);
+                    break;
+                case 'artifact':
+                    rarities.push(ItemRarity.Artifact);
+                    break;
+                case 'unique':
+                    rarities.push(ItemRarity.Unique);
+                    break;
+                default:
+                    break;
+            };
+        });
+    };
+
+    if (originsParam) {
+        originsParam.split(',').forEach(o => {
+            switch (o.toLowerCase()) {
+                case 'adventure':
+                    origins.push(CharacterLogType.Adventure);
+                    break;
+                case 'merchant':
+                    origins.push(CharacterLogType.Merchant);
+                    break;
+                case 'magic item trade':
+                    origins.push(CharacterLogType.Trade);
+                    break;
+                case 'downtime activity':
+                    origins.push(CharacterLogType.Downtime);
+                    break;
+                case 'dm service award':
+                    origins.push(CharacterLogType.ServiceAward);
+                    break;
+                default:
+                    break;
+            };
+        });
+    };
+
     /**
      * Function that updates the category query parameter
      * @param value Boolean-like number indicating a category (permanent/consumable) filter
@@ -101,13 +164,13 @@ export function useMagicItemSearchParams() {
 
             switch (value) {
                 case 0:
-                    prevParams.set('category', 'permanent');
+                    prevParams.set('consumable', 'no');
                     break;
                 case 1:
-                    prevParams.set('category', 'consumable');
+                    prevParams.set('consumable', 'yes');
                     break;
                 default:
-                    prevParams.delete('category');
+                    prevParams.delete('consumable');
                     break;
             };
 
@@ -139,7 +202,45 @@ export function useMagicItemSearchParams() {
         });
     };
 
-    return { categoryValue, setCategory, attunementValue, setAttunement };
+    /**
+     * Function that updates the rarities query parameter
+     * @param rarities Array of enums representing item rarities to filter by
+     */
+    const setRarities = (rarities: ItemRarity[]) => {
+        setSearchParams(prevParams => {
+            prevParams.delete('page');
+
+            let rarityNames = [] as string[];
+
+            rarities.forEach(r => {
+                rarityNames.push(ItemRarityDictionary.get(r)!.toLowerCase());
+            });
+
+            rarityNames.length > 0 ? prevParams.set('rarities', rarityNames.join(',')) : prevParams.delete('rarities');
+            return prevParams;
+        });
+    };
+
+    /**
+     * Function that updates the origins query parameter
+     * @param origins Array of enums representing origin log types to filter by
+     */
+    const setOrigins = (origins: CharacterLogType[]) => {
+        setSearchParams(prevParams => {
+            prevParams.delete('page');
+
+            let originNames = [] as string[];
+
+            origins.forEach(o => {
+                originNames.push(CharacterLogTypeDictionary.get(o)!.toLowerCase());
+            });
+
+            originNames.length > 0 ? prevParams.set('origins', originNames.join(',')) : prevParams.delete('origins');
+            return prevParams;
+        });
+    };
+
+    return { categoryValue, setCategory, attunementValue, setAttunement, rarities, setRarities, origins, setOrigins };
 }
 
 /**
@@ -155,7 +256,7 @@ export function useTableSearchParams(sortableKeys: string[]) {
     let page = 0;
     let rows = 10;
     let sort = hasTimestamp ? 'timestamp' : 'name';
-    const orderParam = searchParams.get('order');
+    const orderParam = searchParams.get('order')?.toLowerCase();
     const pageParam = searchParams.get('page');
     const rowsParam = searchParams.get('rows');
     const sortParam = searchParams.get('sort');
@@ -192,7 +293,7 @@ export function useTableSearchParams(sortableKeys: string[]) {
             if (isAsc) {
                 prevParams.set('order', 'desc');
             } else {
-                prevParams.set('order', 'asc');
+                prevParams.delete('order');
             }
 
             if (property === (hasTimestamp ? 'timestamp' : 'name')) {

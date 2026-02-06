@@ -30,10 +30,8 @@ const DMLogHome = () => {
     const [items, setItems] = useState<MagicItemGeneralRow[] | undefined>();
 
     // Variables storing filters
-    const { categoryValue, setCategory, attunementValue, setAttunement } = useMagicItemSearchParams();
+    const { categoryValue, setCategory, attunementValue, setAttunement, rarities, setRarities, origins, setOrigins } = useMagicItemSearchParams();
     const [searchValue, setSearchValue] = useState("");
-    const [rarityFilter, setRarityFilter] = useState<ItemRarity[]>([]);
-    const [originLogTypeFilter, setOriginLogTypeFilter] = useState<CharacterLogType[]>([]);
 
     // Object containing a subset of filtered Magic Items
     const filteredMagicItems = useMemo(
@@ -48,17 +46,17 @@ const DMLogHome = () => {
                 filteredItems = filteredItems?.filter((item) => item.requiresAttunement == Boolean(attunementValue));
             }
 
-            if (rarityFilter.length > 0) {
-                filteredItems = filteredItems?.filter((item) => rarityFilter.indexOf(item.rarity) >= 0);
+            if (rarities.length > 0) {
+                filteredItems = filteredItems?.filter((item) => rarities.indexOf(item.rarity) >= 0);
             }
 
-            if (originLogTypeFilter.length > 0) {
-                filteredItems = filteredItems?.filter((item) => originLogTypeFilter.indexOf(item.originLogType) >= 0);
+            if (origins.length > 0) {
+                filteredItems = filteredItems?.filter((item) => origins.indexOf(item.originLogType) >= 0);
             }
 
             return filteredItems;
         },
-        [items, categoryValue, attunementValue, rarityFilter, originLogTypeFilter]
+        [items, categoryValue, attunementValue, rarities, origins]
     );
     const searchedMagicItems = useMemo(
         () => searchValue === "" ? filteredMagicItems?.slice() : filteredMagicItems?.slice().filter((item) => {
@@ -135,13 +133,13 @@ const DMLogHome = () => {
                                             labelId="magic-item-rarity-label"
                                             label="Rarity"
                                             multiple
-                                            onChange={e => setRarityFilter(e.target.value as ItemRarity[])}
+                                            onChange={e => setRarities(e.target.value as ItemRarity[])}
                                             renderValue={(selected) => selected.map(o => ItemRarityDictionary.get(o)).join(', ')}
-                                            value={rarityFilter}
+                                            value={rarities}
                                         >
                                             { itemRarityArray.map((option) => (
                                                 <MenuItem key={option} value={option}>
-                                                    <Checkbox checked={ rarityFilter.indexOf(option) > -1 } />
+                                                    <Checkbox checked={ rarities.indexOf(option) > -1 } />
                                                     <ListItemText primary={ItemRarityDictionary.get(option)} />
                                                 </MenuItem>
                                             ))}
@@ -154,20 +152,20 @@ const DMLogHome = () => {
                                             id="magic-item-category-label"
                                             shrink={categoryValue >= 0}
                                         >
-                                            Category
+                                            Consumable
                                         </InputLabel>
                                         <Select
                                             id="magic-item-category"
                                             labelId="magic-item-category-label"
-                                            label="Category"
+                                            label="Consumable"
                                             notched={categoryValue >= 0}
                                             onChange={e => setCategory(e.target.value as number)}
-                                            renderValue={s => s == 1 ? 'Consumable' : s == 0 ? 'Permanent' : ''}
+                                            renderValue={s => s == 1 ? 'Yes' : s == 0 ? 'No' : ''}
                                             value={categoryValue}
                                         >
                                             <MenuItem value={-1}>—</MenuItem>
-                                            <MenuItem value={0}>Permanent</MenuItem>
-                                            <MenuItem value={1}>Consumable</MenuItem>
+                                            <MenuItem value={0}>No</MenuItem>
+                                            <MenuItem value={1}>Yes</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -202,13 +200,13 @@ const DMLogHome = () => {
                                             labelId="magic-item-origin-type-label"
                                             label="Origin Type"
                                             multiple
-                                            onChange={e => setOriginLogTypeFilter(e.target.value as CharacterLogType[])}
+                                            onChange={e => setOrigins(e.target.value as CharacterLogType[])}
                                             renderValue={(selected) => selected.map(o => CharacterLogTypeDictionary.get(o)).join(', ')}
-                                            value={originLogTypeFilter}
+                                            value={origins}
                                         >
                                             { charLogTypeArray.map((option) => (
                                                 <MenuItem key={option} value={option}>
-                                                    <Checkbox checked={ originLogTypeFilter.indexOf(option) > -1 } />
+                                                    <Checkbox checked={ origins.indexOf(option) > -1 } />
                                                     <ListItemText primary={CharacterLogTypeDictionary.get(option)} />
                                                 </MenuItem>
                                             ))}
