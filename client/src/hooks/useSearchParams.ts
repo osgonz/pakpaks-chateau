@@ -59,6 +59,89 @@ export function useCharacterTabSearchParams() {
     return { tabValue, setTabValue };
 }
 
+export function useMagicItemSearchParams() {
+    // Object representing query params
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    let categoryValue = -1;
+    let attunementValue= -1;
+    const categoryParam = searchParams.get('category');
+    const attunementParam = searchParams.get('attunement');
+
+    switch (categoryParam) {
+        case 'permanent':
+            categoryValue = 0;
+            break;
+        case 'consumable':
+            categoryValue = 1;
+            break;
+        default:
+            break;
+
+    };
+
+    switch (attunementParam) {
+        case 'no':
+            attunementValue = 0;
+            break;
+        case 'yes':
+            attunementValue = 1;
+            break;
+        default:
+            break;
+    };
+
+    /**
+     * Function that updates the category query parameter
+     * @param value Boolean-like number indicating a category (permanent/consumable) filter
+     */
+    const setCategory = (value: number) => {
+        setSearchParams(prevParams => {
+            prevParams.delete('page');
+
+            switch (value) {
+                case 0:
+                    prevParams.set('category', 'permanent');
+                    break;
+                case 1:
+                    prevParams.set('category', 'consumable');
+                    break;
+                default:
+                    prevParams.delete('category');
+                    break;
+            };
+
+            return prevParams;
+        });
+    };
+
+    /**
+     * Function that updates the attunement query parameter
+     * @param value Boolean-like number indicating an attunement filter
+     */
+    const setAttunement = (value: number) => {
+        setSearchParams(prevParams => {
+            prevParams.delete('page');
+
+            switch (value) {
+                case 0:
+                    prevParams.set('attunement', 'no');
+                    break;
+                case 1:
+                    prevParams.set('attunement', 'yes');
+                    break;
+                default:
+                    prevParams.delete('attunement');
+                    break;
+            };
+
+            return prevParams;
+        });
+    };
+
+    return { categoryValue, setCategory, attunementValue, setAttunement };
+}
+
 /**
  * Custom hook that returns a table's order, sort, page, rows, and methods to modify these by injecting query params
  * @returns Order, sort, page, rows, and methods to modify them

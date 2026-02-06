@@ -18,6 +18,7 @@ import { CharacterLogType, ItemRarity, MagicItemGeneralRow } from '../data/Types
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import MagicItemTable from '../components/magic-items/MagicItemTable';
 import { useMagicItems } from "../hooks/useMagicItem";
+import { useMagicItemSearchParams } from "../hooks/useSearchParams";
 
 const DMLogHome = () => {
     // Array containing Character Sort By Option ids for Select options
@@ -28,10 +29,9 @@ const DMLogHome = () => {
     const loadedItems = useMagicItems();
     const [items, setItems] = useState<MagicItemGeneralRow[] | undefined>();
 
-    // Variables storing
+    // Variables storing filters
+    const { categoryValue, setCategory, attunementValue, setAttunement } = useMagicItemSearchParams();
     const [searchValue, setSearchValue] = useState("");
-    const [categoryFilter, setCategoryFilter] = useState<number>(-1);
-    const [attunementFilter, setAttunementFilter] = useState<number>(-1);
     const [rarityFilter, setRarityFilter] = useState<ItemRarity[]>([]);
     const [originLogTypeFilter, setOriginLogTypeFilter] = useState<CharacterLogType[]>([]);
 
@@ -40,12 +40,12 @@ const DMLogHome = () => {
         () => {
             let filteredItems = items?.slice();
 
-            if (categoryFilter > -1) {
-                filteredItems = filteredItems?.filter((item) => item.isConsumable == Boolean(categoryFilter));
+            if (categoryValue > -1) {
+                filteredItems = filteredItems?.filter((item) => item.isConsumable == Boolean(categoryValue));
             }
 
-            if (attunementFilter > -1) {
-                filteredItems = filteredItems?.filter((item) => item.requiresAttunement == Boolean(attunementFilter));
+            if (attunementValue > -1) {
+                filteredItems = filteredItems?.filter((item) => item.requiresAttunement == Boolean(attunementValue));
             }
 
             if (rarityFilter.length > 0) {
@@ -58,7 +58,7 @@ const DMLogHome = () => {
 
             return filteredItems;
         },
-        [items, categoryFilter, attunementFilter, rarityFilter, originLogTypeFilter]
+        [items, categoryValue, attunementValue, rarityFilter, originLogTypeFilter]
     );
     const searchedMagicItems = useMemo(
         () => searchValue === "" ? filteredMagicItems?.slice() : filteredMagicItems?.slice().filter((item) => {
@@ -152,7 +152,7 @@ const DMLogHome = () => {
                                     <FormControl fullWidth>
                                         <InputLabel 
                                             id="magic-item-category-label"
-                                            shrink={categoryFilter >= 0}
+                                            shrink={categoryValue >= 0}
                                         >
                                             Category
                                         </InputLabel>
@@ -160,10 +160,10 @@ const DMLogHome = () => {
                                             id="magic-item-category"
                                             labelId="magic-item-category-label"
                                             label="Category"
-                                            notched={categoryFilter >= 0}
-                                            onChange={e => setCategoryFilter(e.target.value as number)}
+                                            notched={categoryValue >= 0}
+                                            onChange={e => setCategory(e.target.value as number)}
                                             renderValue={s => s == 1 ? 'Consumable' : s == 0 ? 'Permanent' : ''}
-                                            value={categoryFilter}
+                                            value={categoryValue}
                                         >
                                             <MenuItem value={-1}>—</MenuItem>
                                             <MenuItem value={0}>Permanent</MenuItem>
@@ -175,7 +175,7 @@ const DMLogHome = () => {
                                     <FormControl fullWidth>
                                         <InputLabel 
                                             id="magic-item-attunement-label"
-                                            shrink={attunementFilter >= 0}
+                                            shrink={attunementValue >= 0}
                                         >
                                             Attunement
                                         </InputLabel>
@@ -183,10 +183,10 @@ const DMLogHome = () => {
                                             id="magic-item-attunement"
                                             labelId="magic-item-attunement-label"
                                             label="Attunement"
-                                            notched={attunementFilter >= 0}
-                                            onChange={e => setAttunementFilter(e.target.value as number)}
+                                            notched={attunementValue >= 0}
+                                            onChange={e => setAttunement(e.target.value as number)}
                                             renderValue={s => s == 1 ? 'Yes' : s == 0 ? 'No' : ''}
-                                            value={attunementFilter}
+                                            value={attunementValue}
                                         >
                                             <MenuItem value={-1}>—</MenuItem>
                                             <MenuItem value={0}>No</MenuItem>
