@@ -1,13 +1,14 @@
-import Grid from "@mui/material/Grid";
-import { Tab, Tabs } from "@mui/material";
+import Grid from '@mui/material/Grid';
+import Tab from '@mui/material/Tab';
+import Tabs from "@mui/material/Tabs";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { CharacterLogRow, MagicItemRow, StoryAwardRow } from '../../data/Types';
 import { useCharacterTabSearchParams } from '../../hooks/useSearchParams';
-import CharacterDetailTabPanel from './CharacterDetailTabPanel';
-import CharacterLogTable from '../character-logs/CharacterLogTable';
-import StoryAwardTable from '../story-awards/CharacterStoryAwardTable';
-import MagicItemTable from '../magic-items/CharacterMagicItemTable';
+import CharacterLogTabPanel from '../character-logs/CharacterLogTabPanel';
+import CharacterMagicItemTabPanel from '../magic-items/CharacterMagicItemTabPanel';
+import CharacterStoryAwardTabPanel from '../story-awards/CharacterStoryAwardTabPanel';
+import DetailTabPanel from '../shared/DetailTabPanel';
 
 function getA11yPropsForTabs(tabName: string) {
     return {
@@ -42,7 +43,6 @@ const CharacterDetailTabs = (props: CharacterDetailsProps) => {
         <>
             <Grid 
                 container 
-                direction="row" 
                 justifyContent="center" 
                 rowSpacing={2}
                 columnSpacing={1}
@@ -51,7 +51,6 @@ const CharacterDetailTabs = (props: CharacterDetailsProps) => {
                     pr: 2,
                     ml: "auto",
                     mr: "auto",
-
                 }}
             >
                 <Grid item xs={12}>
@@ -69,42 +68,30 @@ const CharacterDetailTabs = (props: CharacterDetailsProps) => {
                         <Tab label="Other Details" {...getA11yPropsForTabs("other-details")} />
                     </Tabs>
                 </Grid>
-                <CharacterDetailTabPanel 
-                    value={tabValue}
-                    index={0}
-                    tabName="player-logs"
-                >
-                    <CharacterLogTable 
-                        characterLogs={props.characterLogs}
-                        handleRemoveCharacterLogByIndex={props.handleRemoveCharacterLogByIndex}
-                    />
-                </CharacterDetailTabPanel>
-                <CharacterDetailTabPanel 
-                    value={tabValue}
-                    index={1}
-                    tabName="magic-items"
-                >
-                    <MagicItemTable
-                        magicItems={props.magicItems}
-                        handleRemoveMagicItemByIndex={props.handleRemoveMagicItemByIndex}
-                    />
-                </CharacterDetailTabPanel>
-                <CharacterDetailTabPanel 
-                    value={tabValue}
-                    index={2}
-                    tabName="story-awards"
-                >
-                    <StoryAwardTable
-                        storyAwards={props.storyAwards}
-                        handleRemoveStoryAwardByIndex={props.handleRemoveStoryAwardByIndex}
-                    />
-                </CharacterDetailTabPanel>
-                <CharacterDetailTabPanel 
+                <CharacterLogTabPanel 
+                    tabIndex={0}
+                    tabValue={tabValue}
+                    characterLogs={props.characterLogs}
+                    handleRemoveCharacterLogByIndex={props.handleRemoveCharacterLogByIndex}
+                />
+                <CharacterMagicItemTabPanel
+                    tabIndex={1}
+                    tabValue={tabValue}
+                    magicItems={props.magicItems}
+                    handleRemoveMagicItemByIndex={props.handleRemoveMagicItemByIndex}
+                />
+                <CharacterStoryAwardTabPanel
+                    tabIndex={2}
+                    tabValue={tabValue}
+                    storyAwards={props.storyAwards}
+                    handleRemoveStoryAwardByIndex={props.handleRemoveStoryAwardByIndex}
+                />
+                <DetailTabPanel 
                     value={tabValue}
                     index={3}
                     tabName="other-details"
                 >
-                </CharacterDetailTabPanel>
+                </DetailTabPanel>
             </Grid>
         </>
     );

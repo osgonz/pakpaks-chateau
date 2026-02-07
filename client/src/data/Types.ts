@@ -132,6 +132,7 @@ export type CharacterLog = {
 export interface CharacterLogRow extends CharacterLog {
     magicItemNames: string | null;
     lostMagicItemNames: string | null;
+    storyAwardNames: string | null;
 };
 
 export type CharacterLogAbstract = {

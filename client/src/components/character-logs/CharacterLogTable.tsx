@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useMemo } from 'react';
 import { format } from 'date-fns';
+import Grid from '@mui/material/Grid';
 import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -138,7 +139,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
     };
 
     return (
-        <>
+        <Grid item xs={12}>
             <TableContainer component={Paper} elevation={3}>
                 <Table sx={{ minWidth: 650 }} size="medium" aria-label="Character Logs table">
                     <SortableTableHead 
@@ -228,7 +229,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                 confirmationDialogText={`You are deleting a log titled '${logToBeDeleted?.title}'. You will not be able to recover this data.`}
                 deleteFunction={deleteCharacterLog}
             />
-        </>
+        </Grid>
     );
 };
 

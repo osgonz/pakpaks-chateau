@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState, useMemo } from 'react';
+import Grid from "@mui/material/Grid";
 import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
@@ -122,7 +123,7 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
     };
 
     return (
-        <>
+        <Grid item xs={12}>
             <TableContainer component={Paper} elevation={3}>
                 <Table sx={{ minWidth: 650 }} size="medium" aria-label="Magic Items table">
                     <SortableTableHead 
@@ -200,7 +201,7 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
                 confirmationDialogText={`You are deleting a magic item titled '${itemToBeDeleted?.flavorName ? `${itemToBeDeleted.flavorName} (${itemToBeDeleted.name})` : itemToBeDeleted?.name }'. You will not be able to recover this data.`}
                 deleteFunction={deleteMagicItem}
             />
-        </>
+        </Grid>
     );
 };
 

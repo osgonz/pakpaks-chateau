@@ -23,7 +23,8 @@ BEGIN
             l.traderOtherPlayer,
             l.description,
             l.characterId,
-            GROUP_CONCAT(m.compoundName SEPARATOR ', ') AS magicItemNames
+            GROUP_CONCAT(m.compoundName SEPARATOR ', ') AS magicItemNames,
+            GROUP_CONCAT(s.name SEPARATOR ', ') AS storyAwardNames
         FROM characterlog l
         LEFT JOIN (
             SELECT CASE
@@ -35,6 +36,12 @@ BEGIN
             FROM magicitem
             WHERE characterId = character_id
         ) AS m ON m.originLogId = l.id
+        LEFT JOIN (
+            SELECT name,
+            originLogId
+            FROM storyAward
+            WHERE characterId = character_id
+        ) AS s ON s.originLogId = l.id
         WHERE l.characterId = character_id
         GROUP BY l.id
     ) AS lm

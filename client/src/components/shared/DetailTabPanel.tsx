@@ -1,24 +1,30 @@
 import { ReactNode } from "react";
 import Grid from '@mui/material/Grid';
 
-interface CharacterDetailTabPanelProps {
+interface DetailTabPanelProps {
     children?: ReactNode;
     index: number;
     tabName: string;
     value: number;
 };
 
-const CharacterDetailTabPanel = (props: CharacterDetailTabPanelProps) => {
+const DetailTabPanel = (props: DetailTabPanelProps) => {
     const { children, value, index, tabName, ...other } = props;
 
     return (
         <Grid
+            container
             item
-            xs={12}
             role="tabpanel"
             hidden={value != index}
             id={`${tabName}-tabpanel`}
             aria-labelledby={`${tabName}-tab`}
+            justifyContent="center" 
+            rowSpacing={2}
+            columnSpacing={1}
+            sx={{
+                mr: "auto",
+            }}
             {...other}
         >
             { value === index && (
@@ -28,4 +34,4 @@ const CharacterDetailTabPanel = (props: CharacterDetailTabPanelProps) => {
     );
 };
 
-export default CharacterDetailTabPanel;
+export default DetailTabPanel;

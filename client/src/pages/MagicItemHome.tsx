@@ -64,8 +64,9 @@ const MagicItemHome = () => {
 
             return item.name.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch) 
                 || item.flavorName?.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch) 
-                || item.characterName.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch)
-                || item.properties?.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch);
+                || item.characterName.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch) 
+                || item.properties?.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch) 
+                || item.originLogTitle.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch);
         }),
         [filteredMagicItems, searchValue]
     );
@@ -117,7 +118,7 @@ const MagicItemHome = () => {
                                         id="magic-item-search"
                                         label="Search"
                                         onChange={e => setSearchValue(e.target.value)}
-                                        placeholder="Search by Name, Owner or Properties"
+                                        placeholder="Search by Name, Owner, Properties or Origin Log"
                                         value={searchValue}
                                         fullWidth
                                         InputProps={{

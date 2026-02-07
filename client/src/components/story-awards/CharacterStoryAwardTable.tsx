@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState, useMemo } from 'react';
+import Grid from "@mui/material/Grid";
 import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
@@ -110,7 +111,7 @@ const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
     };
 
     return (
-        <>
+        <Grid item xs={12}>
             <TableContainer component={Paper} elevation={3}>
                 <Table sx={{ minWidth: 650 }} size="medium" aria-label="Story Awards table">
                     <SortableTableHead 
@@ -186,7 +187,7 @@ const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
                 confirmationDialogText={`You are deleting a story award titled '${itemToBeDeleted?.name }'. You will not be able to recover this data.`}
                 deleteFunction={deleteStoryAward}
             />
-        </>
+        </Grid>
     );
 };
 
