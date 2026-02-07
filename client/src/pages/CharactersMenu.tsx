@@ -14,14 +14,14 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import Typography from '@mui/material/Typography';
 import { Link } from "react-router-dom";
-import { Character, CharacterRow } from '../data/Types';
+import { CharacterSortByOptionDictionary, CampaignDictionary } from '../data/Dictionaries';
+import { Character, CharacterSortByOption, CharacterRow } from '../data/Types';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import CharacterCard from "../components/characters/CharacterCard";
 import DeleteConfirmationDialog from '../components/shared/DeleteConfirmationDialog';
-import { CharacterSortByOptionDictionary, CampaignDictionary } from '../data/Dictionaries';
-import { CharacterSortByOption } from '../data/Types';
-import { useCharacters } from "../hooks/useCharacter";
 import { getCharacterSortComparator } from '../components/shared/SortableTableHead';
+import { useCharacters } from "../hooks/useCharacter";
+import { useSearchBarSearchParams } from "../hooks/useSearchParams";
 
 const CharactersMenu = () => {
     // Array containing Character Sort By Option ids for Select options
@@ -32,7 +32,7 @@ const CharactersMenu = () => {
     const [characters, setCharacters] = useState<CharacterRow[] | undefined>();
 
     // Variables storing
-    const [searchValue, setSearchValue] = useState("");
+    const { searchValue, setSearchValue } = useSearchBarSearchParams();
     const [sortBy, setSortBy] = useState(CharacterSortByOption.LevelDescending);
 
     // Flag used to display Character Delete dialog

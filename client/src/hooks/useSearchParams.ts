@@ -3,6 +3,35 @@ import { CharacterLogTypeDictionary, ItemRarityDictionary } from '../data/Dictio
 import { CharacterLogType, ItemRarity, Order } from '../data/Types';
 
 /**
+ * Custom hook that returns a view's search bar value and a method to modify it by injecting query params
+ * @returns Search bar value and method to modify it
+ */
+export function useSearchBarSearchParams() {
+    // Object representing query params
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    let searchValue = '';
+    const searchParam = searchParams.get('search');
+
+    searchValue = searchParam && searchParam.length > 0 ? searchParam : searchValue;
+
+    /**
+     * Function that updates the search bar query parameter
+     * @param value Search bar string value
+     */
+    const setSearchValue = (value: string) => {
+        setSearchParams(prevParams => {
+            prevParams.delete('page');
+            value.length > 0 ? prevParams.set('search', value) : prevParams.delete('search');
+
+            return prevParams;
+        });
+    };
+
+    return { searchValue, setSearchValue }
+}
+
+/**
  * Custom hook that returns the active character tab index and a method to modify it by injecting query params
  * @returns Tab index and method to modify it
  */

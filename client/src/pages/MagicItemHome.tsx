@@ -18,7 +18,7 @@ import { CharacterLogType, ItemRarity, MagicItemGeneralRow } from '../data/Types
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import MagicItemTable from '../components/magic-items/MagicItemTable';
 import { useMagicItems } from "../hooks/useMagicItem";
-import { useMagicItemSearchParams } from "../hooks/useSearchParams";
+import { useMagicItemSearchParams, useSearchBarSearchParams } from "../hooks/useSearchParams";
 
 const DMLogHome = () => {
     // Array containing Character Sort By Option ids for Select options
@@ -31,7 +31,7 @@ const DMLogHome = () => {
 
     // Variables storing filters
     const { categoryValue, setCategory, attunementValue, setAttunement, rarities, setRarities, origins, setOrigins } = useMagicItemSearchParams();
-    const [searchValue, setSearchValue] = useState("");
+    const { searchValue, setSearchValue } = useSearchBarSearchParams();
 
     // Object containing a subset of filtered Magic Items
     const filteredMagicItems = useMemo(
