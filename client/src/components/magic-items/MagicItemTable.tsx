@@ -13,7 +13,7 @@ import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Link } from "react-router-dom";
-import { CharacterLogTypeDictionary, ItemRarityDictionary } from '../../data/Dictionaries';
+import { ItemRarityDictionary } from '../../data/Dictionaries';
 import { MagicItem, MagicItemGeneralRow, SortableTableHeadCell } from '../../data/Types';
 import { useTableSearchParams } from '../../hooks/useSearchParams';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
@@ -27,7 +27,7 @@ interface MagicItemTableProps {
 
 const MagicItemTable = (props: MagicItemTableProps) => {
     // Order, sort, page and rows per page details
-    const { order, sort, setOrderSort, page, setPage, rows, setRows } = useTableSearchParams(['originTimestamp', 'name', 'rarity', 'isConsumable', 'requiresAttunement', 'characterName', 'originLogType']);
+    const { order, sort, setOrderSort, page, setPage, rows, setRows } = useTableSearchParams(['originTimestamp', 'name', 'rarity', 'isConsumable', 'requiresAttunement', 'characterName']);
     // Flag used to display Magic Item Delete dialog
     const [deleteOpen, setDeleteOpen] = useState(false);
     // Item currently set for deletion
@@ -88,12 +88,6 @@ const MagicItemTable = (props: MagicItemTableProps) => {
             label: 'Origin Log',
             alignment: 'left',
             isSortable: false,
-        },
-        {
-            id: 'originLogType',
-            label: 'Origin Type',
-            alignment: 'left',
-            isSortable: true,
         },
         {
             id: 'actions',
@@ -164,7 +158,6 @@ const MagicItemTable = (props: MagicItemTableProps) => {
                             <TableCell>{item.requiresAttunement ? 'Yes' : 'No'}</TableCell>
                             <TableCell>{item.characterName}</TableCell>
                             <TableCell>{item.originLogTitle}</TableCell>
-                            <TableCell>{CharacterLogTypeDictionary.get(item.originLogType)}</TableCell>
                             <TableCell align="center">
                                 <IconButton 
                                     id={`view-${item.id}`}

@@ -100,11 +100,11 @@ export type MagicItem = {
 
 export interface MagicItemRow extends MagicItem {
     originLogTitle: string;
+    originLogType: CharacterLogType;
 };
 
 export interface MagicItemGeneralRow extends MagicItemRow {
     characterName: string;
-    originLogType: CharacterLogType;
     originTimestamp: Date;
 };
 

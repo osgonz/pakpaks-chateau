@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
-import { CharacterLogTypeDictionary, ItemRarityDictionary } from '../data/Dictionaries';
-import { CharacterLogType, CharacterSortByOption, ItemRarity, Order } from '../data/Types';
+import { CharacterLogTypeDictionary, ItemRarityDictionary, StoryAwardStatusDictionary } from '../data/Dictionaries';
+import { CharacterLogType, CharacterSortByOption, ItemRarity, Order, StoryAwardStatus } from '../data/Types';
 
 /**
  * Custom hook that returns a view's search bar value and a method to modify it by injecting query params
@@ -139,6 +139,63 @@ export function useCharacterTabSearchParams() {
     };
 
     return { tabValue, setTabValue };
+}
+
+/**
+ * Custom hook that returns a player log view's types and methods to modify these by injecting query params
+ * @returns Types and methods to modify them
+ */
+export function usePlayerLogsSearchParams() {
+    // Object representing query params
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    let types = [] as CharacterLogType[];
+    const typesParam = searchParams.get('types');
+
+    if (typesParam) {
+        typesParam.split(',').forEach(t => {
+            switch (t.toLowerCase()) {
+                case 'adventure':
+                    types.push(CharacterLogType.Adventure);
+                    break;
+                case 'merchant':
+                    types.push(CharacterLogType.Merchant);
+                    break;
+                case 'magic item trade':
+                    types.push(CharacterLogType.Trade);
+                    break;
+                case 'downtime activity':
+                    types.push(CharacterLogType.Downtime);
+                    break;
+                case 'dm service award':
+                    types.push(CharacterLogType.ServiceAward);
+                    break;
+                default:
+                    break;
+            };
+        });
+    };
+
+    /**
+     * Function that updates the types query parameter
+     * @param types Array of enums representing log types to filter by 
+     */
+    const setTypes = (types: CharacterLogType[]) => {
+        setSearchParams(prevParams => {
+            prevParams.delete('page');
+
+            let typeNames = [] as string[];
+
+            types.forEach(t => {
+                typeNames.push(CharacterLogTypeDictionary.get(t)!.toLowerCase());
+            });
+
+            typeNames.length > 0 ? prevParams.set('types', typeNames.join(',')) : prevParams.delete('types');
+            return prevParams;
+        });
+    };
+
+    return { types, setTypes }
 }
 
 /**
@@ -322,6 +379,58 @@ export function useMagicItemSearchParams() {
     };
 
     return { categoryValue, setCategory, attunementValue, setAttunement, rarities, setRarities, origins, setOrigins };
+}
+
+/**
+ * Custom hook that returns a story award view's statuses and methods to modify these by injecting query params
+ * @returns Status array and method to modify it
+ */
+export function useStoryAwardSearchParams() {
+    // Object representing query params
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    let status = [] as StoryAwardStatus[];
+    const statusParam = searchParams.get('status')?.toLowerCase();
+
+    if (statusParam) {
+        statusParam.split(',').forEach(s => {
+            switch (s.toLowerCase()) {
+                case 'active':
+                    status.push(StoryAwardStatus.Active);
+                    break;
+                case 'consumed':
+                    status.push(StoryAwardStatus.Consumed);
+                    break;
+                case 'pending activation':
+                    status.push(StoryAwardStatus.Pending);
+                    break;
+                default:
+                    break;
+            };
+        });
+    };
+
+    /**
+     * Function that updates the status query parameter
+     * @param status Array of enums representing statuses to filter by
+     */
+    const setStatus = (status: StoryAwardStatus[]) => {
+        setSearchParams(prevParams => {
+            prevParams.delete('page');
+
+            let statusNames = [] as string[];
+
+            status.forEach(s => {
+                statusNames.push(StoryAwardStatusDictionary.get(s)!.toLowerCase());
+            });
+
+            statusNames.length > 0 ? prevParams.set('status', statusNames.join(',')) : prevParams.delete('status');
+
+            return prevParams;
+        });
+    };
+
+    return { status, setStatus };
 }
 
 /**

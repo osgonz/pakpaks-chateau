@@ -16,7 +16,8 @@ BEGIN
         m.isEquipped, 
         m.characterId, 
         m.originLogId, 
-        l.title AS originLogTitle 
+        l.title AS originLogTitle, 
+        l.type AS originLogType 
     FROM magicitem m 
     JOIN characterlog l ON m.originLogId = l.id 
     WHERE m.characterId = character_id AND m.lossLogId IS NULL;
