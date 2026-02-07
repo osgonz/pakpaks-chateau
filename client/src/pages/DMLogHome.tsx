@@ -1,20 +1,39 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import Icon from "@mui/material/Icon";
+import InputAdornment from '@mui/material/InputAdornment';
 import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
 import Typography from '@mui/material/Typography';
 import { Link } from "react-router-dom";
 import { DMLog } from '../data/Types';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import DMLogTable from '../components/dm-logs/DMLogTable';
 import { useDMLogs } from "../hooks/useDMLog";
+import { useSearchBarSearchParams } from "../hooks/useSearchParams";
 
 const DMLogHome = () => {
     // Logs details
     const loadedLogs = useDMLogs();
     const [logs, setLogs] = useState<DMLog[] | undefined>();
+
+    // Variables storing filters
+    const { searchValue, setSearchValue } = useSearchBarSearchParams();
+
+    // Object containing a subset of filtered logs
+    const filteredLogs = useMemo(
+        () => searchValue === "" ? logs?.slice() : logs?.slice().filter((log) => {
+            let sanitizedSearch = searchValue.toLowerCase().replace(/\s+/g, "");
+
+            return log.title.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch) 
+                || log.location.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch) 
+                || log.description?.toLowerCase().replace(/\s+/g, "").includes(sanitizedSearch);
+        }),
+        [logs, searchValue]
+    );
 
     // Helper function used to refresh data following a log deletion
     const handleRemoveLogByIndex = (index: number) => {
@@ -29,7 +48,7 @@ const DMLogHome = () => {
 
     return (
         <>
-            { logs ? (
+            { filteredLogs ? (
                 <>
                     <Container maxWidth="lg">
                         <BreadcrumbsMenu 
@@ -70,8 +89,21 @@ const DMLogHome = () => {
                                         </Button>
                                     </Grid>
                                 </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="dm-log-search"
+                                        label="Search"
+                                        onChange={e => setSearchValue(e.target.value)}
+                                        placeholder="Search by Title, Location, or Description"
+                                        value={searchValue}
+                                        fullWidth
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start"><Icon>search</Icon></InputAdornment>,
+                                        }}
+                                    />
+                                </Grid>
                                 <DMLogTable
-                                    logs={logs}
+                                    logs={filteredLogs}
                                     handleRemoveLogByIndex={handleRemoveLogByIndex}
                                 />
                             </Grid>
