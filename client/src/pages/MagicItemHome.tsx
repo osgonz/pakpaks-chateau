@@ -20,7 +20,7 @@ import MagicItemTable from '../components/magic-items/MagicItemTable';
 import { useMagicItems } from "../hooks/useMagicItem";
 import { useMagicItemSearchParams, useSearchBarSearchParams } from "../hooks/useSearchParams";
 
-const DMLogHome = () => {
+const MagicItemHome = () => {
     // Array containing Character Sort By Option ids for Select options
     const itemRarityArray = Array.from(ItemRarityDictionary.keys());
     const charLogTypeArray = Array.from(CharacterLogTypeDictionary.keys());
@@ -117,7 +117,7 @@ const DMLogHome = () => {
                                         id="magic-item-search"
                                         label="Search"
                                         onChange={e => setSearchValue(e.target.value)}
-                                        placeholder="Search by Item Name, Owner, or Properties"
+                                        placeholder="Search by Name, Owner, or Properties"
                                         value={searchValue}
                                         fullWidth
                                         InputProps={{
@@ -228,4 +228,4 @@ const DMLogHome = () => {
     );
 };
 
-export default DMLogHome;
+export default MagicItemHome;
