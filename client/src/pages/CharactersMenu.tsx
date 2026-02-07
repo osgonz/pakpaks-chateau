@@ -140,7 +140,7 @@ const CharactersMenu = () => {
                                         id="characters-search"
                                         label="Search"
                                         onChange={e => setSearchValue(e.target.value)}
-                                        placeholder="Search by Name, Level, Class, Species, or Campaign"
+                                        placeholder="Search by Name, Level, Class, Species or Campaign"
                                         value={searchValue}
                                         fullWidth
                                         InputProps={{

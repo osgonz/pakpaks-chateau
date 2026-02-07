@@ -117,7 +117,7 @@ const MagicItemHome = () => {
                                         id="magic-item-search"
                                         label="Search"
                                         onChange={e => setSearchValue(e.target.value)}
-                                        placeholder="Search by Name, Owner, or Properties"
+                                        placeholder="Search by Name, Owner or Properties"
                                         value={searchValue}
                                         fullWidth
                                         InputProps={{
@@ -125,7 +125,7 @@ const MagicItemHome = () => {
                                         }}
                                     />
                                 </Grid>
-                                <Grid item md={3} sm={6} xs={12} sx={{ pb: '0.35em' }}>
+                                <Grid item md={3} sm={6} xs={12}>
                                     <FormControl fullWidth>
                                         <InputLabel id="magic-item-rarity-label">Rarity</InputLabel>
                                         <Select
@@ -146,7 +146,7 @@ const MagicItemHome = () => {
                                         </Select>
                                     </FormControl>
                                 </Grid>
-                                <Grid item md={3} sm={6} xs={12} sx={{ pb: '0.35em' }}>
+                                <Grid item md={3} sm={6} xs={12}>
                                     <FormControl fullWidth>
                                         <InputLabel 
                                             id="magic-item-category-label"
@@ -169,7 +169,7 @@ const MagicItemHome = () => {
                                         </Select>
                                     </FormControl>
                                 </Grid>
-                                <Grid item md={3} sm={6} xs={12} sx={{ pb: '0.35em' }}>
+                                <Grid item md={3} sm={6} xs={12}>
                                     <FormControl fullWidth>
                                         <InputLabel 
                                             id="magic-item-attunement-label"

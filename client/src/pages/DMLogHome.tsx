@@ -78,7 +78,7 @@ const DMLogHome = () => {
                                     </Typography>
                                 </Grid>
                                 <Grid justifyContent="flex-end" container item xs={12}>
-                                    <Grid item md={4.5} xs={12} sx={{ pb: '0.35em' }}>
+                                    <Grid item md={4.5} xs={12}>
                                         <Button 
                                             component={Link}
                                             to={`/dm-logs/new`}
@@ -89,12 +89,12 @@ const DMLogHome = () => {
                                         </Button>
                                     </Grid>
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={12} sx={{ pb: '0.35em' }}>
                                     <TextField
                                         id="dm-log-search"
                                         label="Search"
                                         onChange={e => setSearchValue(e.target.value)}
-                                        placeholder="Search by Title, Location, or Description"
+                                        placeholder="Search by Title, Location or Description"
                                         value={searchValue}
                                         fullWidth
                                         InputProps={{
