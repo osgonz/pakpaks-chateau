@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import { CharacterLogTypeDictionary, ItemRarityDictionary } from '../data/Dictionaries';
-import { CharacterLogType, ItemRarity, Order } from '../data/Types';
+import { CharacterLogType, CharacterSortByOption, ItemRarity, Order } from '../data/Types';
 
 /**
  * Custom hook that returns a view's search bar value and a method to modify it by injecting query params
@@ -9,7 +9,6 @@ import { CharacterLogType, ItemRarity, Order } from '../data/Types';
 export function useSearchBarSearchParams() {
     // Object representing query params
     const [searchParams, setSearchParams] = useSearchParams();
-
     let searchValue = '';
     const searchParam = searchParams.get('search');
 
@@ -29,6 +28,59 @@ export function useSearchBarSearchParams() {
     };
 
     return { searchValue, setSearchValue }
+}
+
+/**
+ * Custom hook that returns the character menu's sorting parameters and a method to modify these by injecting query params
+ * @returns Sort order parameter and a method to modify it
+ */
+export function useCharacterSearchParams() {
+    // Object representing query params
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    let sortOrder = CharacterSortByOption.LevelDescending;
+    const orderParam = searchParams.get('order')?.toLowerCase();
+    const sortParam = searchParams.get('sort');
+
+    switch(sortParam) {
+        case 'name':
+            sortOrder = orderParam as Order && orderParam === 'asc' ? CharacterSortByOption.NameAscending : CharacterSortByOption.NameDescending;
+            break;
+        default:
+            sortOrder = orderParam as Order && orderParam === 'asc' ? CharacterSortByOption.LevelAscending : sortOrder;
+            break;
+    };
+
+    /**
+     * Function that updates the sorting query parameters
+     * @param sortOrder Enum representing the character menu sorting parameter
+     */
+    const setSortOrder = (sortOrder : CharacterSortByOption) => {
+        setSearchParams(prevParams => {
+            switch(sortOrder) {
+                case CharacterSortByOption.NameAscending:
+                    prevParams.set('order', 'asc');
+                    prevParams.set('sort', 'name');
+                    break;
+                case CharacterSortByOption.NameDescending:
+                    prevParams.set('sort', 'name');
+                    prevParams.delete('order');
+                    break;
+                case CharacterSortByOption.LevelAscending:
+                    prevParams.set('order', 'asc');
+                    prevParams.delete('sort');
+                    break;
+                default:
+                    prevParams.delete('order');
+                    prevParams.delete('sort');
+                    break;
+            };
+
+            return prevParams;
+        });
+    };
+
+    return { sortOrder, setSortOrder }
 }
 
 /**

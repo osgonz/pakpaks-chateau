@@ -21,7 +21,7 @@ import CharacterCard from "../components/characters/CharacterCard";
 import DeleteConfirmationDialog from '../components/shared/DeleteConfirmationDialog';
 import { getCharacterSortComparator } from '../components/shared/SortableTableHead';
 import { useCharacters } from "../hooks/useCharacter";
-import { useSearchBarSearchParams } from "../hooks/useSearchParams";
+import { useCharacterSearchParams, useSearchBarSearchParams } from "../hooks/useSearchParams";
 
 const CharactersMenu = () => {
     // Array containing Character Sort By Option ids for Select options
@@ -33,7 +33,7 @@ const CharactersMenu = () => {
 
     // Variables storing
     const { searchValue, setSearchValue } = useSearchBarSearchParams();
-    const [sortBy, setSortBy] = useState(CharacterSortByOption.LevelDescending);
+    const { sortOrder, setSortOrder } = useCharacterSearchParams();
 
     // Flag used to display Character Delete dialog
     const [deleteOpen, setDeleteOpen] = useState(false);
@@ -42,8 +42,8 @@ const CharactersMenu = () => {
 
     // Object containing sorted subset of Characters
     const sortedCharacters = useMemo(
-        () => characters?.slice().sort(getCharacterSortComparator(sortBy)),
-        [characters, sortBy]
+        () => characters?.slice().sort(getCharacterSortComparator(sortOrder)),
+        [characters, sortOrder]
     );
     const visibleCharacters = useMemo(
         () => searchValue === "" ? sortedCharacters?.slice() : sortedCharacters?.slice().filter((character) => {
@@ -155,8 +155,8 @@ const CharactersMenu = () => {
                                             id="characters-sort"
                                             labelId="characters-sort-label"
                                             label="Sort By"
-                                            onChange={e => setSortBy(e.target.value as CharacterSortByOption)}
-                                            value={sortBy}
+                                            onChange={e => setSortOrder(e.target.value as CharacterSortByOption)}
+                                            value={sortOrder}
                                         >
                                             { characterSortByArray.map((option) => (
                                                 <MenuItem key={option} value={option}>{CharacterSortByOptionDictionary.get(option)}</MenuItem>
