@@ -2,12 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import logger from 'morgan';
 
-import charactersRouter from './routes/characters';
-import characterLogsRouter from './routes/character-logs';
-import dmLogsRouter from './routes/dm-logs';
-import magicItemsRouter from './routes/magic-items';
-import playerMagicItemsRouter from './routes/player-magic-items';
-import storyAwardsRouter from './routes/story-awards';
+import indexRouter from './routes';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,12 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
 
 // Declare routes
-app.use('/api/characters', charactersRouter);
-app.use('/api/characters/:charId/character-logs', characterLogsRouter);
-app.use('/api/characters/:charId/magic-items', magicItemsRouter);
-app.use('/api/characters/:charId/story-awards', storyAwardsRouter);
-app.use('/api/dm-logs', dmLogsRouter);
-app.use('/api/magic-items', playerMagicItemsRouter);
+app.use('/api', indexRouter);
 
 // Server starts listening to incoming requests
 app.listen(PORT, () => {

@@ -7,7 +7,7 @@ class CharacterLogController {
     // Get a specific character's logs
     getCharacterLogsByCharacter = async (req: Request, res: Response) => {
         // Extract character id from parameter
-        const characterId = req.params.id;
+        const characterId = req.params.charId;
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();

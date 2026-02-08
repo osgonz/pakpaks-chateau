@@ -3,16 +3,19 @@ import storyAwardController from '../controllers/story-awards';
 
 const router = express.Router({mergeParams: true});
 
-// POST route to create a story award
-router.post('/create', storyAwardController.createStoryAward);
-
-// POST route to update a story award
-router.post('/:id', storyAwardController.updateStoryAward);
+// GET route for one character's story awards
+router.get('/', storyAwardController.getStoryAwardsByCharacter);
 
 // GET route for one story award
 router.get('/:id', storyAwardController.getStoryAward);
 
+// POST route to update a story award
+router.post('/:id', storyAwardController.updateStoryAward);
+
 // DELETE route for a story award
 router.delete('/:id', storyAwardController.deleteStoryAward);
+
+// POST route to create a story award
+router.post('/create', storyAwardController.createStoryAward);
 
 export default router;

@@ -53,43 +53,43 @@ const CharacterSummary = (props: SummaryProps) => {
             </Grid>
             <Grid alignItems="center" container item xs={12} md={4.5}>
                 <Grid item xs={4}>
-                    <Typography gutterBottom>Campaign:</Typography>
+                    <Typography gutterBottom><b>Campaign:</b></Typography>
                 </Grid>
                 <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{CampaignDictionary.get(props.character.campaign)}</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography gutterBottom>Species:</Typography>
+                    <Typography gutterBottom><b>Species:</b></Typography>
                 </Grid>
                 <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{props.character.lineage}</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography gutterBottom>Class:</Typography>
+                    <Typography gutterBottom><b>Class:</b></Typography>
                 </Grid>
                 <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{props.character.classes}</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography gutterBottom>Level:</Typography>
+                    <Typography gutterBottom><b>Level:</b></Typography>
                 </Grid>
                 <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{props.level}</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography gutterBottom>Background:</Typography>
+                    <Typography gutterBottom><b>Background:</b></Typography>
                 </Grid>
                 <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{props.character.background}</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography gutterBottom>Gold:</Typography>
+                    <Typography gutterBottom><b>Gold:</b></Typography>
                 </Grid>
                 <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{parseFloat(props.gold.toFixed(2))}</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography gutterBottom>Downtime:</Typography>
+                    <Typography gutterBottom><b>Downtime:</b></Typography>
                 </Grid>
                 <Grid item xs={8} sx={{ pl: 1 }}>
                     <Typography gutterBottom>{props.downtime}</Typography>

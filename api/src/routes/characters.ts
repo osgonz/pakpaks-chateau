@@ -1,16 +1,12 @@
 import express from 'express';
+
 import characterController from '../controllers/characters';
-import characterLogController from '../controllers/character-logs';
-import magicItemController from '../controllers/magic-items';
-import storyAwardController from '../controllers/story-awards';
+
+import characterLogsRouter from './character-logs';
+import magicItemsRouter from './character-magic-items';
+import storyAwardsRouter from './character-story-awards';
 
 const router = express.Router();
-
-// POST route to create a character
-router.post('/create', characterController.createCharacter);
-
-// POST route to update a character
-router.post('/:id', characterController.updateCharacter);
 
 // GET route for all characters
 router.get('/', characterController.getCharacters);
@@ -18,16 +14,18 @@ router.get('/', characterController.getCharacters);
 // GET route for one character
 router.get('/:id', characterController.getCharacter);
 
-// GET route for one character's logs
-router.get('/:id/character-logs', characterLogController.getCharacterLogsByCharacter);
-
-// GET route for one character's magic items
-router.get('/:id/magic-items', magicItemController.getMagicItemsByCharacter);
-
-// GET route for one character's story awards
-router.get('/:id/story-awards', storyAwardController.getStoryAwardsByCharacter);
+// POST route to update a character
+router.post('/:id', characterController.updateCharacter);
 
 // DELETE route for a character
 router.delete('/:id', characterController.deleteCharacter);
+
+// POST route to create a character
+router.post('/create', characterController.createCharacter);
+
+// Declare child routers
+router.use('/:charId/character-logs', characterLogsRouter);
+router.use('/:charId/magic-items', magicItemsRouter);
+router.use('/:charId/story-awards', storyAwardsRouter);
 
 export default router;
