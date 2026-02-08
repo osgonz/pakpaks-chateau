@@ -8,6 +8,12 @@ const router = express.Router({mergeParams: true});
 // GET route for one character's logs
 router.get('/', characterLogController.getCharacterLogsByCharacter);
 
+// GET route for one character's logs dropdown abstract
+router.get('/abstracts', characterLogController.getCharacterLogsDropdownByCharacter);
+
+// POST route to create a character log
+router.post('/create', characterLogController.createCharacterLog);
+
 // GET route for a character log
 router.get('/:id', characterLogController.getCharacterLog);
 
@@ -28,11 +34,5 @@ router.get('/:id/lost-magic-items', magicItemController.getMagicItemsLostByChara
 
 // GET route for a character log's story awards
 router.get('/:id/story-awards', storyAwardController.getStoryAwardsByCharacterLog);
-
-// GET route for one character's logs dropdown abstract
-router.get('/abstracts', characterLogController.getCharacterLogsDropdownByCharacter);
-
-// POST route to create a character log
-router.post('/create', characterLogController.createCharacterLog);
 
 export default router;

@@ -11,6 +11,9 @@ const router = express.Router();
 // GET route for all characters
 router.get('/', characterController.getCharacters);
 
+// POST route to create a character
+router.post('/create', characterController.createCharacter);
+
 // GET route for one character
 router.get('/:id', characterController.getCharacter);
 
@@ -19,9 +22,6 @@ router.post('/:id', characterController.updateCharacter);
 
 // DELETE route for a character
 router.delete('/:id', characterController.deleteCharacter);
-
-// POST route to create a character
-router.post('/create', characterController.createCharacter);
 
 // Declare child routers
 router.use('/:charId/character-logs', characterLogsRouter);

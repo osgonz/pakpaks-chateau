@@ -6,6 +6,9 @@ const router = express.Router({mergeParams: true});
 // GET route for one character's story awards
 router.get('/', storyAwardController.getStoryAwardsByCharacter);
 
+// POST route to create a story award
+router.post('/create', storyAwardController.createStoryAward);
+
 // GET route for one story award
 router.get('/:id', storyAwardController.getStoryAward);
 
@@ -14,8 +17,5 @@ router.post('/:id', storyAwardController.updateStoryAward);
 
 // DELETE route for a story award
 router.delete('/:id', storyAwardController.deleteStoryAward);
-
-// POST route to create a story award
-router.post('/create', storyAwardController.createStoryAward);
 
 export default router;

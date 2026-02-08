@@ -3,6 +3,9 @@ import magicItemController from '../controllers/magic-items';
 
 const router = express.Router({mergeParams: true});
 
+// POST route to create a magic item
+router.post('/create', magicItemController.createMagicItem);
+
 // GET route for one character's magic items
 router.get('/', magicItemController.getMagicItemsByCharacter);
 
@@ -14,8 +17,5 @@ router.post('/:id', magicItemController.updateMagicItem);
 
 // DELETE route for a magic item
 router.delete('/:id', magicItemController.deleteMagicItem);
-
-// POST route to create a magic item
-router.post('/create', magicItemController.createMagicItem);
 
 export default router;
