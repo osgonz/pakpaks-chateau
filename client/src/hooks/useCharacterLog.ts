@@ -71,3 +71,26 @@ export function useCharacterLogsDropdownByCharacter(characterId: string) {
     
     return characterLogs;
 }
+
+/**
+ * Custom hook that returns all player logs with either service hour changes or service awards
+ * @returns Array containing the subset of player logs
+ */
+export function useServicePlayerLogs() {
+    const [playerLogs, setPlayerLogs] = useState<CharacterLogRow[] | undefined>();
+
+    /**
+     * Asynchronous function that pulls all player logs with either service hour changes or service awards
+     * @returns Array containing the subset of player logs
+     */
+    const loadServicePlayerLogs = async() => {
+        return axios.get('/api/player-logs/service').then(res => res.data) as Promise<CharacterLogRow[]>;
+    };
+
+    useEffect(() => {
+        loadServicePlayerLogs()
+            .then(setPlayerLogs);
+    }, []);
+
+    return playerLogs;
+}

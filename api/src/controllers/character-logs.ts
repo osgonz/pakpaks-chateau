@@ -55,6 +55,20 @@ class CharacterLogController {
         }
     };
 
+    // Get all player logs with either service hour changes or service awards
+    getServicePlayerLogs = async (req: Request, res: Response) => {
+        let conn: PoolConnection | undefined;
+        try {
+            conn = await db.getConnection();
+            const [logs] = await conn.query("call get_service_player_log_list()");
+            res.status(200).send(logs);
+        } finally {
+            if (conn) {
+                conn.release();
+            }
+        }
+    };
+
     // Create a character log
     createCharacterLog = async (req: Request, res: Response) => {
         // Extract character id from parameter

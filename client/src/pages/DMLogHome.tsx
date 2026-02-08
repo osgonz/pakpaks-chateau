@@ -12,12 +12,14 @@ import { Link } from "react-router-dom";
 import { DMLog } from '../data/Types';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import DMLogTable from '../components/dm-logs/DMLogTable';
+import { useServicePlayerLogs } from "../hooks/useCharacterLog"
 import { useDMLogs } from "../hooks/useDMLog";
 import { useSearchBarSearchParams } from "../hooks/useSearchParams";
 
 const DMLogHome = () => {
     // Logs details
-    const loadedLogs = useDMLogs();
+    const loadedDMLogs = useDMLogs();
+    const loadedServiceLogs = useServicePlayerLogs();
     const [logs, setLogs] = useState<DMLog[] | undefined>();
 
     // Variables storing filters
@@ -35,6 +37,19 @@ const DMLogHome = () => {
         [logs, searchValue]
     );
 
+    // Variable containing the amount of unspent service hours
+    const currentServiceHours = useMemo(
+        () => {
+            let totalServiceHours = 0;
+
+            logs?.forEach(l => totalServiceHours += l.serviceHours);
+            loadedServiceLogs?.forEach(l => totalServiceHours += l.serviceHours);
+
+            return totalServiceHours;
+        },
+        [logs, loadedServiceLogs]
+    );
+
     // Helper function used to refresh data following a log deletion
     const handleRemoveLogByIndex = (index: number) => {
         let splicedLogs = [...(logs as DMLog[])];
@@ -43,12 +58,12 @@ const DMLogHome = () => {
     };
 
     useEffect(() => {
-        setLogs(loadedLogs);
-    }, [loadedLogs]);
+        setLogs(loadedDMLogs);
+    }, [loadedDMLogs]);
 
     return (
         <>
-            { filteredLogs ? (
+            { filteredLogs && loadedServiceLogs && currentServiceHours ? (
                 <>
                     <Container maxWidth="lg">
                         <BreadcrumbsMenu 
@@ -77,7 +92,17 @@ const DMLogHome = () => {
                                         DM Logs
                                     </Typography>
                                 </Grid>
-                                <Grid justifyContent="flex-end" container item xs={12}>
+                                <Grid alignItems="center" justifyContent="flex-end" rowSpacing={1} container item xs={12}>
+                                    <Grid item lg={2.5} md={3} sm={4} xs={6}>
+                                        <Typography gutterBottom>
+                                            <b>Current Service Hours:</b>
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item lg={5} md={4.5} sm={8} xs={6} sx={{ pl: 1 }}>
+                                        <Typography gutterBottom>
+                                            { currentServiceHours }
+                                        </Typography>
+                                    </Grid>
                                     <Grid item md={4.5} xs={12}>
                                         <Button 
                                             component={Link}
