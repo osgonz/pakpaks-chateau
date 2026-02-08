@@ -5,17 +5,15 @@ function Home() {
     return (
         <Box
             sx={{
-            background:
-                "linear-gradient(to bottom right, rgba(236, 72, 153, 0.15), rgba(59, 130, 246, 0.15))",
             height: "100vh",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             }}
         >
-            <Stack spacing={2} alignItems="center">
-                <Typography variant="h4" component="h3">
-                    Home Page
+            <Stack spacing={3} alignItems="center">
+                <Typography variant="h3" component="h1">
+                    Pakpak's Chateau
                 </Typography>
                 <Stack direction="row" spacing={2}>
                     <Button 

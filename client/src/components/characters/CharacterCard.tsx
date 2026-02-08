@@ -22,7 +22,7 @@ const CharacterCard = (props: CharacterCardProps) => {
 
     return (
         <Grid item xs={12} md={6}>
-            <Card sx={{ display: 'flex' }}>
+            <Card elevation={4} sx={{ display: 'flex' }}>
                 <Stack sx={{ flex: 1 }}>
                     <CardContent>
                         <Typography component="h2" variant="h4" gutterBottom>
