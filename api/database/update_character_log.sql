@@ -19,7 +19,7 @@ CREATE OR REPLACE PROCEDURE update_character_log
 )
 READS SQL DATA
 BEGIN
-	UPDATE characterLog
+	UPDATE characterlog
     SET title = title,
         timestamp = timestamp,
         location = location,

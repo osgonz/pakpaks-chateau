@@ -11,7 +11,7 @@ CREATE OR REPLACE PROCEDURE create_dm_log
 READS SQL DATA
 BEGIN
     DECLARE newId UUID DEFAULT uuid();
-	INSERT INTO dmLog
+	INSERT INTO dmlog
     (
         id,
         title,

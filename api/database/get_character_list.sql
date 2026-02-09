@@ -17,7 +17,7 @@ BEGIN
     LEFT JOIN (
         SELECT characterId,
         SUM(levels) AS gainedLevels
-        FROM characterLog
+        FROM characterlog
         GROUP BY characterId
     ) AS l ON c.id = l.characterId;
 END; //

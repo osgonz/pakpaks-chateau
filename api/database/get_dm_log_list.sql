@@ -9,6 +9,6 @@ BEGIN
         lengthHours,
         serviceHours,
         description
-    FROM dmLog;
+    FROM dmlog;
 END; //
 DELIMITER ;

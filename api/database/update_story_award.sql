@@ -10,7 +10,7 @@ CREATE OR REPLACE PROCEDURE update_story_award
 )
 READS SQL DATA
 BEGIN
-	UPDATE storyAward
+	UPDATE storyaward
     SET name = name,
         description = description, 
         status = status,

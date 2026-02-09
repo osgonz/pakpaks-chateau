@@ -7,7 +7,7 @@ CREATE OR REPLACE PROCEDURE delete_story_award
 READS SQL DATA
 BEGIN
     DELETE
-    FROM storyAward
+    FROM storyaward
     WHERE id = award_id
     AND characterId = character_id;
 END; //

@@ -7,7 +7,7 @@ CREATE OR REPLACE PROCEDURE delete_character_log
 READS SQL DATA
 BEGIN
     DELETE
-    FROM characterLog
+    FROM characterlog
     WHERE id = log_id
     AND characterId = character_id;
 END; //

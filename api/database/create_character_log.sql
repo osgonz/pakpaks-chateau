@@ -20,7 +20,7 @@ CREATE OR REPLACE PROCEDURE create_character_log
 READS SQL DATA
 BEGIN
     DECLARE newId UUID DEFAULT uuid();
-	INSERT INTO characterLog
+	INSERT INTO characterlog
     (
         id,
 		type,

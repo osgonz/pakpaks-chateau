@@ -37,7 +37,7 @@ BEGIN
         LEFT JOIN (
             SELECT name,
             originLogId
-            FROM storyAward
+            FROM storyaward
         ) AS s ON s.originLogId = l.id
         WHERE l.serviceHours <> 0 OR l.type = 3
         GROUP BY l.id

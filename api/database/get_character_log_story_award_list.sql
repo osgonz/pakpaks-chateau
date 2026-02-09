@@ -10,7 +10,7 @@ BEGIN
         status,
         characterId, 
         originLogId
-    FROM storyAward
+    FROM storyaward
     WHERE originLogId = log_id 
     AND characterId = character_id;
 END; //

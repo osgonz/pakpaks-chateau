@@ -39,7 +39,7 @@ BEGIN
         LEFT JOIN (
             SELECT name,
             originLogId
-            FROM storyAward
+            FROM storyaward
             WHERE characterId = character_id
         ) AS s ON s.originLogId = l.id
         WHERE l.characterId = character_id

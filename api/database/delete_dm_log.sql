@@ -6,7 +6,7 @@ CREATE OR REPLACE PROCEDURE delete_dm_log
 READS SQL DATA
 BEGIN
     DELETE
-    FROM dmLog
+    FROM dmlog
     WHERE id = log_id;
 END; //
 DELIMITER ;

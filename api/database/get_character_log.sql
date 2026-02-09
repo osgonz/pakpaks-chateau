@@ -21,7 +21,7 @@ BEGIN
         traderOtherPlayer,
         description,
         characterId
-    FROM characterLog
+    FROM characterlog
     WHERE id = log_id
     AND characterId = character_id;
 END; //

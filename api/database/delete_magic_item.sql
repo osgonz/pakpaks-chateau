@@ -7,7 +7,7 @@ CREATE OR REPLACE PROCEDURE delete_magic_item
 READS SQL DATA
 BEGIN
     DELETE
-    FROM magicItem
+    FROM magicitem
     WHERE id = item_id
     AND characterId = character_id;
 END; //

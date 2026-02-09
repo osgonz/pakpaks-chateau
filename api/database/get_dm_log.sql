@@ -10,7 +10,7 @@ BEGIN
         lengthHours,
         serviceHours,
         description
-    FROM dmLog
+    FROM dmlog
     WHERE id = log_id;
 END; //
 DELIMITER ;

@@ -10,7 +10,7 @@ CREATE OR REPLACE PROCEDURE create_story_award
 READS SQL DATA
 BEGIN
     DECLARE newId UUID DEFAULT uuid();
-	INSERT INTO storyAward
+	INSERT INTO storyaward
     (
         id,
 		name, 

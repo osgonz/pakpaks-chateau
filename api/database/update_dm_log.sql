@@ -11,7 +11,7 @@ CREATE OR REPLACE PROCEDURE update_dm_log
 )
 READS SQL DATA
 BEGIN
-	UPDATE dmLog
+	UPDATE dmlog
     SET title = title,
         timestamp = timestamp,
         location = location,

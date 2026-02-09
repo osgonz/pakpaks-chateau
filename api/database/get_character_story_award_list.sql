@@ -10,7 +10,7 @@ BEGIN
         st.characterId, 
         st.originLogId, 
         l.title AS originLogTitle 
-    FROM storyAward st 
+    FROM storyaward st 
     JOIN characterlog l ON st.originLogId = l.id 
     WHERE st.characterId = character_id;
 END; //

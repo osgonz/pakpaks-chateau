@@ -18,7 +18,7 @@ CREATE OR REPLACE PROCEDURE create_magic_item
 READS SQL DATA
 BEGIN
     DECLARE newId UUID DEFAULT uuid();
-	INSERT INTO magicItem
+	INSERT INTO magicitem
     (
         id,
 		name, 

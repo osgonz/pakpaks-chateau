@@ -6,7 +6,7 @@ BEGIN
     SELECT id,
         title,
         timestamp
-    FROM characterLog
+    FROM characterlog
     WHERE characterId = character_id;
 END; //
 DELIMITER ;

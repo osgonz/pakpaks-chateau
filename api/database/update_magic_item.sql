@@ -18,7 +18,7 @@ CREATE OR REPLACE PROCEDURE update_magic_item
 )
 READS SQL DATA
 BEGIN
-	UPDATE magicItem
+	UPDATE magicitem
     SET name = name,
         flavorName = flavor_name,
         type = type,
