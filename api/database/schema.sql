@@ -4,6 +4,14 @@ CREATE DATABASE adventurersleague;
 
 USE adventurersleague;
 
+CREATE TABLE `user` (
+    id UUID PRIMARY KEY DEFAULT (UUID()),
+    googleId VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255),
+    name VARCHAR(255),
+    imageUrl VARCHAR(255)
+);
+
 CREATE TABLE `character` (
     id UUID PRIMARY KEY DEFAULT (UUID()),
     name VARCHAR(100) NOT NULL,
@@ -14,7 +22,13 @@ CREATE TABLE `character` (
     backstory TEXT,
     notes TEXT,
     characterSheetLink VARCHAR(255),
-    imageUrl VARCHAR(255)
+    imageUrl VARCHAR(255),
+    userId UUID NOT NULL,
+
+    CONSTRAINT `fk_character_user`
+        FOREIGN KEY (userId) REFERENCES `user` (id)
+        ON DELETE CASCADE
+        ON UPDATE RESTRICT
 );
 
 CREATE TABLE characterLog (
@@ -105,5 +119,11 @@ CREATE TABLE dmLog (
     location VARCHAR(100) NOT NULL,
     lengthHours INT NOT NULL,
     serviceHours INT NOT NULL,
-    description TEXT
+    description TEXT,
+    userId UUID NOT NULL,
+
+    CONSTRAINT `fk_dmLog_user`
+        FOREIGN KEY (userId) REFERENCES `user` (id)
+        ON DELETE CASCADE
+        ON UPDATE RESTRICT
 );
