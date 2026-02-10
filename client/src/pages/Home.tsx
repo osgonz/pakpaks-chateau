@@ -1,7 +1,15 @@
 import { Button, Stack, Box, Typography } from "@mui/material";
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { Link } from "react-router-dom";
 
 function Home() {
+    const onLoginSuccess = (response: CredentialResponse) => {
+        console.log(response);
+    };
+    const onLoginError = () => {
+        console.log("Google OAuth has failed.");
+    };
+
     return (
         <Box
             sx={{
@@ -15,6 +23,7 @@ function Home() {
                 <Typography variant="h3" component="h1">
                     Pakpak's Chateau
                 </Typography>
+                <GoogleLogin onSuccess={onLoginSuccess} onError={onLoginError}/>
                 <Stack direction="row" spacing={2}>
                     <Button 
                         component={Link}

@@ -4,6 +4,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 import { LocalizationProvider } from '@mui/x-date-pickers/';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Outlet } from 'react-router-dom';
 
 function App() {
@@ -21,12 +22,14 @@ function App() {
     return (
         <>
             {/* HEADER HERE */}
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    <Outlet />
-                </ThemeProvider>
-            </LocalizationProvider>
+            <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <ThemeProvider theme={theme}>
+                        <CssBaseline />
+                        <Outlet />
+                    </ThemeProvider>
+                </LocalizationProvider>
+            </GoogleOAuthProvider>
             {/* FOOTER HERE */}
         </>
     )
