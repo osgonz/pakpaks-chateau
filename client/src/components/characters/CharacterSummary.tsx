@@ -6,6 +6,7 @@ import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { CampaignDictionary } from "../../data/Dictionaries";
 import { Character } from "../../data/Types";
+import { useAuth } from '../shared/AuthContext';
 
 interface SummaryProps {
     character: Character,
@@ -15,6 +16,8 @@ interface SummaryProps {
 };
 
 const CharacterSummary = (props: SummaryProps) => {
+    // Reference to logged in user
+    const { user } = useAuth();
     // Reference to theme
     const theme = useTheme();
     // Helper boolean to apply properties conditional on screen size
@@ -96,36 +99,40 @@ const CharacterSummary = (props: SummaryProps) => {
                 </Grid>
             </Grid>
             <Grid alignItems="center" container item xs={12} md={4.5}>
-                <Grid item xs={12} sx={{ pb: '0.35em' }}>
-                    <Button 
-                        component={Link}
-                        to={`/characters/${props.character.id}/logs/new`}
-                        variant="outlined"
-                        fullWidth
-                    >
-                        Add Character Log
-                    </Button>
-                </Grid>
-                <Grid item xs={12} sx={{ pb: '0.35em' }}>
-                    <Button 
-                        component={Link}
-                        to={`/characters/${props.character.id}/magic-items/new`}
-                        variant="outlined"
-                        fullWidth
-                    >
-                        Add Magic Item
-                    </Button>
-                </Grid>
-                <Grid item xs={12} sx={{ pb: '0.35em' }}>
-                    <Button 
-                        component={Link}
-                        to={`/characters/${props.character.id}/story-awards/new`}
-                        variant="outlined"
-                        fullWidth
-                    >
-                        Add Story Award
-                    </Button>
-                </Grid>
+                { user &&
+                    <>
+                        <Grid item xs={12} sx={{ pb: '0.35em' }}>
+                            <Button 
+                                component={Link}
+                                to={`/characters/${props.character.id}/logs/new`}
+                                variant="outlined"
+                                fullWidth
+                            >
+                                Add Character Log
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12} sx={{ pb: '0.35em' }}>
+                            <Button 
+                                component={Link}
+                                to={`/characters/${props.character.id}/magic-items/new`}
+                                variant="outlined"
+                                fullWidth
+                            >
+                                Add Magic Item
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12} sx={{ pb: '0.35em' }}>
+                            <Button 
+                                component={Link}
+                                to={`/characters/${props.character.id}/story-awards/new`}
+                                variant="outlined"
+                                fullWidth
+                            >
+                                Add Story Award
+                            </Button>
+                        </Grid>
+                    </>
+                }
                 { props.character.characterSheetLink &&
                     <Grid item xs={12} sx={{ pb: '0.35em' }}>
                         <Button 

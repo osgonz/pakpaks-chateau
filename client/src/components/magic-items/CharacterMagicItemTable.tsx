@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { ItemRarityDictionary } from '../../data/Dictionaries';
 import { MagicItem, MagicItemRow, SortableTableHeadCell } from '../../data/Types';
 import { useTableSearchParams } from '../../hooks/useSearchParams';
+import { useAuth } from '../shared/AuthContext';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
 import SortableTableHead, { getMagicItemSortComparator } from '../shared/SortableTableHead';
@@ -25,6 +26,8 @@ interface CharacterMagicItemTableProps {
 };
 
 const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
+    // Reference to logged in user
+    const { user } = useAuth();
     // Order, sort, page and rows per page details
     const { order, sort, setOrderSort, page, setPage, rows, setRows } = useTableSearchParams(['name', 'rarity', 'isConsumable', 'requiresAttunement']);
     // Flag used to display Magic Item Delete dialog
@@ -153,23 +156,27 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
                                 >
                                     <Icon>visibility</Icon>
                                 </IconButton>
-                                <IconButton 
-                                    id={`edit-${item.id}`}
-                                    aria-label={`Edit ${item.flavorName ? `${item.flavorName} (${item.name})` : item.name}`}
-                                    color="primary"
-                                    component={Link}
-                                    to={`/characters/${item.characterId}/magic-items/${item.id}/edit`}
-                                >
-                                    <Icon>edit</Icon>
-                                </IconButton>
-                                <IconButton 
-                                    id={`delete-${item.id}`}
-                                    aria-label={`Delete ${item.flavorName ? `${item.flavorName} (${item.name})` : item.name}`}
-                                    color="error"
-                                    onClick={() => handleDeleteOpen(item)}
-                                >
-                                    <Icon>delete</Icon>
-                                </IconButton>
+                                { user &&
+                                    <>
+                                        <IconButton 
+                                            id={`edit-${item.id}`}
+                                            aria-label={`Edit ${item.flavorName ? `${item.flavorName} (${item.name})` : item.name}`}
+                                            color="primary"
+                                            component={Link}
+                                            to={`/characters/${item.characterId}/magic-items/${item.id}/edit`}
+                                        >
+                                            <Icon>edit</Icon>
+                                        </IconButton>
+                                        <IconButton 
+                                            id={`delete-${item.id}`}
+                                            aria-label={`Delete ${item.flavorName ? `${item.flavorName} (${item.name})` : item.name}`}
+                                            color="error"
+                                            onClick={() => handleDeleteOpen(item)}
+                                        >
+                                            <Icon>delete</Icon>
+                                        </IconButton>
+                                    </>
+                                }
                             </TableCell>
                         </TableRow>
                     ))}

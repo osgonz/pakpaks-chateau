@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { StoryAwardStatusDictionary } from '../../data/Dictionaries';
 import { SortableTableHeadCell, StoryAward, StoryAwardRow } from '../../data/Types';
 import { useTableSearchParams } from '../../hooks/useSearchParams';
+import { useAuth } from '../shared/AuthContext';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
 import SortableTableHead, { getSortComparator } from '../shared/SortableTableHead';
@@ -25,6 +26,8 @@ interface CharacterStoryAwardTableProps {
 };
 
 const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
+    // Reference to logged in user
+    const { user } = useAuth();
     // Order, sort, page and rows per page details
     const { order, sort, setOrderSort, page, setPage, rows, setRows } = useTableSearchParams(['name', 'status']);
     // Flag used to display Story Award Delete dialog
@@ -139,23 +142,27 @@ const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
                                 >
                                     <Icon>visibility</Icon>
                                 </IconButton>
-                                <IconButton 
-                                    id={`edit-${award.id}`}
-                                    aria-label={`Edit ${award.name}`}
-                                    color="primary"
-                                    component={Link}
-                                    to={`/characters/${award.characterId}/story-awards/${award.id}/edit`}
-                                >
-                                    <Icon>edit</Icon>
-                                </IconButton>
-                                <IconButton 
-                                    id={`delete-${award.id}`}
-                                    aria-label={`Delete ${award.name}`}
-                                    color="error"
-                                    onClick={() => handleDeleteOpen(award)}
-                                >
-                                    <Icon>delete</Icon>
-                                </IconButton>
+                                { user &&
+                                    <>
+                                        <IconButton 
+                                            id={`edit-${award.id}`}
+                                            aria-label={`Edit ${award.name}`}
+                                            color="primary"
+                                            component={Link}
+                                            to={`/characters/${award.characterId}/story-awards/${award.id}/edit`}
+                                        >
+                                            <Icon>edit</Icon>
+                                        </IconButton>
+                                        <IconButton 
+                                            id={`delete-${award.id}`}
+                                            aria-label={`Delete ${award.name}`}
+                                            color="error"
+                                            onClick={() => handleDeleteOpen(award)}
+                                        >
+                                            <Icon>delete</Icon>
+                                        </IconButton>
+                                    </>
+                                }
                             </TableCell>
                         </TableRow>
                     ))}

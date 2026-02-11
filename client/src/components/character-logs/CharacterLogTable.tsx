@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import { CharacterLogTypeDictionary } from '../../data/Dictionaries';
 import { CharacterLog, CharacterLogRow, SortableTableHeadCell } from '../../data/Types';
 import { useTableSearchParams } from '../../hooks/useSearchParams';
+import { useAuth } from '../shared/AuthContext';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
 import ExpandableTableRow from '../shared/ExpandableTableRow';
@@ -29,6 +30,8 @@ interface CharacterLogTableProps {
 };
 
 const CharacterLogTable = (props: CharacterLogTableProps) => {
+    // Reference to logged in user
+    const { user } = useAuth();
     // Order, sort, page and rows per page details
     const { order, sort, setOrderSort, page, setPage, rows, setRows } = useTableSearchParams(['timestamp', 'title', 'type', 'levels', 'gold', 'downtime']);
     // Flag used to display Character Log Delete dialog
@@ -181,23 +184,27 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                                 >
                                     <Icon>visibility</Icon>
                                 </IconButton>
-                                <IconButton 
-                                    id={`edit-${log.id}`}
-                                    aria-label={`Edit ${log.title}`}
-                                    color="primary"
-                                    component={Link}
-                                    to={`/characters/${log.characterId}/logs/${log.id}/edit`}
-                                >
-                                    <Icon>edit</Icon>
-                                </IconButton>
-                                <IconButton 
-                                    id={`delete-${log.id}`}
-                                    aria-label={`Delete ${log.title}`}
-                                    color="error"
-                                    onClick={() => handleDeleteOpen(log)}
-                                >
-                                    <Icon>delete</Icon>
-                                </IconButton>
+                                { user &&
+                                    <>
+                                        <IconButton 
+                                            id={`edit-${log.id}`}
+                                            aria-label={`Edit ${log.title}`}
+                                            color="primary"
+                                            component={Link}
+                                            to={`/characters/${log.characterId}/logs/${log.id}/edit`}
+                                        >
+                                            <Icon>edit</Icon>
+                                        </IconButton>
+                                        <IconButton 
+                                            id={`delete-${log.id}`}
+                                            aria-label={`Delete ${log.title}`}
+                                            color="error"
+                                            onClick={() => handleDeleteOpen(log)}
+                                        >
+                                            <Icon>delete</Icon>
+                                        </IconButton>
+                                    </>
+                                }
                             </TableCell>
                         </ExpandableTableRow>
                     ))}

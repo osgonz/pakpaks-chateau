@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ProtectedRoutes from "./components/shared/ProtectedRoutes.tsx";
 import App from "./pages/App.tsx";
 import CharacterHome from "./pages/CharacterHome.tsx";
 import CharacterForm from "./pages/CharacterForm.tsx";
@@ -20,76 +21,81 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <Home /> },
             {
-                path: "characters",
-                element: <CharactersMenu />,
-            },
-            {
-                path: "characters/new",
-                element: <CharacterForm />,
-            },
-            {
                 path: "characters/:characterId",
                 element: <CharacterHome />,
-            },
-            {
-                path: "characters/:characterId/edit",
-                element: <CharacterForm />,
-            },
-            {
-                path: "characters/:characterId/magic-items/new",
-                element: <MagicItemForm />,
             },
             {
                 path: "characters/:characterId/magic-items/:magicItemId",
                 element: <MagicItemForm />,
             },
             {
-                path: "characters/:characterId/magic-items/:magicItemId/edit",
-                element: <MagicItemForm />,
-            },
-            {
-                path: "characters/:characterId/logs/new",
-                element: <CharacterLogForm />,
-            },
-            {
                 path: "characters/:characterId/logs/:logId",
                 element: <CharacterLogForm />,
-            },
-            {
-                path: "characters/:characterId/logs/:logId/edit",
-                element: <CharacterLogForm />,
-            },
-            {
-                path: "characters/:characterId/story-awards/new",
-                element: <StoryAwardForm />,
             },
             {
                 path: "characters/:characterId/story-awards/:storyAwardId",
                 element: <StoryAwardForm />,
             },
             {
-                path: "characters/:characterId/story-awards/:storyAwardId/edit",
-                element: <StoryAwardForm />,
-            },
-            {
-                path: "dm-logs",
-                element: <DMLogHome />,
-            },
-            {
-                path: "dm-logs/new",
-                element: <DMLogForm />,
-            },
-            {
                 path: "dm-logs/:logId",
                 element: <DMLogForm />,
             },
             {
-                path: "dm-logs/:logId/edit",
-                element: <DMLogForm />,
-            },
-            {
-                path: "magic-items",
-                element: <MagicItemHome />,
+                element: <ProtectedRoutes />,
+                children: [
+                    {
+                        path: "characters",
+                        element: <CharactersMenu />,
+                    },
+                    {
+                        path: "characters/new",
+                        element: <CharacterForm />,
+                    },
+                    {
+                        path: "characters/:characterId/edit",
+                        element: <CharacterForm />,
+                    },
+                    {
+                        path: "characters/:characterId/magic-items/new",
+                        element: <MagicItemForm />,
+                    },
+                    {
+                        path: "characters/:characterId/magic-items/:magicItemId/edit",
+                        element: <MagicItemForm />,
+                    },
+                    {
+                        path: "characters/:characterId/logs/new",
+                        element: <CharacterLogForm />,
+                    },
+                    {
+                        path: "characters/:characterId/logs/:logId/edit",
+                        element: <CharacterLogForm />,
+                    },
+                    {
+                        path: "characters/:characterId/story-awards/new",
+                        element: <StoryAwardForm />,
+                    },
+                    {
+                        path: "characters/:characterId/story-awards/:storyAwardId/edit",
+                        element: <StoryAwardForm />,
+                    },
+                    {
+                        path: "dm-logs",
+                        element: <DMLogHome />,
+                    },
+                    {
+                        path: "dm-logs/new",
+                        element: <DMLogForm />,
+                    },
+                    {
+                        path: "dm-logs/:logId/edit",
+                        element: <DMLogForm />,
+                    },
+                    {
+                        path: "magic-items",
+                        element: <MagicItemHome />,
+                    },
+                ],
             },
         ],
     },
