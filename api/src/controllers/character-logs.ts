@@ -57,10 +57,11 @@ class CharacterLogController {
 
     // Get all player logs with either service hour changes or service awards
     getServicePlayerLogs = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            const [logs] = await conn.query("call get_service_player_log_list()");
+            const [logs] = await conn.query("call get_service_player_log_list(?)", [userId]);
             res.status(200).send(logs);
         } finally {
             if (conn) {
@@ -71,6 +72,7 @@ class CharacterLogController {
 
     // Create a character log
     createCharacterLog = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract character id from parameter
         const characterId = req.params.charId;
         // Extract log payload from request body
@@ -78,7 +80,7 @@ class CharacterLogController {
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            const [result] = await conn.query("call create_character_log(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
+            const [result] = await conn.query("call create_character_log(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
                 logContent.type,
                 logContent.title,
                 format(logContent.timestamp as Date, "yyyy-MM-dd HH:mm:ss"),
@@ -93,9 +95,16 @@ class CharacterLogController {
                 logContent.traderCharacterName,
                 logContent.traderOtherPlayer,
                 logContent.description,
-                characterId
+                characterId,
+                userId
             ]);
-            res.status(200).send(result[0].newId);
+            const newId = result[0].newId;
+
+            if (!newId) {
+                res.status(403).send("Forbidden");
+            } else {
+                res.status(200).send(newId);
+            }
         } finally {
             if (conn) {
                 conn.release();
@@ -105,6 +114,7 @@ class CharacterLogController {
 
     // Update a character log
     updateCharacterLog = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract character log id from parameter
         const id = req.params.id;
         // Extract character id from parameter
@@ -114,7 +124,7 @@ class CharacterLogController {
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            await conn.query("call update_character_log(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
+            const result = await conn.query("call update_character_log(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
                 id,
                 logContent.title,
                 format(logContent.timestamp as Date, "yyyy-MM-dd HH:mm:ss"),
@@ -129,9 +139,14 @@ class CharacterLogController {
                 logContent.traderCharacterName,
                 logContent.traderOtherPlayer,
                 logContent.description,
-                characterId
+                characterId,
+                userId
             ]);
-            res.status(204).send();
+            if (result.affectedRows === 0) {
+                res.status(403).send('Forbidden');
+            } else {
+                res.status(204).send();
+            }
         } finally {
             if (conn) {
                 conn.release();
@@ -141,6 +156,7 @@ class CharacterLogController {
 
     // Delete a character log
     deleteCharacterLog = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract character log id from parameter
         const id = req.params.id;
         // Extract character id from parameter
@@ -148,11 +164,16 @@ class CharacterLogController {
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            await conn.query("call delete_character_log(?,?)", [
+            const result = await conn.query("call delete_character_log(?,?,?)", [
                 id,
-                characterId
+                characterId,
+                userId
             ]);
-            res.status(204).send();
+            if (result.affectedRows === 0) {
+                res.status(403).send('Forbidden');
+            } else {
+                res.status(204).send();
+            }
         } finally {
             if (conn) {
                 conn.release();

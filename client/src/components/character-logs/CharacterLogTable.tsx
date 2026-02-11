@@ -133,7 +133,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
 
     // Function used to delete a character log following confirmation
     const deleteCharacterLog = async() => {
-        await axios.delete(`/api/characters/${logToBeDeleted?.characterId}/character-logs/${logToBeDeleted?.id}`);
+        await axios.delete(`/api/characters/${logToBeDeleted?.characterId}/character-logs/${logToBeDeleted?.id}`, { withCredentials: true });
         props.handleRemoveCharacterLogByIndex(characterLogs.findIndex((log) => log.id === logToBeDeleted?.id));
         handleDeleteClose();
     };

@@ -105,7 +105,7 @@ const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
 
     // Function used to delete a story award following confirmation
     const deleteStoryAward = async() => {
-        await axios.delete(`/api/characters/${itemToBeDeleted?.characterId}/story-awards/${itemToBeDeleted?.id}`);
+        await axios.delete(`/api/characters/${itemToBeDeleted?.characterId}/story-awards/${itemToBeDeleted?.id}`, { withCredentials: true });
         props.handleRemoveStoryAwardByIndex(storyAwards.findIndex((item) => item.id === itemToBeDeleted?.id));
         handleDeleteClose();
     };

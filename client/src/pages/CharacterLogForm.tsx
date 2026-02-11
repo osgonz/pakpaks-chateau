@@ -274,7 +274,7 @@ const CharacterLogForm = () => {
             rawLog.description = null;
         }
 
-        axios.post(`/api/characters/${characterId}/character-logs/${logId || 'create'}`, rawLog).then(res => {
+        axios.post(`/api/characters/${characterId}/character-logs/${logId || 'create'}`, rawLog, { withCredentials: true }).then(res => {
             // If successful
             if (res.status == 200 || res.status == 204) {
                 // Update Lost Magic Items
@@ -282,7 +282,7 @@ const CharacterLogForm = () => {
                     promiseArray.push(axios.post(`/api/characters/${characterId}/character-logs/${logId || (res.data as string)}/lost-magic-items`, {
                         lostItemIdsToAdd: lostMagicItemsToAdd.map((item) => item.id),
                         lostItemIdsToRemove: lostItemIdsToRemove
-                    }));
+                    }, { withCredentials: true }));
                 }
                 // Create Earned Magic Items
                 magicItemsToAdd.forEach((item) => {
@@ -299,10 +299,10 @@ const CharacterLogForm = () => {
                         isEquipped: item.isEquipped,
                         originLogId: logId || (res.data as string),
                         lossLogId: item.lossLogId,
-                    }));
+                    }, { withCredentials: true }));
                 });
                 // Delete Earned Magic Items
-                itemIdsToRemove.forEach((id) => promiseArray.push(axios.delete(`/api/characters/${characterId}/magic-items/${id}`)));
+                itemIdsToRemove.forEach((id) => promiseArray.push(axios.delete(`/api/characters/${characterId}/magic-items/${id}`, { withCredentials: true })));
                 // Create Story Awards
                 storyAwardsToAdd.forEach((award) => {
                     promiseArray.push(axios.post(`/api/characters/${characterId}/story-awards/create`, {
@@ -310,10 +310,10 @@ const CharacterLogForm = () => {
                         description: award.description,
                         status: award.status,
                         originLogId: logId || (res.data as string),
-                    }));
+                    }, { withCredentials: true }));
                 });
                 // Delete Story Awards
-                awardIdsToRemove.forEach((id) => promiseArray.push(axios.delete(`/api/characters/${characterId}/story-awards/${id}`)));
+                awardIdsToRemove.forEach((id) => promiseArray.push(axios.delete(`/api/characters/${characterId}/story-awards/${id}`, { withCredentials: true })));
                 return Promise.all(promiseArray);
             }
         }).then(_ => {

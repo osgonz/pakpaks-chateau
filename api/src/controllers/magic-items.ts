@@ -5,10 +5,11 @@ import { Request, Response } from 'express';
 class MagicItemController {
     // Get all magic items
     getMagicItems = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            const [items] = await conn.query("call get_magic_item_list()");
+            const [items] = await conn.query("call get_magic_item_list(?)", [userId]);
             res.status(200).send(items);
         } finally {
             if (conn) {
@@ -93,6 +94,7 @@ class MagicItemController {
 
     // Create a magic item
     createMagicItem = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract character id from parameter
         const characterId = req.params.charId;
         // Extract magic item payload from request body
@@ -100,7 +102,7 @@ class MagicItemController {
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            const [result] = await conn.query("call create_magic_item(?,?,?,?,?,?,?,?,?,?,?,?,?)", [
+            const [result] = await conn.query("call create_magic_item(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
                 itemContent.name,
                 itemContent.flavorName,
                 itemContent.type,
@@ -113,9 +115,16 @@ class MagicItemController {
                 itemContent.isEquipped,
                 characterId,
                 itemContent.originLogId,
-                itemContent.lossLogId
+                itemContent.lossLogId,
+                userId
             ]);
-            res.status(200).send(result[0].newId);
+            const newId = result[0].newId;
+
+            if (!newId) {
+                res.status(403).send("Forbidden");
+            } else {
+                res.status(200).send(newId);
+            }
         } finally {
             if (conn) {
                 conn.release();
@@ -125,6 +134,7 @@ class MagicItemController {
 
     // Update a magic item
     updateMagicItem = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract magic item id from parameter
         const id = req.params.id;
         // Extract character id from parameter
@@ -134,7 +144,7 @@ class MagicItemController {
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            await conn.query("call update_magic_item(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
+            const result = await conn.query("call update_magic_item(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
                 id,
                 itemContent.name,
                 itemContent.flavorName,
@@ -148,9 +158,14 @@ class MagicItemController {
                 itemContent.isEquipped,
                 characterId,
                 itemContent.originLogId,
-                itemContent.lossLogId
+                itemContent.lossLogId,
+                userId
             ]);
-            res.status(204).send();
+            if (result.affectedRows === 0) {
+                res.status(403).send('Forbidden');
+            } else {
+                res.status(204).send();
+            }
         } finally {
             if (conn) {
                 conn.release();
@@ -160,6 +175,7 @@ class MagicItemController {
 
     // Update a specific character log's lost magic items
     updateMagicItemsLostByCharacterLog = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract character log id from parameter
         const logId = req.params.id;
         // Extract character id from parameter
@@ -169,13 +185,18 @@ class MagicItemController {
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            await conn.query("call update_character_log_lost_magic_item_list(?,?,?,?)", [
+            const result = await conn.query("call update_character_log_lost_magic_item_list(?,?,?,?,?)", [
                 characterId,
                 logId,
                 JSON.stringify(itemContent.lostItemIdsToAdd),
-                JSON.stringify(itemContent.lostItemIdsToRemove)
+                JSON.stringify(itemContent.lostItemIdsToRemove),
+                userId
             ]);
-            res.status(204).send();
+            if (result.affectedRows === 0) {
+                res.status(403).send('Forbidden');
+            } else {
+                res.status(204).send();
+            }
         } finally {
             if (conn) {
                 conn.release();
@@ -185,6 +206,7 @@ class MagicItemController {
 
     // Delete a magic item
     deleteMagicItem = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract magic item id from parameter
         const id = req.params.id;
         // Extract character id from parameter
@@ -192,11 +214,16 @@ class MagicItemController {
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            await conn.query("call delete_magic_item(?,?)", [
+            const result = await conn.query("call delete_magic_item(?,?,?)", [
                 id,
-                characterId
+                characterId,
+                userId
             ]);
-            res.status(204).send();
+            if (result.affectedRows === 0) {
+                res.status(403).send('Forbidden');
+            } else {
+                res.status(204).send();
+            }
         } finally {
             if (conn) {
                 conn.release();

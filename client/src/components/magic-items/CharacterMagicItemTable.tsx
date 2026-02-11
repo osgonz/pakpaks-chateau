@@ -117,7 +117,7 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
 
     // Function used to delete a magic item following confirmation
     const deleteMagicItem = async() => {
-        await axios.delete(`/api/characters/${itemToBeDeleted?.characterId}/magic-items/${itemToBeDeleted?.id}`);
+        await axios.delete(`/api/characters/${itemToBeDeleted?.characterId}/magic-items/${itemToBeDeleted?.id}`, { withCredentials: true });
         props.handleRemoveMagicItemByIndex(magicItems.findIndex((item) => item.id === itemToBeDeleted?.id));
         handleDeleteClose();
     };

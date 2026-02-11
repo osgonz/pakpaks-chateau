@@ -86,7 +86,7 @@ const CharactersMenu = () => {
 
     // Function used to delete a character following confirmation
     const deleteCharacter = async() => {
-        await axios.delete(`/api/characters/${characterToBeDeleted?.id}`);
+        await axios.delete(`/api/characters/${characterToBeDeleted?.id}`, { withCredentials: true });
         handleRemoveCharacterByIndex(characters!.findIndex((character) => character.id === characterToBeDeleted?.id));
         handleDeleteClose();
     };

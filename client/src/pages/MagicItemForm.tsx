@@ -131,7 +131,7 @@ const MagicItemForm = () => {
             rawMagicItem.lossLogId = null;
         }
 
-        axios.post(`/api/characters/${characterId}/magic-items/${magicItemId || 'create'}`, rawMagicItem).then(_ => {
+        axios.post(`/api/characters/${characterId}/magic-items/${magicItemId || 'create'}`, rawMagicItem, { withCredentials: true }).then(_ => {
             navigate(`/characters/${characterId}`);
         });
     };

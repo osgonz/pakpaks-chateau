@@ -10,7 +10,8 @@ CREATE OR REPLACE PROCEDURE update_character
     backstory TEXT,
     notes TEXT,
     character_sheet_link VARCHAR(255),
-    image_url VARCHAR(255)
+    image_url VARCHAR(255),
+    user_id UUID
 )
 READS SQL DATA
 BEGIN
@@ -24,6 +25,6 @@ BEGIN
         notes = notes, 
         characterSheetLink = character_sheet_link, 
         imageUrl = image_url
-    WHERE id = character_id;
+    WHERE id = character_id AND userId = user_id;
 END; //
 DELIMITER ;

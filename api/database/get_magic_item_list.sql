@@ -1,5 +1,6 @@
 DELIMITER //
-CREATE OR REPLACE PROCEDURE get_magic_item_list()
+CREATE OR REPLACE PROCEDURE get_magic_item_list
+(user_id UUID)
 READS SQL DATA
 BEGIN
     SELECT m.id, 
@@ -22,6 +23,6 @@ BEGIN
     FROM magicitem m 
     JOIN characterlog l ON m.originLogId = l.id 
     JOIN `character` c ON m.characterId = c.id
-    WHERE m.lossLogId IS NULL;
+    WHERE c.userId = user_id AND m.lossLogId IS NULL;
 END; //
 DELIMITER ;

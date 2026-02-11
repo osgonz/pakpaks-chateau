@@ -1,5 +1,6 @@
 DELIMITER //
-CREATE OR REPLACE PROCEDURE get_service_player_log_list()
+CREATE OR REPLACE PROCEDURE get_service_player_log_list
+(user_id UUID)
 READS SQL DATA
 BEGIN
     SELECT lm.*,
@@ -25,6 +26,11 @@ BEGIN
             GROUP_CONCAT(m.compoundName SEPARATOR ', ') AS magicItemNames,
             GROUP_CONCAT(s.name SEPARATOR ', ') AS storyAwardNames
         FROM characterlog l
+        JOIN (
+            SELECT id
+            FROM `character`
+            WHERE userId = user_id
+        ) AS c ON l.characterId = c.id
         LEFT JOIN (
             SELECT CASE
             WHEN flavorName IS NULL

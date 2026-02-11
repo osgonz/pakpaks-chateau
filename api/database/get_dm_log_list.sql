@@ -1,5 +1,6 @@
 DELIMITER //
-CREATE OR REPLACE PROCEDURE get_dm_log_list()
+CREATE OR REPLACE PROCEDURE get_dm_log_list
+(user_id UUID)
 READS SQL DATA
 BEGIN
     SELECT id,
@@ -9,6 +10,7 @@ BEGIN
         lengthHours,
         serviceHours,
         description
-    FROM dmlog;
+    FROM dmlog
+    WHERE userId = user_id;
 END; //
 DELIMITER ;

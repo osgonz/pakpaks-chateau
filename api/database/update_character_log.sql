@@ -15,25 +15,28 @@ CREATE OR REPLACE PROCEDURE update_character_log
     trader_character_name VARCHAR(100),
     trader_other_player VARCHAR(100),
     description TEXT,
-    character_id UUID
+    character_id UUID,
+    user_id UUID
 )
 READS SQL DATA
 BEGIN
-	UPDATE characterlog
-    SET title = title,
-        timestamp = timestamp,
-        location = location,
-        dmName = dm_name,
-        dmDci = dm_dci,
-        lengthHours = length_hours,
-        gold = gold,
-        downtime = downtime,
-        levels = levels,
-        serviceHours = service_hours,
-        traderCharacterName = trader_character_name,
-        traderOtherPlayer = trader_other_player,
-        description = description
-    WHERE id = log_id
-    AND characterId = character_id;
+	UPDATE characterlog cl
+    JOIN `character` c ON cl.characterId = c.id
+    SET cl.title = title,
+        cl.timestamp = timestamp,
+        cl.location = location,
+        cl.dmName = dm_name,
+        cl.dmDci = dm_dci,
+        cl.lengthHours = length_hours,
+        cl.gold = gold,
+        cl.downtime = downtime,
+        cl.levels = levels,
+        cl.serviceHours = service_hours,
+        cl.traderCharacterName = trader_character_name,
+        cl.traderOtherPlayer = trader_other_player,
+        cl.description = description
+    WHERE cl.id = log_id
+    AND cl.characterId = character_id
+    AND c.userId = user_id;
 END; //
 DELIMITER ;

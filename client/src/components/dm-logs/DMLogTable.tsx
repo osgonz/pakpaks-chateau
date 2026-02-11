@@ -106,7 +106,7 @@ const DMLogTable = (props: DMLogTableProps) => {
 
     // Function used to delete a log following confirmation
     const deleteLog = async() => {
-        await axios.delete(`/api/dm-logs/${logToBeDeleted?.id}`);
+        await axios.delete(`/api/dm-logs/${logToBeDeleted?.id}`, { withCredentials: true });
         props.handleRemoveLogByIndex(logs!.findIndex((log) => log.id === logToBeDeleted?.id));
         handleDeleteClose();
     };

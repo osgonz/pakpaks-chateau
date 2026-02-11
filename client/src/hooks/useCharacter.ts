@@ -39,7 +39,7 @@ export function useCharacters() {
      * @returns Array containing all character card details
      */
     const loadCharacters = async() => {
-        return axios.get(`/api/characters`).then((res) => {
+        return axios.get(`/api/characters`, { withCredentials: true }).then((res) => {
             // Character Level is being returned as string (weirdness with MariaDB SUM)
             return (res.data as Array<any>).map((character) => {
                 return { ...character,  characterLevel: typeof character["characterLevel"] === 'string' ? parseInt(character["characterLevel"]) : character["characterLevel"]};

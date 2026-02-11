@@ -59,6 +59,7 @@ class StoryAwardController {
 
     // Create a story award
     createStoryAward = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract character id from parameter
         const characterId = req.params.charId;
         // Extract story award payload from request body
@@ -66,14 +67,21 @@ class StoryAwardController {
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            const [result] = await conn.query("call create_story_award(?,?,?,?,?)", [
+            const [result] = await conn.query("call create_story_award(?,?,?,?,?,?)", [
                 awardContent.name,
                 awardContent.description,
                 awardContent.status,
                 characterId,
-                awardContent.originLogId
+                awardContent.originLogId,
+                userId
             ]);
-            res.status(200).send(result[0].newId);
+            const newId = result[0].newId;
+
+            if (!newId) {
+                res.status(403).send("Forbidden");
+            } else {
+                res.status(200).send(newId);
+            }
         } finally {
             if (conn) {
                 conn.release();
@@ -83,6 +91,7 @@ class StoryAwardController {
 
     // Update a story award
     updateStoryAward = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract story award id from parameter
         const id = req.params.id;
         // Extract character id from parameter
@@ -92,15 +101,20 @@ class StoryAwardController {
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            await conn.query("call update_story_award(?,?,?,?,?,?)", [
+            const result = await conn.query("call update_story_award(?,?,?,?,?,?,?)", [
                 id,
                 awardContent.name,
                 awardContent.description,
                 awardContent.status,
                 characterId,
-                awardContent.originLogId
+                awardContent.originLogId,
+                userId
             ]);
-            res.status(204).send();
+            if (result.affectedRows === 0) {
+                res.status(403).send('Forbidden');
+            } else {
+                res.status(204).send();
+            }
         } finally {
             if (conn) {
                 conn.release();
@@ -110,6 +124,7 @@ class StoryAwardController {
 
     // Delete a story award
     deleteStoryAward = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract story award id from parameter
         const id = req.params.id;
         // Extract character id from parameter
@@ -117,11 +132,16 @@ class StoryAwardController {
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            await conn.query("call delete_story_award(?,?)", [
+            const result = await conn.query("call delete_story_award(?,?,?)", [
                 id,
-                characterId
+                characterId,
+                userId
             ]);
-            res.status(204).send();
+            if (result.affectedRows === 0) {
+                res.status(403).send('Forbidden');
+            } else {
+                res.status(204).send();
+            }
         } finally {
             if (conn) {
                 conn.release();

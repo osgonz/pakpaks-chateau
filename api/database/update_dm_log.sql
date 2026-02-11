@@ -7,7 +7,8 @@ CREATE OR REPLACE PROCEDURE update_dm_log
     location VARCHAR(100),
     length_hours INT,
     service_hours INT,
-    description TEXT
+    description TEXT,
+    user_id UUID
 )
 READS SQL DATA
 BEGIN
@@ -18,6 +19,6 @@ BEGIN
         lengthHours = length_hours,
         serviceHours = service_hours,
         description = description
-    WHERE id = log_id;
+    WHERE id = log_id AND userId = user_id;
 END; //
 DELIMITER ;

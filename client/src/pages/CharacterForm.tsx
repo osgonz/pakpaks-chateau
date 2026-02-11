@@ -106,7 +106,7 @@ const CharacterForm = () => {
             rawCharacter.imageUrl = null;
         }
 
-        axios.post(`/api/characters/${characterId || 'create'}`, rawCharacter).then(_ => {
+        axios.post(`/api/characters/${characterId || 'create'}`, rawCharacter, { withCredentials: true }).then(_ => {
             navigate(`/characters${ characterId ? `/${characterId}` : '' }`);
         });
     };

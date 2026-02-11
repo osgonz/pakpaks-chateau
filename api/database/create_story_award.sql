@@ -4,8 +4,9 @@ CREATE OR REPLACE PROCEDURE create_story_award
     name VARCHAR(100),
     description TEXT,
     status INT,
-    characterId UUID,
-    originLogId UUID
+    character_id UUID,
+    origin_log_id UUID,
+    user_id UUID
 )
 READS SQL DATA
 BEGIN
@@ -19,14 +20,21 @@ BEGIN
         characterId, 
         originLogId
     )
-    VALUES (
+    SELECT
         newId,
 		name, 
         description, 
         status, 
-        characterId, 
-        originLogId
-    );
-    SELECT newId;
+        c.id, 
+        origin_log_id
+    FROM `character` c
+    WHERE c.id = character_id
+    AND c.userId = user_id;
+
+    IF ROW_COUNT() = 0 THEN
+        SELECT NULL as newId;
+    ELSE
+        SELECT newId;
+    END IF;
 END; //
 DELIMITER ;

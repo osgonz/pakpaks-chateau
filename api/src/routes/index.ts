@@ -1,6 +1,5 @@
 import express from 'express';
 
-import authController from '../controllers/auth';
 import characterLogController from '../controllers/character-logs';
 import magicItemController from '../controllers/magic-items';
 
@@ -13,9 +12,9 @@ import dmLogsRouter from './dm-logs';
 const router = express.Router({mergeParams: true});
 
 // GET route for all magic items
-router.get('/magic-items', magicItemController.getMagicItems);
+router.get('/magic-items', requireAuth, magicItemController.getMagicItems);
 // GET route for all service player logs
-router.get('/player-logs/service', characterLogController.getServicePlayerLogs);
+router.get('/player-logs/service', requireAuth, characterLogController.getServicePlayerLogs);
 
 // Declare routers
 router.use('/auth', authRouter);

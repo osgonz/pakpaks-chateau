@@ -104,7 +104,7 @@ const StoryAwardForm = () => {
             rawStoryAward.description = null;
         }
 
-        axios.post(`/api/characters/${characterId}/story-awards/${storyAwardId || 'create'}`, rawStoryAward).then(_ => {
+        axios.post(`/api/characters/${characterId}/story-awards/${storyAwardId || 'create'}`, rawStoryAward, { withCredentials: true }).then(_ => {
             navigate(`/characters/${characterId}`);
         });
     };

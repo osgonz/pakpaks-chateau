@@ -92,7 +92,7 @@ const DMLogForm = () => {
             rawLog.description = null;
         }
 
-        axios.post(`/api/dm-logs/${logId || 'create'}`, rawLog).then(_ => {
+        axios.post(`/api/dm-logs/${logId || 'create'}`, rawLog, { withCredentials: true }).then(_ => {
             navigate(`/dm-logs`);
         });
     };

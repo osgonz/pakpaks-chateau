@@ -39,7 +39,7 @@ export function useDMLogs() {
      * @returns Array containing the DM logs
      */
     const loadDMLogs = async() => {
-        return axios.get(`/api/dm-logs`).then((res) => res.data) as Promise<DMLog[]>;
+        return axios.get(`/api/dm-logs`, { withCredentials: true }).then((res) => res.data) as Promise<DMLog[]>;
     };
 
     useEffect(() => {

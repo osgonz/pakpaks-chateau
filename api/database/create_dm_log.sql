@@ -6,7 +6,8 @@ CREATE OR REPLACE PROCEDURE create_dm_log
     location VARCHAR(100),
     lengthHours INT,
     serviceHours INT,
-    description TEXT
+    description TEXT,
+    userId UUID
 )
 READS SQL DATA
 BEGIN
@@ -19,7 +20,8 @@ BEGIN
         location,
         lengthHours,
         serviceHours,
-        description
+        description,
+        userId
     )
     VALUES (
         newId,
@@ -28,7 +30,8 @@ BEGIN
         location,
         lengthHours,
         serviceHours,
-        description
+        description,
+        userId
     );
     SELECT newId;
 END; //

@@ -9,7 +9,8 @@ CREATE OR REPLACE PROCEDURE create_character
     backstory TEXT,
     notes TEXT,
     characterSheetLink VARCHAR(255),
-    imageUrl VARCHAR(255)
+    imageUrl VARCHAR(255),
+    userId UUID
 )
 READS SQL DATA
 BEGIN
@@ -25,7 +26,8 @@ BEGIN
         backstory,
         notes,
         characterSheetLink,
-        imageUrl
+        imageUrl,
+        userId
     )
     VALUES (
         newId,
@@ -37,7 +39,8 @@ BEGIN
         backstory,
         notes,
         characterSheetLink,
-        imageUrl
+        imageUrl,
+        userId
     );
     SELECT newId;
 END; //

@@ -118,7 +118,7 @@ export function useMagicItems() {
      * @returns Array containing all magic items
      */
     const loadMagicItems = async() => {
-        return axios.get(`/api/magic-items`).then((res) => res.data) as Promise<MagicItemGeneralRow[]>;
+        return axios.get(`/api/magic-items`, { withCredentials: true }).then((res) => res.data) as Promise<MagicItemGeneralRow[]>;
     };
 
     useEffect(() => {
