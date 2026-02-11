@@ -111,6 +111,10 @@ const StoryAwardForm = () => {
 
     useEffect(() => {
         if (currentStoryAward) {
+            if (!currentStoryAward.isOwner && !isViewing) {
+                navigate('/');
+            }
+
             setStoryAward({
                 name: currentStoryAward.name,
                 status: currentStoryAward.status,

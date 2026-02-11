@@ -99,6 +99,10 @@ const DMLogForm = () => {
 
     useEffect(() => {
         if (currentLog) {
+            if (!currentLog.isOwner && !isViewing) {
+                navigate('/');
+            }
+
             setLog({
                 title: currentLog.title,
                 timestamp: new Date(currentLog.timestamp),

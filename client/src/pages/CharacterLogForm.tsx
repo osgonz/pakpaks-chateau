@@ -323,6 +323,9 @@ const CharacterLogForm = () => {
 
     useEffect(() => {
         if (currentLog) {
+            if (!currentLog.isOwner && !isViewing) {
+                navigate('/');
+            }
             setLog({
                 type: currentLog.type,
                 title: currentLog.title,

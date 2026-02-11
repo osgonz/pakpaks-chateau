@@ -1,10 +1,17 @@
 DELIMITER //
 CREATE OR REPLACE PROCEDURE get_character_log_list
-(character_id UUID)
+(
+    character_id UUID,
+    user_id UUID
+)
 READS SQL DATA
 BEGIN
     SELECT lm.*,
-        GROUP_CONCAT(i.compoundName SEPARATOR ', ') AS lostMagicItemNames
+        GROUP_CONCAT(i.compoundName SEPARATOR ', ') AS lostMagicItemNames,
+        CASE
+            WHEN user_id IS NOT NULL AND c.userId = user_id THEN 1
+            ELSE 0
+        END AS isOwner
     FROM (
         SELECT l.id,
             l.type,
@@ -45,6 +52,7 @@ BEGIN
         WHERE l.characterId = character_id
         GROUP BY l.id
     ) AS lm
+    JOIN `character` c ON c.id = lm.characterId
     LEFT JOIN (
         SELECT CASE
         WHEN flavorName IS NULL

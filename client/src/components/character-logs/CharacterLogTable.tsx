@@ -18,7 +18,6 @@ import { Link } from "react-router-dom";
 import { CharacterLogTypeDictionary } from '../../data/Dictionaries';
 import { CharacterLog, CharacterLogRow, SortableTableHeadCell } from '../../data/Types';
 import { useTableSearchParams } from '../../hooks/useSearchParams';
-import { useAuth } from '../shared/AuthContext';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
 import ExpandableTableRow from '../shared/ExpandableTableRow';
@@ -30,8 +29,6 @@ interface CharacterLogTableProps {
 };
 
 const CharacterLogTable = (props: CharacterLogTableProps) => {
-    // Reference to logged in user
-    const { user } = useAuth();
     // Order, sort, page and rows per page details
     const { order, sort, setOrderSort, page, setPage, rows, setRows } = useTableSearchParams(['timestamp', 'title', 'type', 'levels', 'gold', 'downtime']);
     // Flag used to display Character Log Delete dialog
@@ -184,7 +181,7 @@ const CharacterLogTable = (props: CharacterLogTableProps) => {
                                 >
                                     <Icon>visibility</Icon>
                                 </IconButton>
-                                { user &&
+                                { !!log.isOwner &&
                                     <>
                                         <IconButton 
                                             id={`edit-${log.id}`}

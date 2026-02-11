@@ -2,12 +2,12 @@ import express from 'express';
 import characterLogController from '../controllers/character-logs';
 import magicItemController from '../controllers/magic-items';
 import storyAwardController from '../controllers/story-awards';
-import { requireAuth } from '../middleware/auth';
+import { optionalAuth, requireAuth } from '../middleware/auth';
 
 const router = express.Router({mergeParams: true});
 
 // GET route for one character's logs
-router.get('/', characterLogController.getCharacterLogsByCharacter);
+router.get('/', optionalAuth, characterLogController.getCharacterLogsByCharacter);
 
 // GET route for one character's logs dropdown abstract
 router.get('/abstracts', characterLogController.getCharacterLogsDropdownByCharacter);
@@ -16,7 +16,7 @@ router.get('/abstracts', characterLogController.getCharacterLogsDropdownByCharac
 router.post('/create', requireAuth, characterLogController.createCharacterLog);
 
 // GET route for a character log
-router.get('/:id', characterLogController.getCharacterLog);
+router.get('/:id', optionalAuth, characterLogController.getCharacterLog);
 
 // POST route to update a character log
 router.post('/:id', requireAuth, characterLogController.updateCharacterLog);

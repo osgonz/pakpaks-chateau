@@ -21,12 +21,13 @@ class DMLogController {
 
     // Get a DM log
     getDMLog = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract DM log id from parameter
         const id = req.params.id;
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            const [log] = await conn.query("call get_dm_log(?)", [id]);
+            const [log] = await conn.query("call get_dm_log(?,?)", [id, userId]);
             res.status(200).send(log[0]);
         } finally {
             if (conn) {

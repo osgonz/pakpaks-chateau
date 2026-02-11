@@ -1,6 +1,6 @@
 import express from 'express';
 import characterController from '../controllers/characters';
-import { requireAuth } from '../middleware/auth';
+import { optionalAuth, requireAuth } from '../middleware/auth';
 import characterLogsRouter from './character-logs';
 import magicItemsRouter from './character-magic-items';
 import storyAwardsRouter from './character-story-awards';
@@ -14,7 +14,7 @@ router.get('/', requireAuth, characterController.getCharacters);
 router.post('/create', requireAuth, characterController.createCharacter);
 
 // GET route for one character
-router.get('/:id', characterController.getCharacter);
+router.get('/:id', optionalAuth, characterController.getCharacter);
 
 // POST route to update a character
 router.post('/:id', requireAuth, characterController.updateCharacter);

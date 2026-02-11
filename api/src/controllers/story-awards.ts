@@ -5,12 +5,16 @@ import { Request, Response } from 'express';
 class StoryAwardController {
     // Get a specific character's story awards
     getStoryAwardsByCharacter = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract character id from parameter
         const characterId = req.params.charId;
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            const [awards] = await conn.query("call get_character_story_award_list(?)", [characterId]);
+            const [awards] = await conn.query("call get_character_story_award_list(?,?)", [
+                characterId,
+                userId
+            ]);
             res.status(200).send(awards);
         } finally {
             if (conn) {
@@ -40,6 +44,7 @@ class StoryAwardController {
 
     // Get a story award
     getStoryAward = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract story award id from parameter
         const id = req.params.id;
         // Extract character id from parameter
@@ -48,7 +53,11 @@ class StoryAwardController {
         // TODO: Rethink if characterId validation should happen during or after query
         try {
             conn = await db.getConnection();
-            const [award] = await conn.query("call get_story_award(?,?)", [id, characterId]);
+            const [award] = await conn.query("call get_story_award(?,?,?)", [
+                id, 
+                characterId,
+                userId
+            ]);
             res.status(200).send(award[0]);
         } finally {
             if (conn) {

@@ -1,6 +1,6 @@
 import express from 'express';
 import dmLogController from '../controllers/dm-logs';
-import { requireAuth } from '../middleware/auth';
+import { optionalAuth, requireAuth } from '../middleware/auth';
 
 const router = express.Router({mergeParams: true});
 
@@ -11,7 +11,7 @@ router.get('/', requireAuth, dmLogController.getDMLogs);
 router.post('/create', requireAuth, dmLogController.createDMLog);
 
 // GET route for a DM log
-router.get('/:id', dmLogController.getDMLog);
+router.get('/:id', optionalAuth, dmLogController.getDMLog);
 
 // POST route to update a DM log
 router.post('/:id', requireAuth, dmLogController.updateDMLog);

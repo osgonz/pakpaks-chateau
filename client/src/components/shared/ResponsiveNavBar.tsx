@@ -54,6 +54,7 @@ const ResponsiveNavBar = () => {
     const handleGoogleLogin = useGoogleLogin({
         onSuccess: async (response: CodeResponse) => {
             await login(response.code);
+            navigate(0);
         },
         onError: (error) => console.log('Login Failed:', error),
         flow: 'auth-code'

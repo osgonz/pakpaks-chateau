@@ -138,6 +138,10 @@ const MagicItemForm = () => {
 
     useEffect(() => {
         if (currentMagicItem) {
+            if (!currentMagicItem.isOwner && !isViewing) {
+                navigate('/');
+            }
+
             setMagicItem({
                 name: currentMagicItem.name,
                 flavorName: currentMagicItem.flavorName === null ? '' : currentMagicItem.flavorName,

@@ -113,6 +113,10 @@ const CharacterForm = () => {
 
     useEffect(() => {
         if (currentCharacter) {
+            if (!currentCharacter.isOwner) {
+                navigate('/');
+            }
+
             setCharacter({
                 name: currentCharacter.name,
                 campaign: currentCharacter.campaign,

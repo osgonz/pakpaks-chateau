@@ -15,7 +15,6 @@ import { Link } from "react-router-dom";
 import { StoryAwardStatusDictionary } from '../../data/Dictionaries';
 import { SortableTableHeadCell, StoryAward, StoryAwardRow } from '../../data/Types';
 import { useTableSearchParams } from '../../hooks/useSearchParams';
-import { useAuth } from '../shared/AuthContext';
 import DeleteConfirmationDialog from '../shared/DeleteConfirmationDialog';
 import EnhancedTablePaginationActions from '../shared/EnhancedTablePaginationActions';
 import SortableTableHead, { getSortComparator } from '../shared/SortableTableHead';
@@ -26,8 +25,6 @@ interface CharacterStoryAwardTableProps {
 };
 
 const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
-    // Reference to logged in user
-    const { user } = useAuth();
     // Order, sort, page and rows per page details
     const { order, sort, setOrderSort, page, setPage, rows, setRows } = useTableSearchParams(['name', 'status']);
     // Flag used to display Story Award Delete dialog
@@ -142,7 +139,7 @@ const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
                                 >
                                     <Icon>visibility</Icon>
                                 </IconButton>
-                                { user &&
+                                { !!award.isOwner &&
                                     <>
                                         <IconButton 
                                             id={`edit-${award.id}`}

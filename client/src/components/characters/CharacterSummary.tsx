@@ -6,7 +6,6 @@ import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { CampaignDictionary } from "../../data/Dictionaries";
 import { Character } from "../../data/Types";
-import { useAuth } from '../shared/AuthContext';
 
 interface SummaryProps {
     character: Character,
@@ -16,8 +15,6 @@ interface SummaryProps {
 };
 
 const CharacterSummary = (props: SummaryProps) => {
-    // Reference to logged in user
-    const { user } = useAuth();
     // Reference to theme
     const theme = useTheme();
     // Helper boolean to apply properties conditional on screen size
@@ -99,7 +96,7 @@ const CharacterSummary = (props: SummaryProps) => {
                 </Grid>
             </Grid>
             <Grid alignItems="center" container item xs={12} md={4.5}>
-                { user &&
+                { !!props.character.isOwner &&
                     <>
                         <Grid item xs={12} sx={{ pb: '0.35em' }}>
                             <Button 

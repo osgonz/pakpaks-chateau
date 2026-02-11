@@ -20,12 +20,16 @@ class CharacterController {
 
     // Get a character
     getCharacter = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract character id from parameter
         const id = req.params.id;
         let conn: PoolConnection | undefined;
         try {
             conn = await db.getConnection();
-            const [character] = await conn.execute("call get_character(?)", [id]);
+            const [character] = await conn.execute("call get_character(?,?)", [
+                id,
+                userId
+            ]);
             res.status(200).send(character[0]);
         } finally {
             if (conn) {

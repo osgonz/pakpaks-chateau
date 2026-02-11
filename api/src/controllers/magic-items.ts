@@ -20,13 +20,17 @@ class MagicItemController {
     
     // Get a specific character's magic items
     getMagicItemsByCharacter = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract character id from parameter
         const characterId = req.params.charId;
         let conn: PoolConnection | undefined;
         // TODO: Should front end take care of filtering out items with a lossLogId?
         try {
             conn = await db.getConnection();
-            const [items] = await conn.query("call get_character_magic_item_list(?)", [characterId]);
+            const [items] = await conn.query("call get_character_magic_item_list(?,?)", [
+                characterId,
+                userId
+            ]);
             res.status(200).send(items);
         } finally {
             if (conn) {
@@ -75,6 +79,7 @@ class MagicItemController {
 
     // Get a magic item
     getMagicItem = async (req: Request, res: Response) => {
+        const userId = req.userId!;
         // Extract magic item id from parameter
         const id = req.params.id;
         // Extract character id from parameter
@@ -83,7 +88,11 @@ class MagicItemController {
         // TODO: Rethink if characterId validation should happen during or after query
         try {
             conn = await db.getConnection();
-            const [magicItem] = await conn.query("call get_magic_item(?,?)", [id, characterId]);
+            const [magicItem] = await conn.query("call get_magic_item(?,?,?)", [
+                id, 
+                characterId,
+                userId
+            ]);
             res.status(200).send(magicItem[0]);
         } finally {
             if (conn) {
