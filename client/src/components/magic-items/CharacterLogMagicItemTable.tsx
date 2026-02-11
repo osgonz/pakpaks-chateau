@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react';
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -12,6 +11,8 @@ import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from "@mui/material/Typography";
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { ItemRarityDictionary } from '../../data/Dictionaries';
 import { MagicItem, MagicItemRow, Order, SortableTableHeadCell } from "../../data/Types";
 import CharacterLogMagicItemDialog from './CharacterLogMagicItemDialog';
@@ -203,7 +204,7 @@ const CharacterLogMagicItemTable = (props: CharacterLogMagicItemTableProps) => {
                                             color="primary"
                                             onClick={() => handleMagicItemOpen(item)}
                                         >
-                                            <Icon>visibility</Icon>
+                                            <VisibilityIcon />
                                         </IconButton>
                                         { !isViewing &&
                                             <IconButton 
@@ -212,7 +213,7 @@ const CharacterLogMagicItemTable = (props: CharacterLogMagicItemTableProps) => {
                                                 color="error"
                                                 onClick={() => handleDeleteOpen(item)}
                                             >
-                                                <Icon>delete</Icon>
+                                                <DeleteIcon />
                                             </IconButton>
                                         }
                                     </TableCell>

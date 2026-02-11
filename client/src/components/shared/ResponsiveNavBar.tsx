@@ -5,7 +5,6 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import LinearProgress from "@mui/material/LinearProgress";
 import Menu from "@mui/material/Menu";
@@ -15,6 +14,8 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import GitHubIcon from '@mui/icons-material/GitHub';
+import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from "react-router-dom";
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
 import { useAuth } from './AuthContext';
@@ -96,7 +97,7 @@ const ResponsiveNavBar = () => {
                                     onClick={handleOpenNavMenu}
                                     color="inherit"
                                 >
-                                    <Icon>menu</Icon>
+                                    <MenuIcon />
                                 </IconButton>
                                 <Menu
                                     id="nav-menu"
@@ -157,6 +158,19 @@ const ResponsiveNavBar = () => {
                                 ))}
                             </Box>
                         }
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title="GitHub Repository">
+                                <IconButton 
+                                    href="https://github.com/osgonz/pakpaks-chateau"
+                                    target="_blank"
+                                    color="inherit"
+                                    size="large" 
+                                    sx={{ mr: 1.5 }} 
+                                >
+                                    <GitHubIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
                         <Box sx={{ flexGrow: 0 }}>
                             { user ? (
                                 <>

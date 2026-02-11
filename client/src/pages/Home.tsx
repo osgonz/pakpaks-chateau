@@ -24,7 +24,13 @@ function Home() {
                     }}
                 >
                     <Stack spacing={3} alignItems="center">
-                        <Typography variant="h3" component="h1">
+                        <Typography 
+                            variant="h3" 
+                            component="h1" 
+                            sx={{ 
+                                fontFamily: 'monospace'
+                            }}
+                        >
                             Pakpak's Chateau
                         </Typography>
                         { user &&

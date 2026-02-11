@@ -2,13 +2,13 @@ import { useMemo } from 'react';
 import Checkbox from "@mui/material/Checkbox";
 import Grid from '@mui/material/Grid';
 import FormControl from "@mui/material/FormControl";
-import Icon from '@mui/material/Icon';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from "@mui/material/InputLabel";
 import ListItemText from "@mui/material/ListItemText";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
+import SearchIcon from '@mui/icons-material/Search';
 import { CharacterLogTypeDictionary } from '../../data/Dictionaries';
 import { CharacterLogRow, CharacterLogType } from '../../data/Types';
 import { usePlayerLogsSearchParams, useSearchBarSearchParams } from '../../hooks/useSearchParams';
@@ -76,7 +76,7 @@ const CharacterLogTabPanel = (props: CharacterLogTabPanelProps) => {
                     value={searchValue}
                     fullWidth
                     InputProps={{
-                        startAdornment: <InputAdornment position="start"><Icon>search</Icon></InputAdornment>,
+                        startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment>,
                     }}
                 />
             </Grid>

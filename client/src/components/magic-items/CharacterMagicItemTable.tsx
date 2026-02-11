@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useState, useMemo } from 'react';
 import Grid from "@mui/material/Grid";
-import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -11,6 +10,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Link } from "react-router-dom";
 import { ItemRarityDictionary } from '../../data/Dictionaries';
 import { MagicItem, MagicItemRow, SortableTableHeadCell } from '../../data/Types';
@@ -151,7 +153,7 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
                                     component={Link}
                                     to={`/characters/${item.characterId}/magic-items/${item.id}`}
                                 >
-                                    <Icon>visibility</Icon>
+                                    <VisibilityIcon />
                                 </IconButton>
                                 { !!item.isOwner &&
                                     <>
@@ -162,7 +164,7 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
                                             component={Link}
                                             to={`/characters/${item.characterId}/magic-items/${item.id}/edit`}
                                         >
-                                            <Icon>edit</Icon>
+                                            <EditIcon />
                                         </IconButton>
                                         <IconButton 
                                             id={`delete-${item.id}`}
@@ -170,7 +172,7 @@ const CharacterMagicItemTable = (props: CharacterMagicItemTableProps) => {
                                             color="error"
                                             onClick={() => handleDeleteOpen(item)}
                                         >
-                                            <Icon>delete</Icon>
+                                            <DeleteIcon />
                                         </IconButton>
                                     </>
                                 }

@@ -1,7 +1,10 @@
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
 
 interface EnhancedTablePaginationActionsProps {
     count: number;
@@ -46,28 +49,28 @@ const EnhancedTablePaginationActions = (props: EnhancedTablePaginationActionsPro
             disabled={page === 0}
             aria-label="first page"
         >
-            {theme.direction === 'rtl' ? <Icon>last_page</Icon> : <Icon>first_page</Icon>}
+            {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
         </IconButton>
         <IconButton
             onClick={handleBackButtonClick}
             disabled={page === 0}
             aria-label="previous page"
         >
-            {theme.direction === 'rtl' ? <Icon>keyboard_arrow_right</Icon> : <Icon>keyboard_arrow_left</Icon>}
+            {theme.direction === 'rtl' ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon />}
         </IconButton>
         <IconButton
             onClick={handleNextButtonClick}
             disabled={page >= Math.ceil(count / rowsPerPage) - 1}
             aria-label="next page"
         >
-            {theme.direction === 'rtl' ? <Icon>keyboard_arrow_left</Icon> : <Icon>keyboard_arrow_right</Icon>}
+            {theme.direction === 'rtl' ? <KeyboardArrowLeftIcon /> : <KeyboardArrowRightIcon />}
         </IconButton>
         <IconButton
             onClick={handleLastPageButtonClick}
             disabled={page >= Math.ceil(count / rowsPerPage) - 1}
             aria-label="last page"
         >
-            {theme.direction === 'rtl' ? <Icon>first_page</Icon> : <Icon>last_page</Icon>}
+            {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
         </IconButton>
         </Box>
     );

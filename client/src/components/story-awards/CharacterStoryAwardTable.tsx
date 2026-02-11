@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useState, useMemo } from 'react';
 import Grid from "@mui/material/Grid";
-import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -11,6 +10,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Link } from "react-router-dom";
 import { StoryAwardStatusDictionary } from '../../data/Dictionaries';
 import { SortableTableHeadCell, StoryAward, StoryAwardRow } from '../../data/Types';
@@ -137,7 +139,7 @@ const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
                                     component={Link}
                                     to={`/characters/${award.characterId}/story-awards/${award.id}`}
                                 >
-                                    <Icon>visibility</Icon>
+                                    <VisibilityIcon />
                                 </IconButton>
                                 { !!award.isOwner &&
                                     <>
@@ -148,7 +150,7 @@ const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
                                             component={Link}
                                             to={`/characters/${award.characterId}/story-awards/${award.id}/edit`}
                                         >
-                                            <Icon>edit</Icon>
+                                            <EditIcon />
                                         </IconButton>
                                         <IconButton 
                                             id={`delete-${award.id}`}
@@ -156,7 +158,7 @@ const CharacterStoryAwardTable = (props: CharacterStoryAwardTableProps) => {
                                             color="error"
                                             onClick={() => handleDeleteOpen(award)}
                                         >
-                                            <Icon>delete</Icon>
+                                            <DeleteIcon />
                                         </IconButton>
                                     </>
                                 }

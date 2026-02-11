@@ -3,10 +3,12 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
-import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Link } from "react-router-dom";
 import { CampaignDictionary } from '../../data/Dictionaries';
 import { Character, CharacterRow } from "../../data/Types";
@@ -45,7 +47,7 @@ const CharacterCard = (props: CharacterCardProps) => {
                             component={Link}
                             to={`/characters/${character.id}`}
                         >
-                            <Icon>visibility</Icon>
+                            <VisibilityIcon />
                         </IconButton>
                         <IconButton 
                             aria-label={`Edit character ${character.name}`}
@@ -53,14 +55,14 @@ const CharacterCard = (props: CharacterCardProps) => {
                             component={Link}
                             to={`/characters/${character.id}/edit`}
                         >
-                            <Icon>edit</Icon>
+                            <EditIcon />
                         </IconButton>
                         <IconButton 
                             aria-label={`Delete character ${character.name}`}
                             color="error"
                             onClick={() => props.handleDeleteOpen(character)}
                         >
-                            <Icon>delete</Icon>
+                            <DeleteIcon />
                         </IconButton>
                     </CardActions>
                 </Stack>

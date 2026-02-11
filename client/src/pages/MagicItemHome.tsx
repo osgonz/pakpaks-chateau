@@ -3,7 +3,6 @@ import Checkbox from "@mui/material/Checkbox";
 import Container from "@mui/material/Container";
 import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
-import Icon from "@mui/material/Icon";
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from "@mui/material/InputLabel";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -13,6 +12,7 @@ import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import Typography from '@mui/material/Typography';
+import SearchIcon from '@mui/icons-material/Search';
 import { CharacterLogTypeDictionary, ItemRarityDictionary } from '../data/Dictionaries';
 import { CharacterLogType, ItemRarity, MagicItemGeneralRow } from '../data/Types';
 import { useMagicItems } from "../hooks/useMagicItem";
@@ -125,7 +125,7 @@ const MagicItemHome = () => {
                                         value={searchValue}
                                         fullWidth
                                         InputProps={{
-                                            startAdornment: <InputAdornment position="start"><Icon>search</Icon></InputAdornment>,
+                                            startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment>,
                                         }}
                                     />
                                 </Grid>

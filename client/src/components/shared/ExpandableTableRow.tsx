@@ -1,10 +1,11 @@
 import { Children, ReactNode, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
-import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Markdown from "./Markdown";
 
 interface ExpandableTableRowProps {
@@ -32,7 +33,7 @@ const ExpandableTableRow = (props: ExpandableTableRowProps) => {
                         size="small"
                         onClick={() => setOpen(!open)}
                     >
-                        <Icon>{open ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</Icon>
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon /> }
                     </IconButton>
                 </TableCell>
                 {

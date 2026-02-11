@@ -2,12 +2,12 @@ import { useState, useEffect, useMemo } from 'react';
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Icon from "@mui/material/Icon";
 import InputAdornment from '@mui/material/InputAdornment';
 import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from '@mui/material/Typography';
+import SearchIcon from '@mui/icons-material/Search';
 import { Link } from "react-router-dom";
 import { DMLog } from '../data/Types';
 import { useServicePlayerLogs } from "../hooks/useCharacterLog"
@@ -126,7 +126,7 @@ const DMLogHome = () => {
                                         value={searchValue}
                                         fullWidth
                                         InputProps={{
-                                            startAdornment: <InputAdornment position="start"><Icon>search</Icon></InputAdornment>,
+                                            startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment>,
                                         }}
                                     />
                                 </Grid>

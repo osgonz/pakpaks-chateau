@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useState, useMemo } from 'react';
 import { format } from 'date-fns';
 import Grid from "@mui/material/Grid";
-import Icon from '@mui/material/Icon';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -12,6 +11,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Link } from "react-router-dom";
 import { DMLog, SortableTableHeadCell } from "../../data/Types";
 import { useTableSearchParams } from '../../hooks/useSearchParams';
@@ -140,7 +142,7 @@ const DMLogTable = (props: DMLogTableProps) => {
                                     component={Link}
                                     to={`/dm-logs/${log.id}`}
                                 >
-                                    <Icon>visibility</Icon>
+                                    <VisibilityIcon />
                                 </IconButton>
                                 <IconButton 
                                     id={`edit-${log.id}`}
@@ -149,7 +151,7 @@ const DMLogTable = (props: DMLogTableProps) => {
                                     component={Link}
                                     to={`/dm-logs/${log.id}/edit`}
                                 >
-                                    <Icon>edit</Icon>
+                                    <EditIcon />
                                 </IconButton>
                                 <IconButton 
                                     id={`delete-${log.id}`}
@@ -157,7 +159,7 @@ const DMLogTable = (props: DMLogTableProps) => {
                                     color="error"
                                     onClick={() => handleDeleteOpen(log)}
                                 >
-                                    <Icon>delete</Icon>
+                                    <DeleteIcon />
                                 </IconButton>
                             </TableCell>
                         </ExpandableTableRow>

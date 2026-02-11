@@ -4,7 +4,6 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
-import Icon from "@mui/material/Icon";
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from "@mui/material/InputLabel";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -13,6 +12,7 @@ import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import Typography from '@mui/material/Typography';
+import SearchIcon from '@mui/icons-material/Search';
 import { Link } from "react-router-dom";
 import { CharacterSortByOptionDictionary, CampaignDictionary } from '../data/Dictionaries';
 import { Character, CharacterSortByOption, CharacterRow } from '../data/Types';
@@ -147,7 +147,7 @@ const CharactersMenu = () => {
                                         value={searchValue}
                                         fullWidth
                                         InputProps={{
-                                            startAdornment: <InputAdornment position="start"><Icon>search</Icon></InputAdornment>,
+                                            startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment>,
                                         }}
                                     />
                                 </Grid>

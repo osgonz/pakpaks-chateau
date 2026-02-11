@@ -1,7 +1,7 @@
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Icon from '@mui/material/Icon';
 import Link from '@mui/material/Link';
 import Typography from "@mui/material/Typography";
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Link as RouterLink } from 'react-router-dom';
 
 interface BreadcrumbsMenuProps {
@@ -14,7 +14,7 @@ const BreadcrumbsMenu = (props: BreadcrumbsMenuProps) => {
     return (
         <Breadcrumbs
             aria-label="breadcrumb"
-            separator={ <Icon>chevron_right</Icon> }
+            separator={ <ChevronRightIcon /> }
             sx={{
                 pt: 1,
                 pb: 2
