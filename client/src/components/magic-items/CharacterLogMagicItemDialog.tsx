@@ -174,7 +174,8 @@ const CharacterLogMagicItemDialog = (props: CharacterLogMagicItemDialogProps) =>
             isEquipped: rawMagicItem.isEquipped,
             characterId: characterId!,
             originLogId: isEarned && logId ? logId: rawMagicItem.originLogId!,
-            lossLogId: !isEarned && logId ? logId: rawMagicItem.lossLogId
+            lossLogId: !isEarned && logId ? logId: rawMagicItem.lossLogId,
+            isOwner: null
         };
 
         await props.saveFunction(cookedMagicItem);

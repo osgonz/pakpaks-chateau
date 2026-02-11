@@ -63,7 +63,7 @@ export type Character = {
     notes: string | null;
     characterSheetLink: string | null;
     imageUrl: string | null;
-    isOwner: boolean;
+    isOwner: boolean | null;
 };
 
 export interface CharacterRow extends Character {
@@ -79,7 +79,7 @@ export type DMLog = {
     lengthHours: number;
     serviceHours: number;
     description: string | null;
-    isOwner: boolean;
+    isOwner: boolean | null;
 };
 
 // Magic Item type definition
@@ -98,7 +98,7 @@ export type MagicItem = {
     characterId: string;
     originLogId: string;
     lossLogId: string | null;
-    isOwner: boolean;
+    isOwner: boolean | null;
 };
 
 export interface MagicItemRow extends MagicItem {
@@ -130,7 +130,7 @@ export type CharacterLog = {
     traderOtherPlayer: string | null;
     description: string | null;
     characterId: string;
-    isOwner: boolean;
+    isOwner: boolean | null;
 };
 
 export interface CharacterLogRow extends CharacterLog {
@@ -153,7 +153,7 @@ export type StoryAward = {
     status: StoryAwardStatus;
     characterId: string;
     originLogId: string;
-    isOwner: boolean;
+    isOwner: boolean | null;
 };
 
 export interface StoryAwardRow extends StoryAward {

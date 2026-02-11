@@ -96,7 +96,8 @@ const CharacterLogStoryAwardDialog = (props: CharacterLogStoryAwardDialogProps) 
             description: rawStoryAward.description,
             status: rawStoryAward.status!,
             characterId: characterId!,
-            originLogId: logId ? logId: rawStoryAward.originLogId!
+            originLogId: logId ? logId: rawStoryAward.originLogId!,
+            isOwner: null
         };
 
         await props.saveFunction(cookedStoryAward);
