@@ -66,7 +66,7 @@ const DMLogHome = () => {
 
     return (
         <>
-            { !isLoading && filteredLogs && loadedServiceLogs && currentServiceHours ? (
+            { !isLoading && filteredLogs && loadedServiceLogs ? (
                 <>
                     <Container maxWidth="lg">
                         <BreadcrumbsMenu 
