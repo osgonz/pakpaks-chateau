@@ -4,18 +4,21 @@ import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
-import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
-import CharacterSummary from '../components/characters/CharacterSummary';
-import CharacterDetailTabs from '../components/characters/CharacterDetailTabs';
 import { CharacterLogRow, MagicItemRow, StoryAwardRow } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
 import { useCharacterLogsByCharacter } from '../hooks/useCharacterLog';
 import { useMagicItemsByCharacter } from "../hooks/useMagicItem";
 import { useStoryAwardsByCharacter } from '../hooks/useStoryAward';
+import { useAuth } from '../components/shared/AuthContext';
+import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
+import CharacterSummary from '../components/characters/CharacterSummary';
+import CharacterDetailTabs from '../components/characters/CharacterDetailTabs';
 
 const CharacterHome = () => {
     // Character Id value fetched from URL params
     const { characterId } = useParams();
+    // Auth context loading reference
+    const { isLoading } = useAuth();
     // Character summary details
     const character = useCharacter(characterId!);
     // Player logs
@@ -78,7 +81,7 @@ const CharacterHome = () => {
 
     return (
         <>
-            { character && characterLogs && magicItems && storyAwards ? (
+            { !isLoading && character && characterLogs && magicItems && storyAwards ? (
                 <Container maxWidth="lg">
                     <BreadcrumbsMenu 
                         characterName={character.name}

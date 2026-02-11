@@ -6,6 +6,8 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 import { LocalizationProvider } from '@mui/x-date-pickers/';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Outlet } from 'react-router-dom';
+import { AuthProvider } from '../components/shared/AuthContext';
+import ResponsiveNavBar from '../components/shared/ResponsiveNavBar';
 
 function App() {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -22,14 +24,17 @@ function App() {
     return (
         <>
             {/* HEADER HERE */}
-            <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <ThemeProvider theme={theme}>
-                        <CssBaseline />
-                        <Outlet />
-                    </ThemeProvider>
-                </LocalizationProvider>
-            </GoogleOAuthProvider>
+            <AuthProvider>
+                <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <ThemeProvider theme={theme}>
+                            <CssBaseline />
+                            <ResponsiveNavBar />
+                            <Outlet />
+                        </ThemeProvider>
+                    </LocalizationProvider>
+                </GoogleOAuthProvider>
+            </AuthProvider>
             {/* FOOTER HERE */}
         </>
     )

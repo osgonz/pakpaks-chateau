@@ -10,13 +10,16 @@ import TextField from "@mui/material/TextField";
 import Typography from '@mui/material/Typography';
 import { Link } from "react-router-dom";
 import { DMLog } from '../data/Types';
-import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
-import DMLogTable from '../components/dm-logs/DMLogTable';
 import { useServicePlayerLogs } from "../hooks/useCharacterLog"
 import { useDMLogs } from "../hooks/useDMLog";
 import { useSearchBarSearchParams } from "../hooks/useSearchParams";
+import { useAuth } from '../components/shared/AuthContext';
+import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
+import DMLogTable from '../components/dm-logs/DMLogTable';
 
 const DMLogHome = () => {
+    // Auth context loading reference
+    const { isLoading } = useAuth();
     // Logs details
     const loadedDMLogs = useDMLogs();
     const loadedServiceLogs = useServicePlayerLogs();
@@ -63,7 +66,7 @@ const DMLogHome = () => {
 
     return (
         <>
-            { filteredLogs && loadedServiceLogs && currentServiceHours ? (
+            { !isLoading && filteredLogs && loadedServiceLogs && currentServiceHours ? (
                 <>
                     <Container maxWidth="lg">
                         <BreadcrumbsMenu 

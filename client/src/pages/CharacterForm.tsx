@@ -9,12 +9,15 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import { CampaignDictionary } from '../data/Dictionaries';
 import { Campaign } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
+import { useAuth } from '../components/shared/AuthContext';
+import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 
 const CharacterForm = () => {
+    // Auth context loading reference
+    const { isLoading } = useAuth();
     // Character & award id values fetched from URL params
     const { characterId } = useParams();
     // Character details
@@ -127,7 +130,7 @@ const CharacterForm = () => {
 
     return (
         <>
-            { (!characterId || (characterId && !isCharacterLoading)) ? (
+            { !isLoading && (!characterId || (characterId && !isCharacterLoading)) ? (
                 <Container maxWidth="md">
                     <BreadcrumbsMenu 
                         characterId={characterId}

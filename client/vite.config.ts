@@ -10,7 +10,6 @@ export default defineConfig(({ mode }) => {
         server: {
             proxy: {
                 "/api": {
-                    //TODO: replace hard coded value with ENV variable(?)
                     target: env.VITE_API_URL,
                     changeOrigin: true,
                     secure: false,

@@ -9,10 +9,13 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import { useDMLog } from "../hooks/useDMLog";
+import { useAuth } from '../components/shared/AuthContext';
+import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 
 const DMLogForm = () => {
+    // Auth context loading reference
+    const { isLoading } = useAuth();
     // Log id value fetched from URL params
     const { logId } = useParams();
     // DM log details
@@ -110,7 +113,7 @@ const DMLogForm = () => {
 
     return (
         <>
-            { (!logId || (logId && !isLogLoading)) ? (
+            { !isLoading && (!logId || (logId && !isLogLoading)) ? (
                 <Container maxWidth="md">
                     <BreadcrumbsMenu 
                         currentPageTitle={(logId ? (isViewing ? "View" : "Edit") : "New") + " DM Log"}

@@ -10,14 +10,17 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import BaseStoryAwardFields from '../components/story-awards/BaseStoryAwardFields';
-import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import { StoryAwardStatus } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
 import { useCharacterLogsDropdownByCharacter } from "../hooks/useCharacterLog";
 import { useStoryAward } from "../hooks/useStoryAward";
+import { useAuth } from '../components/shared/AuthContext';
+import BaseStoryAwardFields from '../components/story-awards/BaseStoryAwardFields';
+import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 
 const StoryAwardForm = () => {
+    // Auth context loading reference
+    const { isLoading } = useAuth();
     // Character & award id values fetched from URL params
     const { characterId, storyAwardId } = useParams();
     // Character summary details
@@ -120,7 +123,7 @@ const StoryAwardForm = () => {
 
     return (
         <>
-            { (character && characterLogIds && (!storyAwardId || (storyAwardId && !isStoryAwardLoading))) ? (
+            { !isLoading && (character && characterLogIds && (!storyAwardId || (storyAwardId && !isStoryAwardLoading))) ? (
                 <Container maxWidth="md">
                     <BreadcrumbsMenu 
                         characterId={characterId}

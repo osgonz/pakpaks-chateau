@@ -11,6 +11,13 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { CharacterLogTypeDictionary } from '../data/Dictionaries';
+import { CharacterLogType, MagicItem, MagicItemRow, StoryAward } from '../data/Types';
+import { useCharacter } from "../hooks/useCharacter";
+import { useCharacterLog } from "../hooks/useCharacterLog";
+import { useMagicItemsByCharacter, useMagicItemsByCharacterLog, useMagicItemsLostByCharacterLog } from "../hooks/useMagicItem";
+import { useStoryAwardsByCharacterLog } from '../hooks/useStoryAward';
+import { useAuth } from '../components/shared/AuthContext';
 import AdventureLogFields from '../components/character-logs/AdventureLogFields';
 import DowntimeLogFields from '../components/character-logs/DowntimeLogFields';
 import MerchantLogFields from '../components/character-logs/MerchantLogFields';
@@ -19,14 +26,10 @@ import TradeLogFields from '../components/character-logs/TradeLogFields';
 import CharacterLogMagicItemTable from '../components/magic-items/CharacterLogMagicItemTable';
 import CharacterLogStoryAwardTable from '../components/story-awards/CharacterLogStoryAwardTable';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
-import { CharacterLogTypeDictionary } from '../data/Dictionaries';
-import { CharacterLogType, MagicItem, MagicItemRow, StoryAward } from '../data/Types';
-import { useCharacter } from "../hooks/useCharacter";
-import { useCharacterLog } from "../hooks/useCharacterLog";
-import { useMagicItemsByCharacter, useMagicItemsByCharacterLog, useMagicItemsLostByCharacterLog } from "../hooks/useMagicItem";
-import { useStoryAwardsByCharacterLog } from '../hooks/useStoryAward';
 
 const CharacterLogForm = () => {
+    // Auth context loading reference
+    const { isLoading } = useAuth();
     // Character & log id values fetched from URL params
     const { characterId, logId } = useParams();
     // Character summary details
@@ -362,7 +365,7 @@ const CharacterLogForm = () => {
 
     return (
         <>
-            { (character && (!logId || (logId && !isLogLoading))) ? (
+            { !isLoading && (character && (!logId || (logId && !isLogLoading))) ? (
                 <Container maxWidth="md">
                     <BreadcrumbsMenu 
                         characterId={characterId}

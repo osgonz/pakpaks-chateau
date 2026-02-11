@@ -15,16 +15,19 @@ import TextField from "@mui/material/TextField";
 import Typography from '@mui/material/Typography';
 import { CharacterLogTypeDictionary, ItemRarityDictionary } from '../data/Dictionaries';
 import { CharacterLogType, ItemRarity, MagicItemGeneralRow } from '../data/Types';
-import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
-import MagicItemTable from '../components/magic-items/MagicItemTable';
 import { useMagicItems } from "../hooks/useMagicItem";
 import { useMagicItemSearchParams, useSearchBarSearchParams } from "../hooks/useSearchParams";
+import { useAuth } from '../components/shared/AuthContext';
+import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
+import MagicItemTable from '../components/magic-items/MagicItemTable';
 
 const MagicItemHome = () => {
     // Array containing Character Sort By Option ids for Select options
     const itemRarityArray = Array.from(ItemRarityDictionary.keys());
     const charLogTypeArray = Array.from(CharacterLogTypeDictionary.keys());
 
+    // Auth context loading reference
+    const { isLoading } = useAuth();
     // Magic Items details
     const loadedItems = useMagicItems();
     const [items, setItems] = useState<MagicItemGeneralRow[] | undefined>();
@@ -84,7 +87,7 @@ const MagicItemHome = () => {
 
     return (
         <>
-            { searchedMagicItems ? (
+            { !isLoading && searchedMagicItems ? (
                 <>
                     <Container maxWidth="lg">
                         <BreadcrumbsMenu 

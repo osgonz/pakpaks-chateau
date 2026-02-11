@@ -10,14 +10,17 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import BaseMagicItemFields from '../components/magic-items/BaseMagicItemFields';
-import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import { ItemType, ItemRarity } from '../data/Types';
 import { useCharacter } from "../hooks/useCharacter";
 import { useCharacterLogsDropdownByCharacter } from "../hooks/useCharacterLog";
 import { useMagicItem } from "../hooks/useMagicItem";
+import { useAuth } from '../components/shared/AuthContext';
+import BaseMagicItemFields from '../components/magic-items/BaseMagicItemFields';
+import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 
 const MagicItemForm = () => {
+    // Auth context loading reference
+    const { isLoading } = useAuth();
     // Character & log id values fetched from URL params
     const { characterId, magicItemId } = useParams();
     // Character summary details
@@ -155,7 +158,7 @@ const MagicItemForm = () => {
 
     return (
         <>
-            { (character && characterLogIds && (!magicItemId || (magicItemId && !isMagicItemLoading))) ? (
+            { !isLoading && (character && characterLogIds && (!magicItemId || (magicItemId && !isMagicItemLoading))) ? (
                 <Container maxWidth="md">
                     <BreadcrumbsMenu 
                         characterId={characterId}

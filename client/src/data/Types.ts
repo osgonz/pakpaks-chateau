@@ -165,3 +165,19 @@ export interface SortableTableHeadCell {
 
 // Order type for table sorting
 export type Order = 'asc' | 'desc';
+
+// User type definition
+export type User = {
+    id: string;
+    email: string;
+    name: string;
+    imageUrl: string;
+};
+
+// Auth context interface
+export interface AuthContextType {
+    user: User | null;
+    isLoading: boolean;
+    login: (authCode: string) => Promise<void>;
+    logout: () => Promise<void>;
+};

@@ -16,17 +16,20 @@ import Typography from '@mui/material/Typography';
 import { Link } from "react-router-dom";
 import { CharacterSortByOptionDictionary, CampaignDictionary } from '../data/Dictionaries';
 import { Character, CharacterSortByOption, CharacterRow } from '../data/Types';
+import { useCharacters } from "../hooks/useCharacter";
+import { useCharacterSearchParams, useSearchBarSearchParams } from "../hooks/useSearchParams";
+import { useAuth } from '../components/shared/AuthContext';
 import BreadcrumbsMenu from '../components/shared/BreadcrumbsMenu';
 import CharacterCard from "../components/characters/CharacterCard";
 import DeleteConfirmationDialog from '../components/shared/DeleteConfirmationDialog';
 import { getCharacterSortComparator } from '../components/shared/SortableTableHead';
-import { useCharacters } from "../hooks/useCharacter";
-import { useCharacterSearchParams, useSearchBarSearchParams } from "../hooks/useSearchParams";
 
 const CharactersMenu = () => {
     // Array containing Character Sort By Option ids for Select options
     const characterSortByArray = Array.from(CharacterSortByOptionDictionary.keys());
 
+    // Auth context loading reference
+    const { isLoading } = useAuth();
     // Character details
     const loadedCharacters = useCharacters();
     const [characters, setCharacters] = useState<CharacterRow[] | undefined>();
@@ -94,7 +97,7 @@ const CharactersMenu = () => {
 
     return (
         <>
-            { visibleCharacters ? (
+            { !isLoading && visibleCharacters ? (
                 <>
                     <Container maxWidth="lg">
                         <BreadcrumbsMenu 
