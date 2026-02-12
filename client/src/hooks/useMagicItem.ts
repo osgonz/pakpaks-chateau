@@ -16,7 +16,7 @@ export function useMagicItem(characterId: string, itemId: string) {
      * @returns Magic item details
      */
     const loadMagicItem = async(characterId: string, itemId: string) => {
-        return axios.get(`/api/characters/${characterId}/magic-items/${itemId}`).then((res) => res.data) as Promise<MagicItem>;
+        return axios.get(`/api/characters/${characterId}/magic-items/${itemId}`, { withCredentials: true }).then((res) => res.data) as Promise<MagicItem>;
     }
 
     useEffect(() => {
@@ -41,7 +41,7 @@ export function useMagicItemsByCharacter(characterId: string) {
      * @returns Array containing the character's magic items
      */
     const loadMagicItemsByCharacter = async(characterId: string) => {
-        return axios.get(`/api/characters/${characterId}/magic-items`).then((res) => res.data) as Promise<MagicItemRow[]>;
+        return axios.get(`/api/characters/${characterId}/magic-items`, { withCredentials: true }).then((res) => res.data) as Promise<MagicItemRow[]>;
     };
 
     useEffect(() => {
@@ -68,7 +68,7 @@ export function useMagicItemsByCharacterLog(characterId: string, logId: string) 
      * @returns Array containing the character log's magic items
      */
     const loadMagicItemsByCharacterLog = async(characterId: string, logId: string) => {
-        return axios.get(`/api/characters/${characterId}/character-logs/${logId}/magic-items`).then((res) => res.data) as Promise<MagicItem[]>;
+        return axios.get(`/api/characters/${characterId}/character-logs/${logId}/magic-items`, { withCredentials: true }).then((res) => res.data) as Promise<MagicItem[]>;
     };
 
     useEffect(() => {
@@ -95,7 +95,7 @@ export function useMagicItemsLostByCharacterLog(characterId: string, logId: stri
      * @returns Array containing the character log's lost magic items
      */
     const loadMagicItemsByCharacterLog = async(characterId: string, logId: string) => {
-        return axios.get(`/api/characters/${characterId}/character-logs/${logId}/lost-magic-items`).then((res) => res.data) as Promise<MagicItem[]>;
+        return axios.get(`/api/characters/${characterId}/character-logs/${logId}/lost-magic-items`, { withCredentials: true }).then((res) => res.data) as Promise<MagicItem[]>;
     };
 
     useEffect(() => {

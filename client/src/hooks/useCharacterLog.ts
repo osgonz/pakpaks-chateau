@@ -16,7 +16,7 @@ export function useCharacterLog(characterId: string, logId: string) {
      * @returns Player log details
      */
     const loadCharacterLog = async(characterId: string, logId: string) => {
-        return axios.get(`/api/characters/${characterId}/character-logs/${logId}`).then((res) => res.data) as Promise<CharacterLog>;
+        return axios.get(`/api/characters/${characterId}/character-logs/${logId}`, { withCredentials: true }).then((res) => res.data) as Promise<CharacterLog>;
     }
 
     useEffect(() => {
@@ -41,7 +41,7 @@ export function useCharacterLogsByCharacter(characterId: string) {
      * @returns Array containing the character's player logs
      */
     const loadCharacterLogsByCharacter = async(characterId: string) => {
-        return axios.get(`/api/characters/${characterId}/character-logs`).then((res) => res.data) as Promise<CharacterLogRow[]>;
+        return axios.get(`/api/characters/${characterId}/character-logs`, { withCredentials: true }).then((res) => res.data) as Promise<CharacterLogRow[]>;
     };
 
     useEffect(() => {
@@ -61,7 +61,7 @@ export function useCharacterLogsDropdownByCharacter(characterId: string) {
     const [characterLogs, setCharacterLogs] = useState<CharacterLogAbstract[] | undefined>();
 
     const loadCharacterLogsDropdownByCharacter = async(characterId: string) => {
-        return axios.get(`/api/characters/${characterId}/character-logs/abstracts`).then((res) => res.data) as Promise<CharacterLogAbstract[]>;
+        return axios.get(`/api/characters/${characterId}/character-logs/abstracts`, { withCredentials: true }).then((res) => res.data) as Promise<CharacterLogAbstract[]>;
     };
 
     useEffect(() => {
@@ -84,7 +84,7 @@ export function useServicePlayerLogs() {
      * @returns Array containing the subset of player logs
      */
     const loadServicePlayerLogs = async() => {
-        return axios.get('/api/player-logs/service').then(res => res.data) as Promise<CharacterLogRow[]>;
+        return axios.get('/api/player-logs/service', { withCredentials: true }).then(res => res.data) as Promise<CharacterLogRow[]>;
     };
 
     useEffect(() => {

@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import cookies from 'cookie-parser';
+import cors from 'cors';
 import express from 'express';
 import logger from 'morgan';
 
@@ -12,6 +13,10 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookies());
+app.use(cors({
+    origin: ["http://localhost:5173", process.env.CLIENT_API_URL || ''],
+    credentials: true,
+}));
 app.use(logger('dev'));
 
 // Declare routes

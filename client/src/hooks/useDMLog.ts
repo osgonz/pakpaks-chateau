@@ -16,7 +16,7 @@ export function useDMLog(logId: string) {
      * @returns DM log details
      */
     const loadDMLog = async(logId: string) => {
-        return axios.get(`/api/dm-logs/${logId}`).then((res) => res.data) as Promise<DMLog>;
+        return axios.get(`/api/dm-logs/${logId}`, { withCredentials: true }).then((res) => res.data) as Promise<DMLog>;
     }
 
     useEffect(() => {

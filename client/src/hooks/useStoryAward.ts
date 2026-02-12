@@ -16,7 +16,7 @@ export function useStoryAward(characterId: string, awardId: string) {
      * @returns Story award details
      */
     const loadStoryAward = async(characterId: string, awardId: string) => {
-        return axios.get(`/api/characters/${characterId}/story-awards/${awardId}`).then((res) => res.data) as Promise<StoryAward>;
+        return axios.get(`/api/characters/${characterId}/story-awards/${awardId}`, { withCredentials: true }).then((res) => res.data) as Promise<StoryAward>;
     }
 
     useEffect(() => {
@@ -41,7 +41,7 @@ export function useStoryAwardsByCharacter(characterId: string) {
      * @returns Array containing the character's story awards
      */
     const loadStoryAwardsByCharacter = async(characterId: string) => {
-        return axios.get(`/api/characters/${characterId}/story-awards`).then((res) => res.data) as Promise<StoryAwardRow[]>;
+        return axios.get(`/api/characters/${characterId}/story-awards`, { withCredentials: true }).then((res) => res.data) as Promise<StoryAwardRow[]>;
     };
 
     useEffect(() => {
@@ -68,7 +68,7 @@ export function useStoryAwardsByCharacterLog(characterId: string, logId: string)
      * @returns Array containing the character log's story awards
      */
     const loadStoryAwardsByCharacterLog = async(characterId: string, logId: string) => {
-        return axios.get(`/api/characters/${characterId}/character-logs/${logId}/story-awards`).then((res) => res.data) as Promise<StoryAward[]>;
+        return axios.get(`/api/characters/${characterId}/character-logs/${logId}/story-awards`, { withCredentials: true }).then((res) => res.data) as Promise<StoryAward[]>;
     };
 
     useEffect(() => {

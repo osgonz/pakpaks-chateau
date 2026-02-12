@@ -16,7 +16,7 @@ export function useCharacter(id: string) {
      * @returns Character summary details
      */
     const loadCharacter = async(id: string) => {
-        return axios.get(`/api/characters/${id}`).then((res) => res.data) as Promise<Character>;
+        return axios.get(`/api/characters/${id}`, { withCredentials: true }).then((res) => res.data) as Promise<Character>;
     };
 
     useEffect(() => {
