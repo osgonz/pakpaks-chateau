@@ -1,22 +1,14 @@
-import { PoolConnection } from 'mariadb';
-import { format } from 'date-fns';
-import db from '../connection';
 import { Request, Response } from 'express';
+import { format } from 'date-fns';
+import { execute } from '../connection';
 
 class DMLogController {
     // Get all DM logs
     getDMLogs = async (req: Request, res: Response) => {
         const userId = req.userId!;
-        let conn: PoolConnection | undefined;
-        try {
-            conn = await db.getConnection();
-            const [logs] = await conn.query("call get_dm_log_list(?)", [userId]);
-            res.status(200).send(logs);
-        } finally {
-            if (conn) {
-                conn.release();
-            }
-        }
+        
+        const [logs] = await execute("call get_dm_log_list(?)", [userId]);
+        res.status(200).send(logs);
     };
 
     // Get a DM log
@@ -24,16 +16,9 @@ class DMLogController {
         const userId = req.userId!;
         // Extract DM log id from parameter
         const id = req.params.id;
-        let conn: PoolConnection | undefined;
-        try {
-            conn = await db.getConnection();
-            const [log] = await conn.query("call get_dm_log(?,?)", [id, userId]);
-            res.status(200).send(log[0]);
-        } finally {
-            if (conn) {
-                conn.release();
-            }
-        }
+        
+        const [log] = await execute("call get_dm_log(?,?)", [id, userId]);
+        res.status(200).send(log[0]);
     };
 
     // Create a DM log
@@ -41,29 +26,22 @@ class DMLogController {
         const userId = req.userId!;
         // Extract log payload from request body
         const logContent = req.body;
-        let conn: PoolConnection | undefined;
-        try {
-            conn = await db.getConnection();
-            const [result] = await conn.query("call create_dm_log(?,?,?,?,?,?,?)", [
-                logContent.title,
-                format(logContent.timestamp as Date, "yyyy-MM-dd HH:mm:ss"),
-                logContent.location,
-                logContent.lengthHours,
-                logContent.serviceHours,
-                logContent.description,
-                userId
-            ]);
-            const newId = result[0].newId;
+        
+        const [result] = await execute("call create_dm_log(?,?,?,?,?,?,?)", [
+            logContent.title,
+            format(logContent.timestamp as Date, "yyyy-MM-dd HH:mm:ss"),
+            logContent.location,
+            logContent.lengthHours,
+            logContent.serviceHours,
+            logContent.description,
+            userId
+        ]);
+        const newId = result[0].newId;
 
-            if (!newId) {
-                res.status(403).send("Forbidden");
-            } else {
-                res.status(200).send(newId);
-            }
-        } finally {
-            if (conn) {
-                conn.release();
-            }
+        if (!newId) {
+            res.status(403).send("Forbidden");
+        } else {
+            res.status(200).send(newId);
         }
     };
 
@@ -74,28 +52,21 @@ class DMLogController {
         const id = req.params.id;
         // Extract log payload from request body
         const logContent = req.body;
-        let conn: PoolConnection | undefined;
-        try {
-            conn = await db.getConnection();
-            const result = await conn.query("call update_dm_log(?,?,?,?,?,?,?,?)", [
-                id,
-                logContent.title,
-                format(logContent.timestamp as Date, "yyyy-MM-dd HH:mm:ss"),
-                logContent.location,
-                logContent.lengthHours,
-                logContent.serviceHours,
-                logContent.description,
-                userId
-            ]);
-            if (result.affectedRows === 0) {
-                res.status(403).send('Forbidden');
-            } else {
-                res.status(204).send();
-            }
-        } finally {
-            if (conn) {
-                conn.release();
-            }
+        
+        const result = await execute("call update_dm_log(?,?,?,?,?,?,?,?)", [
+            id,
+            logContent.title,
+            format(logContent.timestamp as Date, "yyyy-MM-dd HH:mm:ss"),
+            logContent.location,
+            logContent.lengthHours,
+            logContent.serviceHours,
+            logContent.description,
+            userId
+        ]);
+        if (result.affectedRows === 0) {
+            res.status(403).send('Forbidden');
+        } else {
+            res.status(204).send();
         }
     };
 
@@ -104,22 +75,15 @@ class DMLogController {
         const userId = req.userId!;
         // Extract DM log id from parameter
         const id = req.params.id;
-        let conn: PoolConnection | undefined;
-        try {
-            conn = await db.getConnection();
-            const result = await conn.query("call delete_dm_log(?,?)", [
-                id,
-                userId
-            ]);
-            if (result.affectedRows === 0) {
-                res.status(403).send('Forbidden');
-            } else {
-                res.status(204).send();
-            }
-        } finally {
-            if (conn) {
-                conn.release();
-            }
+        
+        const result = await execute("call delete_dm_log(?,?)", [
+            id,
+            userId
+        ]);
+        if (result.affectedRows === 0) {
+            res.status(403).send('Forbidden');
+        } else {
+            res.status(204).send();
         }
     };
 };

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import { PoolConnection } from 'mariadb';
 import { getGoogleUserPayload, createSessionToken } from '../services/auth';
-import db from '../connection';
+import { execute } from '../connection';
 
 class AuthController {
     // Exchange Google authorization code for tokens
@@ -27,17 +26,9 @@ class AuthController {
     // Get authenticated user info
     getAuthenticatedUser = async (req: Request, res: Response) => {
         const userId = req.userId!;
-        let conn: PoolConnection | undefined;
 
-        try {
-            conn = await db.getConnection();
-            const [user] = await conn.query("call get_user(?)", [userId]);
-            res.status(200).json(user[0]);
-        } finally {
-            if (conn) {
-                conn.release();
-            }
-        }
+        const [user] = await execute("call get_user(?)", [userId]);
+        res.status(200).json(user[0]);
     };
 
     // Log out and clear session cookie
@@ -48,18 +39,9 @@ class AuthController {
 
     // Upsert a user
     upsertUser = async (googleId: string, email?: string, name?: string, picture?: string) => {
-        let conn: PoolConnection | undefined;
+        const [user] = await execute("call upsert_user(?,?,?,?)", [googleId, email, name, picture]);
 
-        try {
-            conn = await db.getConnection();
-            const [user] = await conn.query("call upsert_user(?,?,?,?)", [googleId, email, name, picture]);
-
-            return(user[0]);
-        } finally {
-            if (conn) {
-                conn.release();
-            }
-        }
+        return(user[0]);
     }
 
 };

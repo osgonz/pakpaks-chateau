@@ -1,6 +1,5 @@
-import { PoolConnection } from 'mariadb';
-import db from '../connection';
 import { Request, Response } from 'express';
+import { execute } from '../connection';
 
 class StoryAwardController {
     // Get a specific character's story awards
@@ -8,19 +7,12 @@ class StoryAwardController {
         const userId = req.userId!;
         // Extract character id from parameter
         const characterId = req.params.charId;
-        let conn: PoolConnection | undefined;
-        try {
-            conn = await db.getConnection();
-            const [awards] = await conn.query("call get_character_story_award_list(?,?)", [
-                characterId,
-                userId
-            ]);
-            res.status(200).send(awards);
-        } finally {
-            if (conn) {
-                conn.release();
-            }
-        }
+        
+        const [awards] = await execute("call get_character_story_award_list(?,?)", [
+            characterId,
+            userId
+        ]);
+        res.status(200).send(awards);
     };
 
     // Get a specific character log's story awards
@@ -29,17 +21,9 @@ class StoryAwardController {
         const logId = req.params.id;
         // Extract character id from parameter
         const characterId = req.params.charId;
-        let conn: PoolConnection | undefined;
-        // TODO: Rethink if characterId validation should happen during or after query
-        try {
-            conn = await db.getConnection();
-            const [awards] = await conn.query("call get_character_log_story_award_list(?,?)", [logId, characterId]);
-            res.status(200).send(awards);
-        } finally {
-            if (conn) {
-                conn.release();
-            }
-        }
+        
+        const [awards] = await execute("call get_character_log_story_award_list(?,?)", [logId, characterId]);
+        res.status(200).send(awards);
     };
 
     // Get a story award
@@ -49,21 +33,13 @@ class StoryAwardController {
         const id = req.params.id;
         // Extract character id from parameter
         const characterId = req.params.charId;
-        let conn: PoolConnection | undefined;
-        // TODO: Rethink if characterId validation should happen during or after query
-        try {
-            conn = await db.getConnection();
-            const [award] = await conn.query("call get_story_award(?,?,?)", [
-                id, 
-                characterId,
-                userId
-            ]);
-            res.status(200).send(award[0]);
-        } finally {
-            if (conn) {
-                conn.release();
-            }
-        }
+        
+        const [award] = await execute("call get_story_award(?,?,?)", [
+            id, 
+            characterId,
+            userId
+        ]);
+        res.status(200).send(award[0]);
     };
 
     // Create a story award
@@ -73,28 +49,21 @@ class StoryAwardController {
         const characterId = req.params.charId;
         // Extract story award payload from request body
         const awardContent = req.body;
-        let conn: PoolConnection | undefined;
-        try {
-            conn = await db.getConnection();
-            const [result] = await conn.query("call create_story_award(?,?,?,?,?,?)", [
-                awardContent.name,
-                awardContent.description,
-                awardContent.status,
-                characterId,
-                awardContent.originLogId,
-                userId
-            ]);
-            const newId = result[0].newId;
+        
+        const [result] = await execute("call create_story_award(?,?,?,?,?,?)", [
+            awardContent.name,
+            awardContent.description,
+            awardContent.status,
+            characterId,
+            awardContent.originLogId,
+            userId
+        ]);
+        const newId = result[0].newId;
 
-            if (!newId) {
-                res.status(403).send("Forbidden");
-            } else {
-                res.status(200).send(newId);
-            }
-        } finally {
-            if (conn) {
-                conn.release();
-            }
+        if (!newId) {
+            res.status(403).send("Forbidden");
+        } else {
+            res.status(200).send(newId);
         }
     };
 
@@ -107,27 +76,20 @@ class StoryAwardController {
         const characterId = req.params.charId;
         // Extract story award payload from request body
         const awardContent = req.body;
-        let conn: PoolConnection | undefined;
-        try {
-            conn = await db.getConnection();
-            const result = await conn.query("call update_story_award(?,?,?,?,?,?,?)", [
-                id,
-                awardContent.name,
-                awardContent.description,
-                awardContent.status,
-                characterId,
-                awardContent.originLogId,
-                userId
-            ]);
-            if (result.affectedRows === 0) {
-                res.status(403).send('Forbidden');
-            } else {
-                res.status(204).send();
-            }
-        } finally {
-            if (conn) {
-                conn.release();
-            }
+        
+        const result = await execute("call update_story_award(?,?,?,?,?,?,?)", [
+            id,
+            awardContent.name,
+            awardContent.description,
+            awardContent.status,
+            characterId,
+            awardContent.originLogId,
+            userId
+        ]);
+        if (result.affectedRows === 0) {
+            res.status(403).send('Forbidden');
+        } else {
+            res.status(204).send();
         }
     };
 
@@ -138,23 +100,16 @@ class StoryAwardController {
         const id = req.params.id;
         // Extract character id from parameter
         const characterId = req.params.charId;
-        let conn: PoolConnection | undefined;
-        try {
-            conn = await db.getConnection();
-            const result = await conn.query("call delete_story_award(?,?,?)", [
-                id,
-                characterId,
-                userId
-            ]);
-            if (result.affectedRows === 0) {
-                res.status(403).send('Forbidden');
-            } else {
-                res.status(204).send();
-            }
-        } finally {
-            if (conn) {
-                conn.release();
-            }
+        
+        const result = await execute("call delete_story_award(?,?,?)", [
+            id,
+            characterId,
+            userId
+        ]);
+        if (result.affectedRows === 0) {
+            res.status(403).send('Forbidden');
+        } else {
+            res.status(204).send();
         }
     };
 };
